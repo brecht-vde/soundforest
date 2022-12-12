@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "Spotiwood.Api.Fns.Search": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7071",
+      "launchBrowser": false
+    }
+  }
+}
