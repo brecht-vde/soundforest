@@ -19,6 +19,8 @@ using Xunit;
 namespace Spotiwood.Integrations.Omdb.UnitTests.Clients;
 public sealed class DbClientTests
 {
+    private static ErrorResultDto DefaultErrorResult => new ErrorResultDto() { Error = "N/A", Response = "False" };
+
     [Fact]
     internal void ConstructorGuards()
     {
@@ -53,8 +55,6 @@ public sealed class DbClientTests
             .And
             .BeEquivalentTo<SearchResultDtoCollection>(new());
     }
-
-    private static ErrorResultDto DefaultErrorResult => new ErrorResultDto() { Error = "N/A", Response = "False" };
 
     [Theory]
     [AutoMoqData]
@@ -167,5 +167,142 @@ public sealed class DbClientTests
             .NotBeNull()
             .And
             .BeEquivalentTo<SearchResultDtoCollection>(dto);
+    }
+
+
+
+
+
+
+
+
+
+    [Theory]
+    [AutoMoqData]
+    internal async Task DbClient_SingleAsync_FailedRequest_Returns_Null(
+    ILogger<DbClient> logger,
+    [Frozen] Mock<IOptions<ClientOptions>> options,
+    Mock<HttpMessageHandler> handler,
+    ClientOptions value)
+    {
+        // Arrange
+        options.Setup(opt => opt.Value).Returns(value);
+
+        var client = handler.CreateClient();
+
+        handler.SetupAnyRequest()
+            .ReturnsResponse(HttpStatusCode.InternalServerError);
+
+        var sut = new DbClient(logger, options.Object, client);
+
+        // Act
+        var result = await sut.SingleAsync(It.IsNotNull<string>(), It.IsAny<CancellationToken>());
+
+        // Assert
+        result.Should().BeNull();
+    }
+
+    [Theory]
+    [AutoMoqData]
+    internal async Task DbClient_SingleAsync_ResponseTypeFalse_Returns_Null(
+        ILogger<DbClient> logger,
+        [Frozen] Mock<IOptions<ClientOptions>> options,
+        Mock<HttpMessageHandler> handler,
+        ClientOptions value)
+    {
+        // Arrange
+        options.Setup(opt => opt.Value).Returns(value);
+
+        var client = handler.CreateClient();
+
+        handler.SetupAnyRequest()
+            .ReturnsJsonResponse<ErrorResultDto>(DefaultErrorResult);
+
+        var sut = new DbClient(logger, options.Object, client);
+
+        // Act
+        var result = await sut.SingleAsync(It.IsNotNull<string>(), It.IsAny<CancellationToken>());
+
+        // Assert
+        result.Should().BeNull();
+    }
+
+    [Theory]
+    [AutoMoqData]
+    internal async Task DbClient_SingleAsync_ResponseIsNull_Returns_Null(
+        ILogger<DbClient> logger,
+        [Frozen] Mock<IOptions<ClientOptions>> options,
+        Mock<HttpMessageHandler> handler,
+        ClientOptions value)
+    {
+        // Arrange
+        options.Setup(opt => opt.Value).Returns(value);
+
+        var client = handler.CreateClient();
+
+        handler.SetupAnyRequest()
+            .ReturnsJsonResponse<string>(null);
+
+        var sut = new DbClient(logger, options.Object, client);
+
+        // Act
+        var result = await sut.SingleAsync(It.IsNotNull<string>(), It.IsAny<CancellationToken>());
+
+        // Assert
+        result.Should().BeNull();
+    }
+
+    [Theory]
+    [AutoMoqData]
+    internal async Task DbClient_SingleAsync_Throws_Returns_Null(
+        ILogger<DbClient> logger,
+        [Frozen] Mock<IOptions<ClientOptions>> options,
+        Mock<HttpMessageHandler> handler,
+        ClientOptions value)
+    {
+        // Arrange
+        options.Setup(opt => opt.Value).Returns(value);
+
+        var client = handler.CreateClient();
+
+        handler.SetupAnyRequest()
+            .Throws(new Exception());
+
+        var sut = new DbClient(logger, options.Object, client);
+
+        // Act
+        var result = await sut.SingleAsync(It.IsNotNull<string>(), It.IsAny<CancellationToken>());
+
+        // Assert
+        result.Should().BeNull();
+    }
+
+    [Theory]
+    [AutoMoqData]
+    internal async Task DbClient_SingleAsync_Succeeds_Returns_Valid_SearchDetailDto(
+        ILogger<DbClient> logger,
+        [Frozen] Mock<IOptions<ClientOptions>> options,
+        Mock<HttpMessageHandler> handler,
+        SearchDetailDto dto,
+        ClientOptions value)
+    {
+        // Arrange
+        options.Setup(opt => opt.Value).Returns(value);
+
+        var client = handler.CreateClient();
+
+        handler.SetupAnyRequest()
+            .ReturnsJsonResponse<SearchDetailDto>(dto);
+
+        var sut = new DbClient(logger, options.Object, client);
+
+        // Act
+        var result = await sut.SingleAsync(It.IsNotNull<string>(), It.IsAny<CancellationToken>());
+
+        // Assert
+        result.Should()
+            .NotBeNull()
+            .And
+            .BeEquivalentTo<SearchDetailDto>(dto);
     }
 }

@@ -1,8 +1,6 @@
-﻿using AutoFixture.Xunit2;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Spotiwood.Api.Search.Application.Queries;
 using Spotiwood.Api.Search.Application.Validators;
-using Spotiwood.UnitTests.Common;
 using System.Collections.Generic;
 using Xunit;
 
@@ -35,7 +33,7 @@ public sealed class FreeTextSearchQueryValidatorTests
 
     public static IEnumerable<object[]> InvalidQueries
     {
-        get 
+        get
         {
             yield return new object[] { new FreeTextSearchQuery("") };
             yield return new object[] { new FreeTextSearchQuery(" ") };
@@ -59,6 +57,6 @@ public sealed class FreeTextSearchQueryValidatorTests
 
         // Assert
         result.Should().NotBeNull();
-        result.IsValid.Should().BeFalse(); 
+        result.IsValid.Should().BeFalse();
     }
 }

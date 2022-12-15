@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using Xunit;
 
-namespace Spotiwood.Framework.UnitTests;
+namespace Spotiwood.Framework.UnitTests.Results;
 public sealed class ResultTests
 {
     [Theory]

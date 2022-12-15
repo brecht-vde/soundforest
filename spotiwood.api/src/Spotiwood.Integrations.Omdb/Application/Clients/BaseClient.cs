@@ -31,4 +31,19 @@ internal sealed class BaseClient : IClient
             return new();
         }
     }
+
+    public async Task<SearchDetail?> SingleAsync(string identifier, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var dto = await _client.SingleAsync(identifier, cancellationToken);
+            var result = _mapper.Map<SearchDetail>(dto);
+            return result;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Could not execute search.");
+            return null;
+        }
+    }
 }

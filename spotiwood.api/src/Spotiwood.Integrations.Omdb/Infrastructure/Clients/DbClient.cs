@@ -31,30 +31,61 @@ internal sealed class DbClient : IDbClient
         try
         {
             var request = new HttpRequestMessage(HttpMethod.Get, new Uri($"?apikey={_options.Value.Key}&s={query}&page={page}", UriKind.Relative));
-            var response = await _client.SendAsync(request);
+            var response = await _client.SendAsync(request, cancellationToken);
 
             if (!response.IsSuccessStatusCode)
                 return new();
 
             var content = await response.Content.ReadAsStringAsync();
-            var errorResponse = JsonSerializer.Deserialize<ErrorResultDto>(content, Serialization.DefaultOptions);
 
-            if (errorResponse?.Response?.Equals("false", StringComparison.OrdinalIgnoreCase) is true)
+            if (IsErrorResponse(content))
                 return new();
 
-            var resultResponse = JsonSerializer.Deserialize<SearchResultDtoCollection>(content, Serialization.DefaultOptions);
+            var result = JsonSerializer.Deserialize<SearchResultDtoCollection>(content, Serialization.DefaultOptions);
 
-            if (resultResponse is null)
+            if (result is null)
                 return new();
 
-            resultResponse.Page = page;
+            result.Page = page;
 
-            return resultResponse;
+            return result;
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Could not execute database query.");
             return new();
         }
+    }
+
+    public async Task<SearchDetailDto?> SingleAsync(string identifier, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var request = new HttpRequestMessage(HttpMethod.Get, new Uri($"?apikey={_options.Value.Key}&i={identifier}", UriKind.Relative));
+            var response = await _client.SendAsync(request, cancellationToken);
+
+            if (!response.IsSuccessStatusCode)
+                return null;
+
+            var content = await response.Content.ReadAsStringAsync();
+
+            if (IsErrorResponse(content))
+                return null;
+
+            var result = JsonSerializer.Deserialize<SearchDetailDto>(content, Serialization.DefaultOptions);
+
+            return result;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Could not execute database query.");
+            return null;
+        }
+    }
+
+    private bool IsErrorResponse(string content)
+    {
+        var errorResponse = JsonSerializer.Deserialize<ErrorResultDto>(content, Serialization.DefaultOptions);
+        return errorResponse?.Response?.Equals("false", StringComparison.OrdinalIgnoreCase) is true;
     }
 }

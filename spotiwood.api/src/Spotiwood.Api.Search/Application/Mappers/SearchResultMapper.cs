@@ -17,6 +17,8 @@ internal sealed class SearchResultMapper : Profile
             .ForMember(target => target.StartYear,
                 opt => opt.MapFrom(source => source.StartYear))
             .ForMember(target => target.EndYear,
-                opt => opt.MapFrom(source => source.EndYear));
+                opt => opt.MapFrom(source => source.EndYear))
+            .ForMember(target => target.Type,
+                opt => opt.MapFrom(target => target.Type));
     }
 }
