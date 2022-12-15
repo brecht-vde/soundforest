@@ -5,4 +5,6 @@ namespace Spotiwood.Integrations.Omdb.Application.Abstractions;
 public interface IClient
 {
     public Task<SearchResultCollection> SearchAsync(string query, int page, CancellationToken cancellationToken);
+
+    public Task<SearchDetail?> SingleAsync(string identifier, CancellationToken cancellationToken);
 }

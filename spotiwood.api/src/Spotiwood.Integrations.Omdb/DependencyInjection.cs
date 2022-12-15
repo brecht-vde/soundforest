@@ -5,8 +5,6 @@ using Spotiwood.Integrations.Omdb.Application.Clients;
 using Spotiwood.Integrations.Omdb.Application.Options;
 using Spotiwood.Integrations.Omdb.Infrastructure.Clients;
 using System.Reflection;
-using System.Text.Json.Serialization;
-using System.Text.Json;
 
 namespace Spotiwood.Integrations.Omdb;
 public static class DependencyInjection

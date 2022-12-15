@@ -3,8 +3,8 @@ using MediatR;
 using Spotiwood.Framework.Application.Requests;
 using Spotiwood.Framework.Application.Errors;
 
-namespace Spotiwood.Api.Search.Application.Behaviors;
-internal sealed class ResultRequestValidationBehavior<TRequest, TResult> : IPipelineBehavior<TRequest, TResult>
+namespace Spotiwood.Framework.Application.Behaviors;
+public sealed class ResultRequestValidationBehavior<TRequest, TResult> : IPipelineBehavior<TRequest, TResult>
     where TRequest : IResultRequest<TResult>
     where TResult : IResult, new()
 

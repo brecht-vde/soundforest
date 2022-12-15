@@ -4,11 +4,11 @@ using Spotiwood.Integrations.Omdb.Application.Mappers.Converters;
 using Spotiwood.Integrations.Omdb.Domain;
 
 namespace Spotiwood.Integrations.Omdb.Application.Mappers;
-internal sealed class SearchResultProfile : Profile
+internal sealed class SearchDetailProfile : Profile
 {
-    public SearchResultProfile()
+    public SearchDetailProfile()
     {
-        CreateMap<SearchResultDto, SearchResult>()
+        CreateMap<SearchDetailDto, SearchDetail>()
             .ForMember(target => target.Title,
                 opt => opt.MapFrom(source => source.Title))
             .ForMember(target => target.Identifier,
@@ -26,6 +26,18 @@ internal sealed class SearchResultProfile : Profile
             .ForMember(target => target.EndYear,
                 opt => opt.ConvertUsing(
                     new EndYearValueConverter(),
-                    source => source.Year));
+                    source => source.Year))
+            .ForMember(target => target.Plot,
+                opt => opt.MapFrom(source => source.Plot))
+            .ForMember(target => target.Seasons,
+                opt => opt.MapFrom(source => source.TotalSeasons))
+            .ForMember(target => target.Genres,
+                opt => opt.ConvertUsing(
+                    new CsvValueConverter(),
+                    source => source.Genre))
+            .ForMember(target => target.Actors,
+                opt => opt.ConvertUsing(
+                    new CsvValueConverter(),
+                    source => source.Actors));
     }
 }
