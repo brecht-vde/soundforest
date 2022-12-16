@@ -27,6 +27,9 @@ public static class DependencyInjection
         // Mappers
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
+        // Logging
+        services.AddLogging();
+
         // Add Omdb
         services.AddOmdb(uri, key);
 

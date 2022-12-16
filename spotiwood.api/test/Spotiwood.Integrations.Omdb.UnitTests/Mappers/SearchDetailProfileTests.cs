@@ -67,7 +67,8 @@ public sealed class SearchDetailProfileTests
                     Seasons = 7,
                     Genres = new[] { "1", "2", "3" },
                     Plot = "Some plot",
-                }
+                    Actors = new[] { "1", "2", "3" }
+                 }
             };
         }
     }
