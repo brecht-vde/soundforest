@@ -3,10 +3,11 @@ using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Spotiwood.Api.Playlists.Application.Queries;
 using Spotiwood.Api.Playlists.Domain;
+using Spotiwood.Framework.Application.Pagination;
 using System.Data;
 using System.Net;
 
-namespace Spotiwood.Api.Fns.PlaylistDetails;
+namespace Spotiwood.Api.Fns.Playlists;
 public sealed class App
 {
     private readonly IMediator _mediator;
@@ -16,19 +17,20 @@ public sealed class App
         _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
     }
 
-    [Function("PlaylistDetail")]
+    [Function("Playlists")]
     public async Task<HttpResponseData> Run(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "playlists/{identifier}")] HttpRequestData request,
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "playlists")] HttpRequestData request,
         FunctionContext ctx,
-        string identifier)
+        int? page,
+        int? size)
     {
-        var result = await _mediator.Send(new GetPlaylistByIdQuery(identifier));
+        var result = await _mediator.Send(new GetPlaylistsQuery(page, size));
         var response = request.CreateResponse();
 
         result.Switch(
             success: async (s, v) =>
             {
-                await response.WriteAsJsonAsync<Playlist>(v);
+                await response.WriteAsJsonAsync<PagedCollection<Playlist>>(v);
                 response.StatusCode = (HttpStatusCode)s;
             },
             failure: async (s, m, e) =>
@@ -46,3 +48,4 @@ public sealed class App
         return response;
     }
 }
+
