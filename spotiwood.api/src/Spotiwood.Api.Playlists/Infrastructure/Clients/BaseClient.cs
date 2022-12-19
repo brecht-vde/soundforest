@@ -1,42 +1,106 @@
-﻿using Azure.Data.Tables;
+﻿using Microsoft.Azure.Cosmos;
+using Microsoft.Azure.Cosmos.Linq;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Spotiwood.Api.Playlists.Application.Abstractions;
 using Spotiwood.Api.Playlists.Application.Dtos;
 using Spotiwood.Api.Playlists.Infrastructure.Entities;
+using Spotiwood.Api.Playlists.Infrastructure.Extensions;
+using Spotiwood.Api.Playlists.Infrastructure.Options;
+using Spotiwood.Framework.Application.Pagination;
+using System.Net;
 
 namespace Spotiwood.Api.Playlists.Infrastructure.Clients;
 internal sealed class BaseClient : IClient
 {
     private readonly ILogger<BaseClient> _logger;
-    private readonly TableClient _client;
+    private readonly IOptions<DbOptions> _options;
+    private readonly ICosmosQueryBuilder _qb;
+    private readonly CosmosClient _client;
+    private readonly Container _container;
 
-    public BaseClient(ILogger<BaseClient> logger, TableClient client)
+    private Func<int?, int?, (int, int)> PaginationDefaults = (page, size) => (page ?? 1, size ?? 10);
+
+    public BaseClient(ILogger<BaseClient> logger, IOptions<DbOptions> options, CosmosClient client, ICosmosQueryBuilder queryBuilder)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        _options = options ?? throw new ArgumentNullException(nameof(options));
         _client = client ?? throw new ArgumentNullException(nameof(client));
+        _qb = queryBuilder ?? throw new ArgumentNullException(nameof(queryBuilder));
+
+        if (options?.Value is null)
+            throw new ArgumentNullException(nameof(options));
+
+        _container = _client.GetContainer(_options.Value.Database, _options.Value.Container);
     }
 
     public async Task<PlaylistDto?> SingleAsync(string identifier, CancellationToken cancellationToken)
     {
         try
         {
-            var entity = await _client.GetEntityIfExistsAsync<PlaylistEntity>(
-                partitionKey: identifier,
-                rowKey: identifier,
+            var response = await _container.ReadItemAsync<PlaylistEntity>(
+                id: identifier,
+                partitionKey: new PartitionKey(identifier),
                 cancellationToken: cancellationToken);
 
-            if (entity is null || entity.HasValue is not true || entity.Value is null)
+            if (response is null || response.StatusCode is not HttpStatusCode.OK || response.Resource is null)
                 return null;
 
             var dto = new PlaylistDto()
             {
-                Identifier = entity.Value.PartitionKey,
-                PlaylistTitle = entity.Value.PlaylistTitle,
-                PlaylistUri = new Uri(entity.Value.PlaylistUri!),
-                Title = entity.Value.Title,
+                Identifier = response.Resource.Identifier,
+                PlaylistTitle = response.Resource.PlaylistTitle,
+                PlaylistUri = response.Resource.PlaylistUri,
+                Title = response.Resource.Title,
             };
 
             return dto;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Could not execute database query.");
+            return null;
+        }
+    }
+
+    public async Task<PagedCollection<PlaylistDto>?> ManyAsync(int? page, int? size, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var pagination = PaginationDefaults(page, size);
+            var queryable = _container.GetItemLinqQueryable<PlaylistEntity>();
+
+            var count = await queryable.CountAsync();
+
+            if (count is null || count.Resource is 0)
+                return null;
+
+            var query = queryable
+                .Skip((pagination.Item1 - 1) * pagination.Item2)
+                .Take(pagination.Item2);
+
+            var entities = await _qb.ToListAsync(query);
+
+            if (entities is null || entities.Any() is not true)
+                return null;
+
+            var dtos = entities.Select(e => new PlaylistDto()
+            {
+                Identifier = e.Identifier,
+                PlaylistTitle = e.PlaylistTitle,
+                PlaylistUri = e.PlaylistUri,
+                Title = e.Title,
+            }).ToArray();
+
+            var result = new PagedCollection<PlaylistDto>()
+            {
+                Items = dtos,
+                Page = pagination.Item1,
+                Size = pagination.Item2,
+                Total = count.Resource
+            };
+
+            return result;
         }
         catch (Exception ex)
         {

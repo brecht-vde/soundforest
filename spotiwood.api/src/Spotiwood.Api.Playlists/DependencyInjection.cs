@@ -1,13 +1,17 @@
-﻿using Azure.Data.Tables;
-using FluentValidation;
+﻿using FluentValidation;
 using MediatR;
+using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Spotiwood.Api.Playlists.Application.Abstractions;
 using Spotiwood.Api.Playlists.Application.Queries;
 using Spotiwood.Api.Playlists.Application.Validators;
 using Spotiwood.Api.Playlists.Domain;
 using Spotiwood.Api.Playlists.Infrastructure.Clients;
+using Spotiwood.Api.Playlists.Infrastructure.Extensions;
+using Spotiwood.Api.Playlists.Infrastructure.Options;
 using Spotiwood.Framework;
+using Spotiwood.Framework.Application.Pagination;
 using Spotiwood.Framework.Application.Requests;
 using System.Reflection;
 
@@ -21,9 +25,11 @@ public static class DependencyInjection
 
         // Queries
         services.AddTransient<IResultRequestHandler<GetPlaylistByIdQuery, Result<Playlist>>, GetPlaylistByIdQueryHandler>();
+        services.AddTransient<IResultRequestHandler<GetPlaylistsQuery, Result<PagedCollection<Playlist>>>, GetPlaylistsQueryHandler>();
 
         // Validators
         services.AddSingleton<IValidator<GetPlaylistByIdQuery>, GetPlaylistByIdQueryValidator>();
+        services.AddSingleton<IValidator<GetPlaylistsQuery>, GetPlaylistsQueryValidator>();
 
         // Mappers
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
@@ -34,18 +40,17 @@ public static class DependencyInjection
         // Add Framework
         services.AddFramework();
 
-        // Add tableclient
-        services.AddSingleton<TableClient>(ctx =>
-        {
-            var options = new TableClientOptions();
-            options.Retry.Mode = Azure.Core.RetryMode.Exponential;
-            options.Retry.MaxDelay = TimeSpan.FromSeconds(600);
-            options.Retry.MaxRetries = 4;
-            options.Retry.Delay = TimeSpan.FromSeconds(3);
-            options.Retry.NetworkTimeout = TimeSpan.FromSeconds(600);
+        // Add options
+        services.AddSingleton<IOptions<DbOptions>>(ctx =>
+            Options.Create<DbOptions>(new DbOptions()
+            {
+                ConnectionString = connectionString
+            })
+        );
 
-            return new TableClient(connectionString, "Playlists", options);
-        });
+        // Add Cosmos DB
+        services.AddSingleton<CosmosClient>(ctx => new CosmosClient(connectionString));
+        services.AddSingleton<ICosmosQueryBuilder, BaseCosmosQueryBuilder>();
 
         // DB Client
         services.AddTransient<IClient, BaseClient>();

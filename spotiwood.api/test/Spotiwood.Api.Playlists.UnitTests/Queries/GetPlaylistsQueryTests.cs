@@ -1,47 +1,48 @@
 ﻿using AutoFixture.Idioms;
 using AutoFixture.Xunit2;
 using AutoMapper;
-using FluentAssertions;
-using FluentAssertions.Execution;
 using Moq;
-using Spotiwood.Api.Playlists.Application.Abstractions;
 using Spotiwood.Api.Playlists.Application.Dtos;
 using Spotiwood.Api.Playlists.Application.Queries;
 using Spotiwood.Api.Playlists.Domain;
 using Spotiwood.Framework.Application.Requests;
 using Spotiwood.UnitTests.Common;
-using System;
-using System.Threading;
 using System.Threading.Tasks;
+using System.Threading;
+using System;
 using Xunit;
+using Spotiwood.Api.Playlists.Application.Abstractions;
+using Spotiwood.Framework.Application.Pagination;
+using FluentAssertions;
+using FluentAssertions.Execution;
 
 namespace Spotiwood.Api.Playlists.UnitTests.Queries;
-public sealed class GetPlaylistByIdQueryTests
+public sealed class GetPlaylistsQueryTests
 {
     [Fact]
     public void ConstructorGuards()
     {
         var assertion = new GuardClauseAssertion(AutoMoqDataAttribute.AutoMoqFixture);
-        assertion.Verify(typeof(GetPlaylistByIdQueryHandler).GetConstructors());
+        assertion.Verify(typeof(GetPlaylistsQueryHandler).GetConstructors());
     }
 
     [Theory]
     [AutoMoqData]
-    internal async Task GetPlaylistByIdQueryHandler_Handle_Succeeds(
+    internal async Task GetPlaylistsQueryHandler_Handle_Succeeds(
         [Frozen] Mock<IClient> client,
         [Frozen] Mock<IMapper> mapper,
-        PlaylistDto dto,
-        Playlist res,
-        GetPlaylistByIdQuery query,
-        GetPlaylistByIdQueryHandler sut)
+        PagedCollection<PlaylistDto> dtos,
+        PagedCollection<Playlist> res,
+        GetPlaylistsQuery query,
+        GetPlaylistsQueryHandler sut)
     {
         // Arrange
         client
-            .Setup(c => c.SingleAsync(It.IsNotNull<string>(), It.IsNotNull<CancellationToken>()))
-            .ReturnsAsync(dto);
+            .Setup(c => c.ManyAsync(It.IsAny<int?>(), It.IsAny<int?>(), It.IsNotNull<CancellationToken>()))
+            .ReturnsAsync(dtos);
 
         mapper
-            .Setup(m => m.Map<Playlist>(dto))
+            .Setup(m => m.Map<PagedCollection<Playlist>>(dtos))
             .Returns(res);
 
         // Act
@@ -51,20 +52,20 @@ public sealed class GetPlaylistByIdQueryTests
         result.Should()
             .NotBeNull()
             .And
-            .BeEquivalentTo(Result<Playlist>.SuccessResult(res));
+            .BeEquivalentTo(Result<PagedCollection<Playlist>>.SuccessResult(res));
     }
 
     [Theory]
     [AutoMoqData]
     internal async Task GetPlaylistByIdQueryHandler_Handle_NoResults_ReturnsNotFound(
         [Frozen] Mock<IClient> client,
-        GetPlaylistByIdQuery query,
-        GetPlaylistByIdQueryHandler sut)
+        GetPlaylistsQuery query,
+        GetPlaylistsQueryHandler sut)
     {
         // Arrange
         client
-            .Setup(c => c.SingleAsync(It.IsNotNull<string>(), It.IsNotNull<CancellationToken>()))
-            .ReturnsAsync(It.IsAny<PlaylistDto>());
+            .Setup(c => c.ManyAsync(It.IsAny<int?>(), It.IsAny<int?>(), It.IsNotNull<CancellationToken>()))
+            .ReturnsAsync(It.IsAny<PagedCollection<PlaylistDto>>());
 
         // Act
         var result = await sut.Handle(query, It.IsAny<CancellationToken>());
@@ -73,19 +74,19 @@ public sealed class GetPlaylistByIdQueryTests
         result.Should()
             .NotBeNull()
             .And
-            .BeEquivalentTo(Result<Playlist>.NotFoundResult("Sorry, we did not find this playlist :(."));
+            .BeEquivalentTo(Result<PagedCollection<Playlist>>.NotFoundResult("Sorry, we did not find any playlists :(."));
     }
 
     [Theory]
     [AutoMoqData]
     internal async Task GetPlaylistByIdQueryHandler_Handle_Throws_Returns_InternalError(
         [Frozen] Mock<IClient> client,
-        GetPlaylistByIdQuery query,
-        GetPlaylistByIdQueryHandler sut)
+        GetPlaylistsQuery query,
+        GetPlaylistsQueryHandler sut)
     {
         // Arrange
         client
-            .Setup(c => c.SingleAsync(It.IsNotNull<string>(), It.IsNotNull<CancellationToken>()))
+            .Setup(c => c.ManyAsync(It.IsAny<int?>(), It.IsAny<int?>(), It.IsNotNull<CancellationToken>()))
             .ThrowsAsync(new Exception());
 
         // Act
@@ -95,7 +96,7 @@ public sealed class GetPlaylistByIdQueryTests
         using (new AssertionScope())
         {
             result.Should().NotBeNull();
-            result.StatusCode.Should().Be(500);
-        }
+            result!.StatusCode.Should().Be(500);
+        }  
     }
 }
