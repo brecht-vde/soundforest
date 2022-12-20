@@ -2,7 +2,7 @@ using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Spotiwood.Api.SearchDetails;
+using Spotiwood.Api.Search;
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -23,7 +23,7 @@ var host = new HostBuilder()
 
         services.AddMediatR(typeof(Program));
 
-        services.AddSearchDetails(new Uri(uri), key);
+        services.AddSearch(new Uri(uri), key);
 
         services.Configure<JsonSerializerOptions>(options =>
         {

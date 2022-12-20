@@ -1,8 +1,8 @@
 ﻿using MediatR;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
-using Spotiwood.Api.SearchDetails.Application.Queries;
-using Spotiwood.Api.SearchDetails.Domain;
+using Spotiwood.Api.Search.Application.Queries;
+using Spotiwood.Api.Search.Domain;
 using System.Data;
 using System.Net;
 

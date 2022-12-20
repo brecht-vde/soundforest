@@ -4,12 +4,12 @@ using System;
 using System.Collections.Generic;
 using Xunit;
 using SearchDetailDto = Spotiwood.Integrations.Omdb.Domain.SearchDetail;
-using SearchDetail = Spotiwood.Api.SearchDetails.Domain.SearchDetail;
+using SearchDetail = Spotiwood.Api.Search.Domain.SearchDetail;
 using FluentAssertions;
-using Spotiwood.Api.SearchDetails.Application.Mappers;
+using Spotiwood.Api.Search.Application.Mappers;
 
 
-namespace Spotiwood.Api.SearchDetails.UnitTests.Mappers;
+namespace Spotiwood.Api.Search.UnitTests.Mappers;
 public sealed class SearchDetailMapperTests
 {
     public static IEnumerable<object[]> ValidSearchDetail

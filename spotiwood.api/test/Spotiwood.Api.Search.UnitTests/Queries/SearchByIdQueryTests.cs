@@ -3,7 +3,7 @@ using AutoFixture.Xunit2;
 using AutoMapper;
 using FluentAssertions;
 using Moq;
-using Spotiwood.Api.SearchDetails.Application.Queries;
+using Spotiwood.Api.Search.Application.Queries;
 using Spotiwood.Framework.Application.Requests;
 using Spotiwood.Integrations.Omdb.Application.Abstractions;
 using Spotiwood.UnitTests.Common;
@@ -11,10 +11,10 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
-using SearchDetail = Spotiwood.Api.SearchDetails.Domain.SearchDetail;
+using SearchDetail = Spotiwood.Api.Search.Domain.SearchDetail;
 using SearchDetailDto = Spotiwood.Integrations.Omdb.Domain.SearchDetail;
 
-namespace Spotiwood.Api.SearchDetails.UnitTests.Queries;
+namespace Spotiwood.Api.Search.UnitTests.Queries;
 public sealed class SearchByIdQueryTests
 {
     [Fact]
