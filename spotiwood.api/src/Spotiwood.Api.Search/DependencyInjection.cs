@@ -4,7 +4,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Spotiwood.Api.Search.Application.Queries;
 using Spotiwood.Api.Search.Application.Validators;
 using Spotiwood.Api.Search.Domain;
-using Spotiwood.Api.Search.Application.Validators;
 using Spotiwood.Framework;
 using Spotiwood.Framework.Application.Pagination;
 using Spotiwood.Framework.Application.Requests;
@@ -16,6 +15,12 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddSearch(this IServiceCollection services, Uri uri, string key)
     {
+        // Add Framework
+        services.AddFramework();
+
+        // Add memory cache
+        services.AddMemoryCache();
+
         // Mediatr
         services.AddMediatR(typeof(DependencyInjection));
 
@@ -35,9 +40,6 @@ public static class DependencyInjection
 
         // Add Omdb
         services.AddOmdb(uri, key);
-
-        // Add Framework
-        services.AddFramework();
 
         return services;
     }
