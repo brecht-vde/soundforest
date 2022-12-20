@@ -1,10 +1,10 @@
 ﻿using FluentAssertions;
-using Spotiwood.Api.SearchDetails.Application.Queries;
-using Spotiwood.Api.SearchDetails.Application.Validators;
+using Spotiwood.Api.Search.Application.Queries;
+using Spotiwood.Api.Search.Application.Validators;
 using System.Collections.Generic;
 using Xunit;
 
-namespace Spotiwood.Api.SearchDetails.UnitTests.Validators;
+namespace Spotiwood.Api.Search.UnitTests.Validators;
 public sealed class SearchByIdQueryValidatorTests
 {
     public static IEnumerable<object[]> ValidQueries

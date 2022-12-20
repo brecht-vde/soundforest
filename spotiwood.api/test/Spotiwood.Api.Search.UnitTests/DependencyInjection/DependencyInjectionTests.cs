@@ -2,12 +2,11 @@
 using FluentAssertions;
 using FluentAssertions.Execution;
 using FluentValidation;
-using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using Spotiwood.Framework.Application.Pagination;
 using Spotiwood.Api.Search.Application.Queries;
-using Spotiwood.Framework.Application.Requests;
 using Spotiwood.Api.Search.Domain;
+using Spotiwood.Framework.Application.Pagination;
+using Spotiwood.Framework.Application.Requests;
 using Spotiwood.UnitTests.Common;
 using System;
 using Xunit;
@@ -30,11 +29,16 @@ public sealed class DependencyInjectionTests
         using (new AssertionScope())
         {
             // TODO: how to check pipeline behavior?
-
             provider.GetRequiredService<IResultRequestHandler<FreeTextSearchQuery, Result<PagedCollection<SearchResult>>>>()
                 .Should().NotBeNull();
 
+            provider.GetRequiredService<IResultRequestHandler<SearchByIdQuery, Result<SearchDetail>>>()
+                .Should().NotBeNull();
+
             provider.GetRequiredService<IValidator<FreeTextSearchQuery>>()
+                .Should().NotBeNull();
+
+            provider.GetRequiredService<IValidator<SearchByIdQuery>>()
                 .Should().NotBeNull();
 
             provider.GetRequiredService<IMapper>()

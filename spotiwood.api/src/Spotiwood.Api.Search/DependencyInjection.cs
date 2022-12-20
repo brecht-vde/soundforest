@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Spotiwood.Api.Search.Application.Queries;
 using Spotiwood.Api.Search.Application.Validators;
 using Spotiwood.Api.Search.Domain;
+using Spotiwood.Api.Search.Application.Validators;
 using Spotiwood.Framework;
 using Spotiwood.Framework.Application.Pagination;
 using Spotiwood.Framework.Application.Requests;
@@ -20,9 +21,11 @@ public static class DependencyInjection
 
         // Queries
         services.AddTransient<IResultRequestHandler<FreeTextSearchQuery, Result<PagedCollection<SearchResult>>>, FreeTextSearchQueryHandler>();
+        services.AddTransient<IResultRequestHandler<SearchByIdQuery, Result<SearchDetail>>, SearchByIdQueryHandler>();
 
         // Validators
         services.AddSingleton<IValidator<FreeTextSearchQuery>, FreeTextSearchQueryValidator>();
+        services.AddSingleton<IValidator<SearchByIdQuery>, SearchByIdQueryValidator>();
 
         // Mappers
         services.AddAutoMapper(Assembly.GetExecutingAssembly());

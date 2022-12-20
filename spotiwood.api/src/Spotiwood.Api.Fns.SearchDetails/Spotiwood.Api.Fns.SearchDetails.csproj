@@ -15,7 +15,7 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.1" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Spotiwood.Api.SearchDetails\Spotiwood.Api.SearchDetails.csproj" />
+    <ProjectReference Include="..\Spotiwood.Api.Search\Spotiwood.Api.Search.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="host.json">

@@ -1,4 +1,4 @@
-﻿namespace Spotiwood.Api.SearchDetails.Domain;
+﻿namespace Spotiwood.Api.Search.Domain;
 public sealed record SearchDetail
 {
     public string? Identifier { get; init; }

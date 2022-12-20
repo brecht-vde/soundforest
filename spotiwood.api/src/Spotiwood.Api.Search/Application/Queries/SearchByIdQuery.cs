@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using Spotiwood.Api.SearchDetails.Domain;
+using Spotiwood.Api.Search.Domain;
 using Spotiwood.Framework.Application.Errors;
 using Spotiwood.Framework.Application.Requests;
 using Spotiwood.Integrations.Omdb.Application.Abstractions;
 
-namespace Spotiwood.Api.SearchDetails.Application.Queries;
+namespace Spotiwood.Api.Search.Application.Queries;
 public sealed record SearchByIdQuery(string Identifier) : IResultRequest<Result<SearchDetail>>;
 
 public sealed class SearchByIdQueryHandler : IResultRequestHandler<SearchByIdQuery, Result<SearchDetail>>

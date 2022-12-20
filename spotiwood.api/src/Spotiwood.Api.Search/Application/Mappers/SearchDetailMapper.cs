@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using SearchDetail = Spotiwood.Api.SearchDetails.Domain.SearchDetail;
+using SearchDetail = Spotiwood.Api.Search.Domain.SearchDetail;
 using SearchDetailDto = Spotiwood.Integrations.Omdb.Domain.SearchDetail;
 
-namespace Spotiwood.Api.SearchDetails.Application.Mappers;
+namespace Spotiwood.Api.Search.Application.Mappers;
 internal sealed class SearchDetailMapper : Profile
 {
     public SearchDetailMapper()

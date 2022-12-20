@@ -1,8 +1,8 @@
 ﻿using FluentValidation;
-using Spotiwood.Api.SearchDetails.Application.Queries;
+using Spotiwood.Api.Search.Application.Queries;
 using System.Text.RegularExpressions;
 
-namespace Spotiwood.Api.SearchDetails.Application.Validators;
+namespace Spotiwood.Api.Search.Application.Validators;
 internal sealed class SearchByIdQueryValidator : AbstractValidator<SearchByIdQuery>
 {
     public SearchByIdQueryValidator()
