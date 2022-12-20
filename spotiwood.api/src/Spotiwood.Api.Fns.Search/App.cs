@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Spotiwood.Api.Search.Application.Queries;
@@ -17,6 +18,7 @@ public sealed class App
     }
 
     [Function("Search")]
+    [Authorize]
     public async Task<HttpResponseData> Run(
         [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "search")] HttpRequestData request,
         FunctionContext ctx,

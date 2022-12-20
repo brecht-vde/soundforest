@@ -30,7 +30,9 @@ internal sealed class SearchDetailProfile : Profile
             .ForMember(target => target.Plot,
                 opt => opt.MapFrom(source => source.Plot))
             .ForMember(target => target.Seasons,
-                opt => opt.MapFrom(source => source.TotalSeasons))
+                opt => opt.ConvertUsing(
+                    new IntegerValueConverter(),
+                    source => source.TotalSeasons))
             .ForMember(target => target.Genres,
                 opt => opt.ConvertUsing(
                     new CsvValueConverter(),

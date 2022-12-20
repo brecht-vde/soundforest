@@ -19,7 +19,7 @@ public sealed class Result<T> : IResult
 
     public static Result<T> SuccessResult(T? value)
         => new Result<T>()
-        { 
+        {
             IsSuccessful = true,
             StatusCode = 200,
             Value = value
@@ -44,10 +44,18 @@ public sealed class Result<T> : IResult
 
     public static Result<T> UserErrorResult(string message, IEnumerable<Error>? errors)
         => new Result<T>()
-        { 
+        {
             DisplayMessage = message,
             IsSuccessful = false,
             StatusCode = 400,
             Errors = errors
+        };
+
+    public static Result<T> UnauthorizedResult(string message)
+        => new Result<T>()
+        {
+            DisplayMessage = message,
+            IsSuccessful = false,
+            StatusCode = 401
         };
 }
