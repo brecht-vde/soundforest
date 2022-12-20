@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.Caching.Memory;
 using Spotiwood.Api.Search.Domain;
 using Spotiwood.Framework.Application.Errors;
 using Spotiwood.Framework.Application.Requests;
@@ -11,18 +12,22 @@ public sealed class SearchByIdQueryHandler : IResultRequestHandler<SearchByIdQue
 {
     private readonly IClient _client;
     private readonly IMapper _mapper;
+    private readonly IMemoryCache _cache;
 
-    public SearchByIdQueryHandler(IClient client, IMapper mapper)
+    public SearchByIdQueryHandler(IClient client, IMapper mapper, IMemoryCache cache)
     {
         _client = client ?? throw new ArgumentNullException(nameof(client));
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+        _cache = cache ?? throw new ArgumentNullException(nameof(cache));
     }
 
     public async Task<Result<SearchDetail>> Handle(SearchByIdQuery request, CancellationToken cancellationToken)
     {
         try
         {
-            var result = await _client.SingleAsync(request.Identifier, cancellationToken);
+            var result = await _cache.GetOrCreateAsync(
+                key: $"{nameof(request)}:{request.Identifier}",
+                factory: async entry => await _client.SingleAsync(request.Identifier, cancellationToken));
 
             if (result is null)
             {

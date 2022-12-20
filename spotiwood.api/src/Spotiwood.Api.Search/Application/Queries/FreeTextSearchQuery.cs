@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.Caching.Memory;
+using Spotiwood.Api.Search.Domain;
 using Spotiwood.Framework.Application.Pagination;
 using Spotiwood.Framework.Application.Requests;
-using Spotiwood.Api.Search.Domain;
 using Spotiwood.Integrations.Omdb.Application.Abstractions;
 using Error = Spotiwood.Framework.Application.Errors.Error;
 
@@ -12,18 +13,22 @@ internal sealed class FreeTextSearchQueryHandler : IResultRequestHandler<FreeTex
 {
     private readonly IClient _client;
     private readonly IMapper _mapper;
+    private readonly IMemoryCache _cache;
 
-    public FreeTextSearchQueryHandler(IClient client, IMapper mapper)
+    public FreeTextSearchQueryHandler(IClient client, IMapper mapper, IMemoryCache cache)
     {
         _client = client ?? throw new ArgumentNullException(nameof(client));
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+        _cache = cache ?? throw new ArgumentNullException(nameof(cache));
     }
 
     public async Task<Result<PagedCollection<SearchResult>>> Handle(FreeTextSearchQuery request, CancellationToken cancellationToken)
     {
         try
         {
-            var result = await _client.SearchAsync(request.Query, request.Page, cancellationToken);
+            var result = await _cache.GetOrCreateAsync(
+                key: $"{nameof(request)}:{request.Query}:{request.Page}",
+                factory: async entry => await _client.SearchAsync(request.Query, request.Page, cancellationToken));
 
             if (result?.Results?.Any() is not true)
             {
