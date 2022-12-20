@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Spotiwood.Api.Search;
+using Spotiwood.Framework.Authentication;
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -10,16 +11,22 @@ using System.Text.Json.Serialization;
 var host = new HostBuilder()
     .ConfigureAppConfiguration((ctx, cfg) =>
     {
-
         if (ctx.HostingEnvironment.IsDevelopment())
         {
             cfg.AddUserSecrets(Assembly.GetExecutingAssembly(), true).Build();
         }
-
     })
-    .ConfigureFunctionsWorkerDefaults()
+    .ConfigureFunctionsWorkerDefaults(app =>
+    {
+        app.UseFunctionAuthentication();
+    })
     .ConfigureServices((ctx, services) =>
     {
+        var audience = ctx.Configuration["SPOTIWOOD_AUTH_AUDIENCE"];
+        var issuer = ctx.Configuration["SPOTIWOOD_AUTH_ISSUER"];
+
+        services.AddFunctionAuthentication(audience, new Uri(issuer), Assembly.GetExecutingAssembly());
+
         var uri = ctx.Configuration["SPOTIWOOD_OMDB_API"];
         var key = ctx.Configuration["SPOTIWOOD_OMDB_KEY"];
 

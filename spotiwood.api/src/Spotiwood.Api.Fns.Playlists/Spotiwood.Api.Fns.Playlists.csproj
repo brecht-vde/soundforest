@@ -16,6 +16,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Spotiwood.Api.Playlists\Spotiwood.Api.Playlists.csproj" />
+    <ProjectReference Include="..\Spotiwood.Framework.Authentication\Spotiwood.Framework.Authentication.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="host.json">
