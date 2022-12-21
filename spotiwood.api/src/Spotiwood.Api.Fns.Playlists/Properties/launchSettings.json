@@ -2,8 +2,13 @@
   "profiles": {
     "Spotiwood.Api.Fns.Playlists": {
       "commandName": "Project",
-      "commandLineArgs": "--port 7074",
-      "launchBrowser": false
+      "commandLineArgs": "--port 7074"
+    },
+    "Docker": {
+      "commandName": "Docker",
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
+      "httpPort": 7074,
+      "useSSL": false
     }
   }
 }

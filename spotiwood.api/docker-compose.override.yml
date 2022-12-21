@@ -1,0 +1,17 @@
+version: '3.4'
+
+services:
+  spotiwood.api.fns.playlistdetails:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+  spotiwood.api.fns.playlists:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+
+  spotiwood.api.fns.search:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+
+  spotiwood.api.fns.searchdetails:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development

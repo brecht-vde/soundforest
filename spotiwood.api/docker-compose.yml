@@ -1,0 +1,58 @@
+version: '3.4'
+
+services:
+  spotiwood.api.fns.playlistdetails:
+    image: ${DOCKER_REGISTRY-}spotiwoodapifnsplaylistdetails
+    build:
+      context: .
+      dockerfile: src/Spotiwood.Api.Fns.PlaylistDetails/Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://+:7073
+      - SPOTIWOOD_AUTH_AUDIENCE=${SPOTIWOOD_AUTH_AUDIENCE}
+      - SPOTIWOOD_AUTH_ISSUER=${SPOTIWOOD_AUTH_ISSUER}
+      - SPOTIWOOD_CONNECTIONSTRING=${SPOTIWOOD_CONNECTIONSTRING}
+    ports:
+      - 7073:7073
+
+  spotiwood.api.fns.playlists:
+    image: ${DOCKER_REGISTRY-}spotiwoodapifnsplaylists
+    build:
+      context: .
+      dockerfile: src/Spotiwood.Api.Fns.Playlists/Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://+:7074
+      - SPOTIWOOD_AUTH_AUDIENCE=${SPOTIWOOD_AUTH_AUDIENCE}
+      - SPOTIWOOD_AUTH_ISSUER=${SPOTIWOOD_AUTH_ISSUER}
+      - SPOTIWOOD_CONNECTIONSTRING=${SPOTIWOOD_CONNECTIONSTRING}
+    ports:
+      - 7074:7074
+
+
+  spotiwood.api.fns.search:
+    image: ${DOCKER_REGISTRY-}spotiwoodapifnssearch
+    build:
+      context: .
+      dockerfile: src/Spotiwood.Api.Fns.Search/Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://+:7071
+      - SPOTIWOOD_OMDB_API=${SPOTIWOOD_OMDB_API}
+      - SPOTIWOOD_OMDB_KEY=${SPOTIWOOD_OMDB_KEY}
+      - SPOTIWOOD_AUTH_AUDIENCE=${SPOTIWOOD_AUTH_AUDIENCE}
+      - SPOTIWOOD_AUTH_ISSUER=${SPOTIWOOD_AUTH_ISSUER}
+    ports:
+      - 7071:7071
+
+
+  spotiwood.api.fns.searchdetails:
+    image: ${DOCKER_REGISTRY-}spotiwoodapifnssearchdetails
+    build:
+      context: .
+      dockerfile: src/Spotiwood.Api.Fns.SearchDetails/Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://+:7072
+      - SPOTIWOOD_OMDB_API=${SPOTIWOOD_OMDB_API}
+      - SPOTIWOOD_OMDB_KEY=${SPOTIWOOD_OMDB_KEY}
+      - SPOTIWOOD_AUTH_AUDIENCE=${SPOTIWOOD_AUTH_AUDIENCE}
+      - SPOTIWOOD_AUTH_ISSUER=${SPOTIWOOD_AUTH_ISSUER}
+    ports:
+      - 7072:7072
