@@ -56,3 +56,10 @@ services:
       - SPOTIWOOD_AUTH_ISSUER=${SPOTIWOOD_AUTH_ISSUER}
     ports:
       - 7072:7072
+
+  nginx:
+    image: nginx:latest
+    volumes: 
+      - ./nginx/reverse_proxy.conf:/etc/nginx/nginx.conf
+    ports:
+      - 7070:7070
