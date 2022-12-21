@@ -27,7 +27,7 @@ var host = new HostBuilder()
 
         services.AddFunctionAuthentication(audience, new Uri(issuer), Assembly.GetExecutingAssembly());
 
-        var connectionString = ctx.Configuration["SPOTIWOOD_TABLE_CONNECTIONSTRING"];
+        var connectionString = ctx.Configuration["SPOTIWOOD_CONNECTIONSTRING"];
 
         services.AddMediatR(typeof(Program));
 

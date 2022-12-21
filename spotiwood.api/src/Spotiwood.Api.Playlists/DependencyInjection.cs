@@ -49,7 +49,29 @@ public static class DependencyInjection
         );
 
         // Add Cosmos DB
-        services.AddSingleton<CosmosClient>(ctx => new CosmosClient(connectionString));
+        services.AddSingleton<CosmosClient>(ctx =>
+        {
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") is "Development")
+            {
+                var cosmosClientOptions = new CosmosClientOptions()
+                {
+                    HttpClientFactory = () =>
+                    {
+                        var httpMessageHandler = new HttpClientHandler()
+                        {
+                            ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+                        };
+
+                        return new HttpClient(httpMessageHandler);
+                    },
+                    ConnectionMode = ConnectionMode.Gateway
+                };
+
+                return new CosmosClient(connectionString, cosmosClientOptions);
+            }
+
+            return new CosmosClient(connectionString);
+        });
         services.AddSingleton<ICosmosQueryBuilder, BaseCosmosQueryBuilder>();
 
         // DB Client

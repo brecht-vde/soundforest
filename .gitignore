@@ -352,3 +352,6 @@ MigrationBackup/
 # Tests
 TestResults/
 coverage/
+
+# local settings
+*.env
