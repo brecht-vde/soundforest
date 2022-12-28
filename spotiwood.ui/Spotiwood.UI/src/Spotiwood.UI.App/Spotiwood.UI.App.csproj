@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Spotiwood.Framework.Authentication\Spotiwood.Framework.Authentication.csproj" />
+    <ProjectReference Include="..\Spotiwood.Framework.Authentication\Spotiwood.Framework.Authentication.csproj" />
   </ItemGroup>
 
 </Project>
