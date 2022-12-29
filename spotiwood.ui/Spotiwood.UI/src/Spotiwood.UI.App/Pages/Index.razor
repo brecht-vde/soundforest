@@ -1,19 +1,18 @@
 ﻿@page "/"
 @using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
+@using Spotiwood.UI.Components.Buttons
+@inject NavigationManager _navigator
 @attribute [AllowAnonymous]
 
 <h1>Hello, world!</h1>
 
 <AuthorizeView>
     <Authorized>
-        <a href="/search">
-            Let's go!
-        </a>
+        <LinkButton Href="/search" Text="Let's go!" Class="smth" />
+        <Button Text="Sign out" Class="smth2" OnClick=@(async e => _navigator.NavigateToLogout("authentication/logout")) />
     </Authorized>
     <NotAuthorized>
-        <a href="/authentication/login">
-            Sign
-            in
-        </a>
+        <LinkButton href="/authentication/login" text="Sign in" class="smth else" />
     </NotAuthorized>
 </AuthorizeView>

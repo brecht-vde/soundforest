@@ -1,0 +1,11 @@
+﻿<a href=@Href class=@Class>
+    @Text
+</a>
+
+@code {
+    [Parameter] public string? Href { get; init; }
+
+    [Parameter] public string? Text { get; init; }
+
+    [Parameter] public string? Class { get; init; }
+}
