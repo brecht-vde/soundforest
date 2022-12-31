@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Spotiwood.Framework.Authentication\Spotiwood.Framework.Authentication.csproj" />
+    <ProjectReference Include="..\Spotiwood.UI.Components\Spotiwood.UI.Components.csproj" />
   </ItemGroup>
 
 </Project>

@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spotiwood.UI.App", "src\Spo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spotiwood.Framework.Authentication", "src\Spotiwood.Framework.Authentication\Spotiwood.Framework.Authentication.csproj", "{A6AC9D0C-D05E-4C7B-938F-D95461C8B586}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spotiwood.UI.Components", "src\Spotiwood.UI.Components\Spotiwood.UI.Components.csproj", "{D63AD4FB-3F17-48E0-A715-3C9D47374966}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{A6AC9D0C-D05E-4C7B-938F-D95461C8B586}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A6AC9D0C-D05E-4C7B-938F-D95461C8B586}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A6AC9D0C-D05E-4C7B-938F-D95461C8B586}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D63AD4FB-3F17-48E0-A715-3C9D47374966}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D63AD4FB-3F17-48E0-A715-3C9D47374966}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D63AD4FB-3F17-48E0-A715-3C9D47374966}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D63AD4FB-3F17-48E0-A715-3C9D47374966}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
