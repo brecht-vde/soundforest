@@ -1,0 +1,15 @@
+﻿@using Spotiwood.UI.Components.Buttons
+@using Spotiwood.UI.Components.TextFields
+
+<SearchField PlaceHolder=@PlaceHolder @ref=_searchField />
+<Button OnClick=@OnClick Text=@Text />
+
+@code {
+    private SearchField? _searchField;
+
+    public string? Query => _searchField?.Query;
+
+    [Parameter] public string? PlaceHolder { get; init; }
+    [Parameter] public string? Text { get; init; }
+    [Parameter] public Func<MouseEventArgs, Task> OnClick { get; init; } = default!;
+}
