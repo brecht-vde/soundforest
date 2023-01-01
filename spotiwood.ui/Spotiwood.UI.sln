@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spotiwood.UI.App", "Spotiwo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spotiwood.Framework.Api", "Spotiwood.UI\src\Spotiwood.Framework.Api\Spotiwood.Framework.Api.csproj", "{F150B0D1-6F12-40DA-A01F-7D22EA19F7A5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spotiwood.Framework.Messaging", "Spotiwood.Framework.Messaging\Spotiwood.Framework.Messaging.csproj", "{0AA2B0FC-4B7C-4C15-9D1C-C9E64529076A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spotiwood.Framework.Messaging", "Spotiwood.Framework.Messaging\Spotiwood.Framework.Messaging.csproj", "{0AA2B0FC-4B7C-4C15-9D1C-C9E64529076A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
