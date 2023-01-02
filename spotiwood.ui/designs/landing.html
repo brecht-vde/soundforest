@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body>
+    <!-- fullscreen for blazor app div -->
+    <div id="app" class="flex min-h-screen w-full bg-no-repeat bg-cover bg-center bg-[url('/background.avif')]">
+      <!-- Grid layout wrapper -->
+      <div class="grid h-screen w-full grid-cols-12 gap-4">
+        <div class="col-span-12 flex flex-col p-2 lg:p-4">
+          <section>
+            <a href="/" alt="spotiwood" class="flex text-xl font-semibold lowercase text-gray-800 drop-shadow-lg lg:text-2xl">
+              <span class="inline-block rounded-bl-lg border-2 border-gray-800 bg-gray-800 pl-1 pb-1 text-white">Spoti</span>
+              <span class="inline-block rounded-tr-lg border-2 border-gray-800 pr-1 pb-1">wood</span>
+            </a>
+          </section>
+        </div>
+        <div class="col-span-10 col-start-2 col-end-12 flex flex-col place-items-center">
+          <!-- Hero section -->
+          <section>
+            <h1 class="mb-4 text-center text-4xl font-black text-gray-800 lg:mb-6 lg:text-6xl">Looking for awesome playlists?</h1>
+            <div class="flex flex-row justify-center gap-4">
+              <button class="w-28 rounded-md border-2 border-blue-600 p-2 font-semibold lowercase text-blue-600 drop-shadow-lg lg:w-36">Learn more</button>
+              <button class="w-28 rounded-md border-2 border-blue-600 bg-blue-600 p-2 font-semibold lowercase text-white drop-shadow-lg lg:w-36">Sign in</button>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

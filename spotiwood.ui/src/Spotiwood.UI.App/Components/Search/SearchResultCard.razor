@@ -1,0 +1,55 @@
+﻿@using Spotiwood.Framework.Api.Application.Dtos;
+
+<div class="rounded-lg bg-slate-50 drop-shadow-xl border-gray-300 border-[1px]">
+    <a href="/details/@SearchResult?.Identifier" alt="@SearchResult?.Title">
+
+        @if (SearchResult?.Poster is null)
+        {
+            <img class="h-40 lg:h-72 w-full rounded-t object-cover object-center"
+             src="/res/no-image.svg" alt="@SearchResult?.Title" />
+        }
+        else
+        {
+            <img class="h-40 lg:h-72 w-full rounded-t object-cover object-center"
+             src=@SearchResult?.Poster?.AbsoluteUri alt=@SearchResult?.Title />
+        }
+    </a>
+    <div class="p-2 mb-2">
+        <ul>
+            <li class="font-semibold text-lg overflow-hidden whitespace-nowrap text-ellipsis">
+                <a href="/details/@SearchResult?.Identifier" alt="@SearchResult?.Title">
+                    @SearchResult?.Title
+                </a>
+            </li>
+            <li class="text-base">
+                @SearchResult?.StartYear
+
+                @if (SearchResult?.EndYear.HasValue is true)
+                {
+                    <span> - @SearchResult.EndYear </span>
+                }
+            </li>
+            <li class="text-xs text-white lowercase text-right">
+                @if (!string.IsNullOrWhiteSpace(SearchResult?.Type))
+                {
+                    if (SearchResult.Type.Equals("movie", StringComparison.OrdinalIgnoreCase))
+                    {
+                        <span class="bg-pink-600 rounded-full px-2 pb-1">@SearchResult?.Type</span>
+                    }
+                    else if (SearchResult.Type.Equals("series", StringComparison.OrdinalIgnoreCase))
+                    {
+                        <span class="bg-yellow-600 rounded-full px-2 pb-1">@SearchResult?.Type</span>
+                    }
+                    else
+                    {
+                        <span class="bg-green-600 rounded-full px-2 pb-1">@SearchResult?.Type</span>
+                    }
+                }
+            </li>
+        </ul>
+    </div>
+</div>
+
+@code {
+    [Parameter] public SearchResult? SearchResult { get; init; }
+}

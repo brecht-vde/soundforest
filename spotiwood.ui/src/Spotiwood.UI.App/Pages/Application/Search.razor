@@ -1,0 +1,25 @@
+﻿@using OneOf;
+@using Spotiwood.Framework.Api.Application;
+@using Spotiwood.Framework.Api.Application.Abstractions;
+@using Spotiwood.Framework.Api.Application.Dtos;
+@using Spotiwood.Framework.Api.Infrastructure;
+@using Spotiwood.Framework.Messaging;
+@using System.Text.Json;
+@using Spotiwood.UI.App.Components.Search
+@using Spotiwood.UI.App.Layouts;
+@page "/search"
+@layout Dashboard
+@inject IService _service
+@inject IMessageBus _bus
+
+<SearchBar 
+    PlaceHolder="Search Spotiwood" 
+    Text="Search"
+           ClassField="block w-full rounded-lg border border-slate-300 bg-slate-50 p-4 pl-10 text-sm text-slate-900"
+           ClassButton="absolute right-2 bottom-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white" />
+
+<SearchResultRepeater />
+
+@code {
+
+}

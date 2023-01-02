@@ -1,0 +1,36 @@
+﻿@using OneOf;
+@using Spotiwood.Framework.Api.Application.Dtos;
+@using Spotiwood.Framework.Messaging;
+@using Spotiwood.UI.App.Events;
+@inject IMessageBus _bus
+
+<div>
+    @if (Results?.IsT0 is true)
+    {
+        <span>@Results!.Value.AsT0.Message</span>
+    }
+    else if (Results?.IsT1 is true)
+    {
+        <div class="grid grid-cols-5 gap-4 mt-4">
+            @foreach (var result in Results!.Value.AsT1.Items)
+            {
+                <SearchResultCard SearchResult=@result />
+            }
+        </div>
+    }
+</div>
+
+@code {
+    private OneOf<Error, PagedCollection<SearchResult>>? Results { get; set; }
+
+    protected override void OnInitialized()
+    {
+        _bus.Subscribe<SearchResultsChangedEvent>(OnSearchResultsChanged);
+    }
+
+    private void OnSearchResultsChanged(SearchResultsChangedEvent @event)
+    {
+        Results = @event?.Results;
+        StateHasChanged();
+    }
+}

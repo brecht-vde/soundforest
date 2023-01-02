@@ -16,9 +16,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Spotiwood.Framework.Messaging\Spotiwood.Framework.Messaging.csproj" />
     <ProjectReference Include="..\Spotiwood.Framework.Api\Spotiwood.Framework.Api.csproj" />
-    <ProjectReference Include="..\Spotiwood.UI.Components\Spotiwood.UI.Components.csproj" />
+    <ProjectReference Include="..\Spotiwood.Framework.Messaging\Spotiwood.Framework.Messaging.csproj" />
   </ItemGroup>
 
 </Project>

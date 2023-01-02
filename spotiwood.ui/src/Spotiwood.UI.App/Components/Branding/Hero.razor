@@ -1,0 +1,26 @@
+﻿@using Microsoft.AspNetCore.Components.Authorization
+@using Spotiwood.UI.App.Components.Authentication
+
+<section class="text-center">
+    <h1 class="mb-8 text-4xl font-black text-slate-900 lg:mb-12 lg:text-6xl drop-shadow-lg">
+        Looking for 
+        <span class=" text-slate-800 underline decoration-pink-600 decoration-wavy decoration-4 underline-offset-8">awesome</span>
+        <span class="text-pink-600">playlists?</span>
+    </h1>
+
+    <div class="flex flex-row justify-center gap-4">
+        <a href="/about" class="w-28 rounded-md border-2 border-blue-600 p-2 font-semibold lowercase text-blue-600 drop-shadow-lg lg:w-36">
+            Learn more
+        </a>
+        <AuthorizeView>
+            <Authorized>
+                <a href="/search" class="w-28 rounded-md border-2 border-blue-600 bg-blue-600 p-2 font-semibold lowercase text-white drop-shadow-lg lg:w-36">
+                    Let's go!
+                </a>
+            </Authorized>
+            <NotAuthorized>
+                <LoginButton Text="Sign in" Class="w-28 rounded-md border-2 border-blue-600 bg-blue-600 p-2 font-semibold lowercase text-white drop-shadow-lg lg:w-36" />
+            </NotAuthorized>
+        </AuthorizeView>
+    </div>
+</section>
