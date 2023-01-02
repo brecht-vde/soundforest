@@ -1,0 +1,20 @@
+﻿@using OneOf;
+@using Spotiwood.Framework.Api.Application;
+@using Spotiwood.Framework.Api.Application.Abstractions;
+@using Spotiwood.Framework.Api.Application.Dtos;
+@using Spotiwood.Framework.Api.Infrastructure;
+@using Spotiwood.Framework.Messaging;
+@using System.Text.Json;
+@using Spotiwood.UI.App.Components.Search
+@page "/search"
+@inject IService _service
+@inject IMessageBus _bus
+
+<h3>Search</h3>
+
+<SearchBar PlaceHolder="Search Spotiwood" Text="Search" />
+<SearchResultRepeater />
+
+@code {
+
+}

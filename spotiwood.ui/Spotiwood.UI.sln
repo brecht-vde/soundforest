@@ -3,15 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33110.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spotiwood.Framework.Authentication", "Spotiwood.UI\src\Spotiwood.Framework.Authentication\Spotiwood.Framework.Authentication.csproj", "{80CC9F05-A1B3-4849-A35B-8828FE2B6C12}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spotiwood.Framework.Api", "src\Spotiwood.Framework.Api\Spotiwood.Framework.Api.csproj", "{7FED7D9B-E192-424A-BD5E-4AC2B208ADC4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spotiwood.UI.Components", "Spotiwood.UI\src\Spotiwood.UI.Components\Spotiwood.UI.Components.csproj", "{2AFC45A0-E37B-4A84-AB37-0D1B9E44D7B8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spotiwood.Framework.Authentication", "src\Spotiwood.Framework.Authentication\Spotiwood.Framework.Authentication.csproj", "{5F5CFA0C-8E17-41BC-8C24-9C9B0B014D60}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spotiwood.UI.App", "Spotiwood.UI\src\Spotiwood.UI.App\Spotiwood.UI.App.csproj", "{96D37E30-230E-4F1A-A32D-217E44183043}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spotiwood.Framework.Messaging", "src\Spotiwood.Framework.Messaging\Spotiwood.Framework.Messaging.csproj", "{1EF6FB20-EBE0-4CFE-813F-BDEC677A9BCF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spotiwood.Framework.Api", "Spotiwood.UI\src\Spotiwood.Framework.Api\Spotiwood.Framework.Api.csproj", "{F150B0D1-6F12-40DA-A01F-7D22EA19F7A5}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spotiwood.Framework.Messaging", "Spotiwood.Framework.Messaging\Spotiwood.Framework.Messaging.csproj", "{0AA2B0FC-4B7C-4C15-9D1C-C9E64529076A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spotiwood.UI.App", "src\Spotiwood.UI.App\Spotiwood.UI.App.csproj", "{34E7B9B0-F946-44EA-B36C-08B9FF6AC354}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,26 +17,22 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{80CC9F05-A1B3-4849-A35B-8828FE2B6C12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{80CC9F05-A1B3-4849-A35B-8828FE2B6C12}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{80CC9F05-A1B3-4849-A35B-8828FE2B6C12}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{80CC9F05-A1B3-4849-A35B-8828FE2B6C12}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2AFC45A0-E37B-4A84-AB37-0D1B9E44D7B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2AFC45A0-E37B-4A84-AB37-0D1B9E44D7B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2AFC45A0-E37B-4A84-AB37-0D1B9E44D7B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2AFC45A0-E37B-4A84-AB37-0D1B9E44D7B8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{96D37E30-230E-4F1A-A32D-217E44183043}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{96D37E30-230E-4F1A-A32D-217E44183043}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{96D37E30-230E-4F1A-A32D-217E44183043}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{96D37E30-230E-4F1A-A32D-217E44183043}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F150B0D1-6F12-40DA-A01F-7D22EA19F7A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F150B0D1-6F12-40DA-A01F-7D22EA19F7A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F150B0D1-6F12-40DA-A01F-7D22EA19F7A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F150B0D1-6F12-40DA-A01F-7D22EA19F7A5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0AA2B0FC-4B7C-4C15-9D1C-C9E64529076A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0AA2B0FC-4B7C-4C15-9D1C-C9E64529076A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0AA2B0FC-4B7C-4C15-9D1C-C9E64529076A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0AA2B0FC-4B7C-4C15-9D1C-C9E64529076A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7FED7D9B-E192-424A-BD5E-4AC2B208ADC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7FED7D9B-E192-424A-BD5E-4AC2B208ADC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7FED7D9B-E192-424A-BD5E-4AC2B208ADC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7FED7D9B-E192-424A-BD5E-4AC2B208ADC4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F5CFA0C-8E17-41BC-8C24-9C9B0B014D60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F5CFA0C-8E17-41BC-8C24-9C9B0B014D60}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F5CFA0C-8E17-41BC-8C24-9C9B0B014D60}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F5CFA0C-8E17-41BC-8C24-9C9B0B014D60}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1EF6FB20-EBE0-4CFE-813F-BDEC677A9BCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1EF6FB20-EBE0-4CFE-813F-BDEC677A9BCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1EF6FB20-EBE0-4CFE-813F-BDEC677A9BCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1EF6FB20-EBE0-4CFE-813F-BDEC677A9BCF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34E7B9B0-F946-44EA-B36C-08B9FF6AC354}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34E7B9B0-F946-44EA-B36C-08B9FF6AC354}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34E7B9B0-F946-44EA-B36C-08B9FF6AC354}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34E7B9B0-F946-44EA-B36C-08B9FF6AC354}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

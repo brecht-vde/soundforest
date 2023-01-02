@@ -1,0 +1,27 @@
+﻿@using Spotiwood.Framework.Api.Application.Dtos;
+
+<div>
+    <img src=@SearchResult?.Poster?.AbsoluteUri alt=@SearchResult?.Title />
+
+    <p>@SearchResult?.Title</p>
+    <p>@SearchResult?.Identifier</p>
+
+    <p>
+        <span>
+            @SearchResult?.StartYear
+        </span>
+
+        @if (SearchResult?.EndYear.HasValue is true)
+        {
+            <span> - @SearchResult.EndYear</span>
+        }
+    </p>
+
+
+    <p>@SearchResult?.Type</p>
+</div>
+
+
+@code {
+    [Parameter] public SearchResult? SearchResult { get; init; }
+}
