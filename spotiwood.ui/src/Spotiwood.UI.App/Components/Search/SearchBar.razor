@@ -4,10 +4,24 @@
 @inject IService _service
 @inject IMessageBus _bus
 
-<input type="search" placeholder=@PlaceHolder class=@ClassField @bind-value=@Query />
-<button class=@ClassButton @onclick=OnSearch>
-    @Text
-</button>
+<label for="searchbar" class="sr-only mb-2 text-sm font-medium text-slate-900">Search</label>
+<div class="relative">
+    <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+        <svg class="text-slate-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+    </div>
+    <input type="search" id="searchbar"
+           @bind-value=@Query
+           class=@ClassField
+           placeholder=@PlaceHolder required />
+    <button class=@ClassButton @onclick=OnSearch>
+        @Text
+    </button>
+</div>
 
 @code {
     private string? Query { get; set; }

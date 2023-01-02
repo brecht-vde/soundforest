@@ -11,10 +11,12 @@
     }
     else if (Results?.IsT1 is true)
     {
-        foreach (var result in Results!.Value.AsT1.Items)
-        {
-            <SearchResultCard SearchResult=result />
-        }
+        <div class="grid grid-cols-5 gap-4 mt-4">
+            @foreach (var result in Results!.Value.AsT1.Items)
+            {
+                <SearchResultCard SearchResult=@result />
+            }
+        </div>
     }
 </div>
 

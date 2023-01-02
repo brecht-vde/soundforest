@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<!-- background on body -->
+
+<body class="bg-no-repeat bg-cover bg-center bg-[url('/background.avif')]">
+    <!-- fullscreen for blazor app div -->
+    <div id="app" class="flex min-h-screen w-full">
+        <!-- Grid layout wrapper -->
+        <div class="grid h-screen w-full grid-cols-12 gap-4">
+            <!-- left side bar -->
+            <div class="col-span-3 flex flex-col justify-between bg-slate-50 p-2 lg:p-4">
+                <div>
+                    <!-- Logo Section -->
+                    <section>
+                        <a href="/" alt="spotiwood"
+                            class="flex text-xl font-semibold lowercase text-gray-800 drop-shadow-lg lg:text-2xl">
+                            <span
+                                class="inline-block rounded-bl-lg border-2 border-gray-800 bg-gray-800 pl-1 pb-1 text-white">Spoti</span>
+                            <span class="inline-block rounded-tr-lg border-2 border-gray-800 pr-1 pb-1">wood</span>
+                        </a>
+                    </section>
+
+                    <!-- Navigation Section -->
+                    <section>
+                        <nav>
+                            <ul class="mt-8 space-y-4">
+                                <li class="flex items-center gap-2">
+                                    <svg class="text-primary w-6" xmlns="http://www.w3.org/2000/svg" width="24"
+                                        height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="11" cy="11" r="8"></circle>
+                                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                    </svg>
+                                    <a class="font-semibold lowercase underline decoration-blue-600 decoration-double decoration-2 underline-offset-8"
+                                        href="/application" alt="search">Search</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </section>
+                </div>
+
+                <div class="space-y-8">
+                    <!-- Settings Section -->
+                    <section>
+                        <div>
+                            <ul class="mt-8 space-y-4">
+                                <li class="flex items-center gap-2">
+                                    <svg class="text-primary w-6" xmlns="http://www.w3.org/2000/svg" width="24"
+                                        height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                        <polyline points="16 17 21 12 16 7"></polyline>
+                                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                                    </svg>
+                                    <a class="hover:text-primary" href="/logout" alt="sign out">Sign out</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </section>
+
+                    <!-- Account Section -->
+                    <section>
+                        <div class="inline-flex items-center justify-center gap-4">
+                            <svg class="h-10" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                            <span class="inline-flex"> John Doe </span>
+                        </div>
+                    </section>
+                </div>
+            </div>
+            <!-- Right side content -->
+            <div class="col-span-9 flex flex-col overflow-y-scroll p-2 lg:p-4">
+                <!-- Search Bar -->
+                <section class="mb-4">
+                    <label for="default-search" class="sr-only mb-2 text-sm font-medium text-gray-800">Search</label>
+                    <div class="relative">
+                        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                            <svg class="text-gray-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg>
+                        </div>
+                        <input type="search" id="default-search"
+                            class="block w-full rounded-lg border border-gray-300 bg-slate-50 p-4 pl-10 text-sm text-gray-800"
+                            placeholder="Search" required />
+                        <button type="submit"
+                            class="absolute right-2 bottom-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white">Search</button>
+                    </div>
+                </section>
+                <!-- Content -->
+                <section class="grid grid-cols-5 gap-4">
+                    <div class="rounded bg-slate-50 drop-shadow">
+                        <img class="h-40 lg:h-72 w-full rounded-t object-cover object-center"
+                            src="https://images.unsplash.com/photo-1485780974122-c91bb5dcf725?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80" />
+                        <div class="p-2 ">
+                            <ul>
+                                <li class="font-semibold text-lg overflow-hidden whitespace-nowrap text-ellipsis">The
+                                    Assassination of Jesse James by the Coward Robert Ford </title>
+                                <li class="text-base">Year</li>
+                                <li class="text-xs text-white lowercase text-right">
+                                    <span class="bg-pink-600 rounded-full px-2 pb-1">type</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="rounded bg-slate-50 drop-shadow">
+                        <img class="h-40 lg:h-72 w-full rounded-t object-cover object-center"
+                            src="https://images.unsplash.com/photo-1485780974122-c91bb5dcf725?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80" />
+                        <div class="p-2 ">
+                            <ul>
+                                <li class="font-semibold text-lg overflow-hidden whitespace-nowrap text-ellipsis">The
+                                    Assassination of Jesse James by the Coward Robert Ford </title>
+                                <li class="text-base">Year</li>
+                                <li class="text-xs text-white lowercase text-right">
+                                    <span class="bg-pink-600 rounded-full px-2 pb-1">type</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="rounded bg-slate-50 drop-shadow">
+                        <img class="h-40 lg:h-72 w-full rounded-t object-cover object-center"
+                            src="https://images.unsplash.com/photo-1485780974122-c91bb5dcf725?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80" />
+                        <div class="p-2 ">
+                            <ul>
+                                <li class="font-semibold text-lg overflow-hidden whitespace-nowrap text-ellipsis">The
+                                    Assassination of Jesse James by the Coward Robert Ford </title>
+                                <li class="text-base">Year</li>
+                                <li class="text-xs text-white lowercase text-right">
+                                    <span class="bg-pink-600 rounded-full px-2 pb-1">type</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="rounded bg-slate-50 drop-shadow">
+                        <img class="h-40 lg:h-72 w-full rounded-t object-cover object-center"
+                            src="https://images.unsplash.com/photo-1485780974122-c91bb5dcf725?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80" />
+                        <div class="p-2 ">
+                            <ul>
+                                <li class="font-semibold text-lg overflow-hidden whitespace-nowrap text-ellipsis">The
+                                    Assassination of Jesse James by the Coward Robert Ford </title>
+                                <li class="text-base">Year</li>
+                                <li class="text-xs text-white lowercase text-right">
+                                    <span class="bg-pink-600 rounded-full px-2 pb-1">type</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="rounded bg-slate-50 drop-shadow">
+                        <img class="h-40 lg:h-72 w-full rounded-t object-cover object-center"
+                            src="https://images.unsplash.com/photo-1485780974122-c91bb5dcf725?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80" />
+                        <div class="p-2 ">
+                            <ul>
+                                <li class="font-semibold text-lg overflow-hidden whitespace-nowrap text-ellipsis">The
+                                    Assassination of Jesse James by the Coward Robert Ford </title>
+                                <li class="text-base">Year</li>
+                                <li class="text-xs text-white lowercase text-right">
+                                    <span class="bg-pink-600 rounded-full px-2 pb-1">type</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="rounded bg-slate-50 drop-shadow">
+                        <img class="h-40 lg:h-72 w-full rounded-t object-cover object-center"
+                            src="https://images.unsplash.com/photo-1485780974122-c91bb5dcf725?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80" />
+                        <div class="p-2 ">
+                            <ul>
+                                <li class="font-semibold text-lg overflow-hidden whitespace-nowrap text-ellipsis">The
+                                    Assassination of Jesse James by the Coward Robert Ford </title>
+                                <li class="text-base">Year</li>
+                                <li class="text-xs text-white lowercase text-right">
+                                    <span class="bg-pink-600 rounded-full px-2 pb-1">type</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="rounded bg-slate-50 drop-shadow">
+                        <img class="h-40 lg:h-72 w-full rounded-t object-cover object-center"
+                            src="https://images.unsplash.com/photo-1485780974122-c91bb5dcf725?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80" />
+                        <div class="p-2 ">
+                            <ul>
+                                <li class="font-semibold text-lg overflow-hidden whitespace-nowrap text-ellipsis">The
+                                    Assassination of Jesse James by the Coward Robert Ford </title>
+                                <li class="text-base">Year</li>
+                                <li class="text-xs text-white lowercase text-right">
+                                    <span class="bg-pink-600 rounded-full px-2 pb-1">type</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
