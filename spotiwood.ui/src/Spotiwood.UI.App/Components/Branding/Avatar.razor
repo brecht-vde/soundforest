@@ -1,0 +1,17 @@
+﻿@using Microsoft.AspNetCore.Components.Authorization
+
+<AuthorizeView>
+    <Authorized>
+        @{
+            var picture = @context?.User?.Claims.FirstOrDefault(c => c.Type.Equals("picture"))?.Value;
+            var name = @context?.User?.Identity?.Name;
+
+            <div class="inline-flex gap-4 justify-center items-center">
+                <img class="h-12 rounded-full" src=@picture alt="avatar" />
+                <span class="inline-flex font-semibold">
+                    @name
+                </span>
+            </div>
+        }
+    </Authorized>
+</AuthorizeView>
