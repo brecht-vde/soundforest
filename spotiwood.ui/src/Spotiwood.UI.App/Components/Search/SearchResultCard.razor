@@ -1,7 +1,7 @@
 ﻿@using Spotiwood.Framework.Api.Application.Dtos;
 
 <div class="rounded-lg bg-slate-50 drop-shadow-xl border-gray-300 border-[1px]">
-    <a href="/details/@SearchResult?.Identifier" alt="@SearchResult?.Title">
+    <a href="/search/@SearchResult?.Identifier" alt="@SearchResult?.Title">
 
         @if (SearchResult?.Poster is null)
         {
@@ -17,7 +17,7 @@
     <div class="p-2 mb-2">
         <ul>
             <li class="font-semibold text-lg overflow-hidden whitespace-nowrap text-ellipsis">
-                <a href="/details/@SearchResult?.Identifier" alt="@SearchResult?.Title">
+                <a href="/search/@SearchResult?.Identifier" alt="@SearchResult?.Title">
                     @SearchResult?.Title
                 </a>
             </li>

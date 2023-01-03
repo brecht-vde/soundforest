@@ -64,7 +64,6 @@ internal sealed class Service : IService
                 ?? throw new NullReferenceException();
 
             return result;
-
         }
         catch (Exception ex)
         {
@@ -75,16 +74,37 @@ internal sealed class Service : IService
         }
     }
 
-    public async Task SearchDetailsAsync(string? identifier, CancellationToken cancellationToken = default)
+    public async Task<OneOf<Error, SearchDetail>> SearchDetailsAsync(string? identifier, CancellationToken cancellationToken = default)
     {
         try
         {
+            var query = !string.IsNullOrWhiteSpace(identifier)
+                ? $"/api/search/{identifier}"
+                : throw new ArgumentNullException($"{nameof(identifier)}");
 
+            var request = new HttpRequestMessage(HttpMethod.Get, query);
+            var response = await _client.SendAsync(request, cancellationToken);
+            var stream = await response.Content.ReadAsStreamAsync();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var error = await JsonSerializer.DeserializeAsync<Error>(stream, Serialization.DefaultOptions)
+                    ?? throw new NullReferenceException();
+
+                return error;
+            }
+
+            var result = await JsonSerializer.DeserializeAsync<SearchDetail>(stream, Serialization.DefaultOptions)
+                ?? throw new NullReferenceException();
+
+            return result;
         }
         catch (Exception ex)
         {
-
-            throw;
+            return new Error()
+            {
+                Message = "Whoops, something went wrong :(."
+            };
         }
     }
 }

@@ -1,5 +1,8 @@
 ﻿@using Spotiwood.UI.App.Components.Branding
+@using Spotiwood.UI.App.Components.Icons.Lucide;
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 @inherits LayoutComponentBase
+@inject NavigationManager _navigator
 
 <div class="grid w-full h-screen grid-cols-12 gap-4">
     <div class="col-span-3 flex flex-col justify-between bg-slate-50 p-2 lg:p-4">
@@ -7,30 +10,57 @@
             <Logo />
             <!-- Navigation -->
             <section class="space-y-8">
-                <nav>
-                    <ul class="mt-8 space-y-4">
-                        <li class="flex items-center gap-2">
-                            <svg class="text-primary w-6" xmlns="http://www.w3.org/2000/svg" width="24"
-                                 height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="11" cy="11" r="8"></circle>
-                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                            </svg>
-                            <a class="font-semibold lowercase underline decoration-blue-600 decoration-double decoration-2 underline-offset-8"
-                               href="/search" alt="search">Search</a>
-                        </li>
-                    </ul>
-                </nav>
+
+                <LinkMenu Items="@LinkMenuItems" ItemType="LinkMenuItem">
+                    <Template Context="link">
+                        <DynamicComponent Type="@link.Icon.GetType()" />
+                        <a class="font-semibold lowercase underline decoration-blue-600 decoration-double decoration-2 underline-offset-8"
+                           href="@link.Uri" alt="@link.Text">@link.Text</a>
+                    </Template>
+                </LinkMenu>
+
             </section>
         </div>
-        <div>
+        <div class="space-y-8">
             <!-- Actions -->
-            <section></section>
+            <section class="space-y-8">
+
+                <ButtonMenu Items="@ButtonMenuItems" ItemType="ButtonMenuItem">
+                    <Template Context="button">
+                        <DynamicComponent Type="@button.Icon.GetType()"/>
+                        <button class="font-semibold lowercase underline decoration-blue-600 decoration-double decoration-2 underline-offset-8"
+                            @onclick="@button.OnClick">
+                            @button.Text
+                        </button>
+                    </Template>
+                </ButtonMenu>
+
+            </section>
             <!-- Avatar -->
-            <section></section>
+            <section class="space-y-8">
+
+                <Avatar />
+
+            </section>
         </div>
     </div>
     <div class="col-span-9 flex flex-col overflow-y-scroll p-2 lg:p-4">
         @Body
     </div>
 </div>
+
+@code
+{
+    private IEnumerable<LinkMenuItem> LinkMenuItems => new List<LinkMenuItem>()
+    {
+        new LinkMenuItem("search", "/search", new SearchIcon())
+    };
+
+    private IEnumerable<ButtonMenuItem> ButtonMenuItems => new List<ButtonMenuItem>()
+    {
+        new ButtonMenuItem("sign out", new LogoutIcon(), async (EventArgs e) =>
+        {
+            _navigator.NavigateToLogout("authentication/logout");
+        })
+    };
+}
