@@ -41,6 +41,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spotiwood.Framework.Authent
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{D88D142F-F6BD-4AE4-9E98-07004E207D46}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spotiwood.Api.Fns.PlaylistExport", "src\Spotiwood.Api.Fns.PlaylistExport\Spotiwood.Api.Fns.PlaylistExport.csproj", "{3CC4F7DB-D2B0-4411-8556-83C153156FD0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -111,6 +113,10 @@ Global
 		{D88D142F-F6BD-4AE4-9E98-07004E207D46}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D88D142F-F6BD-4AE4-9E98-07004E207D46}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D88D142F-F6BD-4AE4-9E98-07004E207D46}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3CC4F7DB-D2B0-4411-8556-83C153156FD0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3CC4F7DB-D2B0-4411-8556-83C153156FD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3CC4F7DB-D2B0-4411-8556-83C153156FD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3CC4F7DB-D2B0-4411-8556-83C153156FD0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -131,6 +137,7 @@ Global
 		{8711CAA2-052F-4634-9F90-969D029D73A0} = {BDC679DF-7A37-42BD-BD5D-A6B95C3154D7}
 		{0282BE8E-C660-4A93-8A02-8105E3046265} = {B2EF4144-EB0B-4630-A57C-E4854B2C1CD3}
 		{16E33E0C-038C-44F1-BEEE-BD6B4250EF48} = {1755C7CF-963A-4BCD-9C77-DD96B4522786}
+		{3CC4F7DB-D2B0-4411-8556-83C153156FD0} = {BDC679DF-7A37-42BD-BD5D-A6B95C3154D7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BC0CDDC5-107B-49E7-9B3F-EEE2C967E2F4}

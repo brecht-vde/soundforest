@@ -6,6 +6,7 @@ using Spotiwood.Api.Playlists.Application.Abstractions;
 using Spotiwood.Api.Playlists.Application.Dtos;
 using Spotiwood.Api.Playlists.Infrastructure.Entities;
 using Spotiwood.Api.Playlists.Infrastructure.Extensions;
+using Spotiwood.Api.Playlists.Infrastructure.Mappers;
 using Spotiwood.Api.Playlists.Infrastructure.Options;
 using Spotiwood.Framework.Application.Pagination;
 using System.Net;
@@ -43,16 +44,10 @@ internal sealed class BaseClient : IClient
                 partitionKey: new PartitionKey(identifier),
                 cancellationToken: cancellationToken);
 
-            if (response is null || response.StatusCode is not HttpStatusCode.OK || response.Resource is null)
+            if (response is null || (int)response.StatusCode >= 300 || response.Resource is null)
                 return null;
 
-            var dto = new PlaylistDto()
-            {
-                Identifier = response.Resource.Identifier,
-                PlaylistTitle = response.Resource.PlaylistTitle,
-                PlaylistUri = response.Resource.PlaylistUri,
-                Title = response.Resource.Title,
-            };
+            var dto = response.Resource.ToDto();
 
             return dto;
         }
@@ -84,13 +79,7 @@ internal sealed class BaseClient : IClient
             if (entities is null || entities.Any() is not true)
                 return null;
 
-            var dtos = entities.Select(e => new PlaylistDto()
-            {
-                Identifier = e.Identifier,
-                PlaylistTitle = e.PlaylistTitle,
-                PlaylistUri = e.PlaylistUri,
-                Title = e.Title,
-            }).ToArray();
+            var dtos = entities.Select(e => e.ToDto()).ToArray();
 
             var result = new PagedCollection<PlaylistDto>()
             {
@@ -105,6 +94,29 @@ internal sealed class BaseClient : IClient
         catch (Exception ex)
         {
             _logger.LogError(ex, "Could not execute database query.");
+            return null;
+        }
+    }
+
+    public async Task<PlaylistDto?> UpsertAsync(PlaylistDto dto, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var response = await _container.UpsertItemAsync<PlaylistEntity>(
+                item: dto.ToEntity(),
+                partitionKey: new PartitionKey(dto.Identifier),
+                cancellationToken: cancellationToken);
+
+            if (response is null || (int)response.StatusCode >= 300  || response.Resource is null)
+                return null;
+
+            dto = response.Resource.ToDto();
+
+            return dto;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Could not upsert record.");
             return null;
         }
     }

@@ -77,10 +77,10 @@ public sealed class BaseClientTests
         using (new AssertionScope())
         {
             result.Should().NotBeNull();
-            result!.PlaylistTitle.Should().Be(entity.PlaylistTitle);
-            result!.PlaylistUri.Should().Be(entity.PlaylistUri);
-            result!.Identifier.Should().Be(entity.Identifier);
-            result!.Title.Should().Be(entity.Title);
+            result!.PlaylistTitle.Should().Be(entity.playlistTitle);
+            result!.PlaylistUri.Should().Be(entity.playlistUri);
+            result!.Identifier.Should().Be(entity.id);
+            result!.Title.Should().Be(entity.title);
         }
     }
 
@@ -160,7 +160,7 @@ public sealed class BaseClientTests
         List<PlaylistEntity> results)
     {
         // Arrange
-        var items = results.AsQueryable().OrderBy(e => e.Identifier);
+        var items = results.AsQueryable().OrderBy(e => e.id);
 
         options.Setup(c => c.Value)
             .Returns(optionsInstance);
@@ -215,7 +215,7 @@ public sealed class BaseClientTests
                 It.IsAny<string>(),
                 It.IsAny<QueryRequestOptions>(),
                 It.IsAny<CosmosLinqSerializerOptions>()))
-            .Returns(new List<PlaylistEntity>().AsQueryable().OrderBy(e => e.Identifier));
+            .Returns(new List<PlaylistEntity>().AsQueryable().OrderBy(e => e.id));
 
         var sut = new BaseClient(logger, options.Object, client.Object, qb.Object);
 

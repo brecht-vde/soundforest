@@ -33,14 +33,14 @@ var host = new HostBuilder()
 
         services.AddPlaylists(connectionString);
 
-        services.Configure<JsonSerializerOptions>(options =>
+        services.AddSingleton(provider =>
         {
+            var options = new JsonSerializerOptions();
             options.Converters.Add(new JsonStringEnumConverter());
             options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-            options.PropertyNameCaseInsensitive = true;
             options.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault;
+            return options;
         });
-
     })
     .Build();
 

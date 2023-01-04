@@ -8,4 +8,6 @@ public sealed record Playlist
     public string? PlaylistTitle { get; init; }
 
     public Uri? PlaylistUri { get; init; }
+
+    public string? Status { get; init; }
 }

@@ -4,6 +4,7 @@ using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Spotiwood.Api.Playlists.Application.Abstractions;
+using Spotiwood.Api.Playlists.Application.Commands;
 using Spotiwood.Api.Playlists.Application.Queries;
 using Spotiwood.Api.Playlists.Application.Validators;
 using Spotiwood.Api.Playlists.Domain;
@@ -26,10 +27,12 @@ public static class DependencyInjection
         // Queries
         services.AddTransient<IResultRequestHandler<GetPlaylistByIdQuery, Result<Playlist>>, GetPlaylistByIdQueryHandler>();
         services.AddTransient<IResultRequestHandler<GetPlaylistsQuery, Result<PagedCollection<Playlist>>>, GetPlaylistsQueryHandler>();
+        services.AddTransient<IResultRequestHandler<ExportPlaylistCommand, Result<Playlist>>, ExportPlaylistCommandHandler>();
 
         // Validators
         services.AddSingleton<IValidator<GetPlaylistByIdQuery>, GetPlaylistByIdQueryValidator>();
         services.AddSingleton<IValidator<GetPlaylistsQuery>, GetPlaylistsQueryValidator>();
+        services.AddSingleton<IValidator<ExportPlaylistCommand>, ExportPlaylistCommandValidator>();
 
         // Mappers
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
@@ -72,6 +75,7 @@ public static class DependencyInjection
 
             return new CosmosClient(connectionString);
         });
+
         services.AddSingleton<ICosmosQueryBuilder, BaseCosmosQueryBuilder>();
 
         // DB Client

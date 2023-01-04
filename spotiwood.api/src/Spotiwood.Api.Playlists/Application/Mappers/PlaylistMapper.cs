@@ -15,6 +15,8 @@ internal sealed class PlaylistMapper : Profile
             .ForMember(target => target.PlaylistUri,
                 opt => opt.MapFrom(source => source.PlaylistUri))
             .ForMember(target => target.Title,
-                opt => opt.MapFrom(source => source.Title));
+                opt => opt.MapFrom(source => source.Title))
+            .ForMember(target => target.Status,
+                opt => opt.MapFrom(source => source.Status));
     }
 }
