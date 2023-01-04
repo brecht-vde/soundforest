@@ -10,5 +10,5 @@ public interface IService
 
     public Task<OneOf<Error, PagedCollection<SearchResult>>> SearchAsync(string? query, int? page = null, CancellationToken cancellationToken = default);
 
-    public Task SearchDetailsAsync(string? identifier, CancellationToken cancellationToken = default);
+    public Task<OneOf<Error, SearchDetail>> SearchDetailsAsync(string? identifier, CancellationToken cancellationToken = default);
 }
