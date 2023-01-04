@@ -7,4 +7,6 @@ internal interface IClient
     public Task<PlaylistDto?> SingleAsync(string identifier, CancellationToken cancellationToken);
 
     public Task<PagedCollection<PlaylistDto>?> ManyAsync(int? page, int? size, CancellationToken cancellationToken);
+
+    public Task<PlaylistDto?> UpsertAsync(PlaylistDto dto, CancellationToken cancellationToken);
 }

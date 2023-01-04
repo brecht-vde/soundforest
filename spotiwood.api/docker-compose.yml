@@ -1,6 +1,19 @@
 version: '3.4'
 
 services:
+  spotiwood.api.fns.playlistexport:
+    image: ${DOCKER_REGISTRY-}spotiwoodapifnsplaylistexport
+    build:
+      context: .
+      dockerfile: src/Spotiwood.Api.Fns.PlaylistExport/Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://+:7075
+      - SPOTIWOOD_AUTH_AUDIENCE=${SPOTIWOOD_AUTH_AUDIENCE}
+      - SPOTIWOOD_AUTH_ISSUER=${SPOTIWOOD_AUTH_ISSUER}
+      - SPOTIWOOD_CONNECTIONSTRING=${SPOTIWOOD_CONNECTIONSTRING}
+    ports:
+      - 7075:7075
+
   spotiwood.api.fns.playlistdetails:
     image: ${DOCKER_REGISTRY-}spotiwoodapifnsplaylistdetails
     build:
@@ -27,7 +40,6 @@ services:
     ports:
       - 7074:7074
 
-
   spotiwood.api.fns.search:
     image: ${DOCKER_REGISTRY-}spotiwoodapifnssearch
     build:
@@ -41,7 +53,6 @@ services:
       - SPOTIWOOD_AUTH_ISSUER=${SPOTIWOOD_AUTH_ISSUER}
     ports:
       - 7071:7071
-
 
   spotiwood.api.fns.searchdetails:
     image: ${DOCKER_REGISTRY-}spotiwoodapifnssearchdetails
