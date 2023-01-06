@@ -81,7 +81,7 @@
       <div class="col-span-9 flex flex-col overflow-y-scroll p-2 lg:p-4">
         <!-- Content -->
         <!-- Movie Details Card -->
-        <article class="p-8 bg-gray-300/80 rounded-lg drop-shadow-lg grid grid-cols-4 gap-4 mt-4 mb-4">
+        <article class="p-8 bg-gray-300/80 rounded-lg drop-shadow-lg grid grid-cols-4 gap-4 mt-4 mb-4 col-span-3">
           <div class="flex flex-col">
             <img class="h-60 w-44 object-cover rounded-lg drop-shadow-lg border-2 border-content-dark border-opacity-5"
               src="https://m.media-amazon.com/images/M/MV5BMjc5MDE0NjkxOF5BMl5BanBnXkFtZTcwNzA0NTkyMw@@._V1_FMjpg_UY720_.jpg"
@@ -114,6 +114,15 @@
               </div>
               </p>
             </div>
+          </div>
+        </article>
+        <article class="p-8 bg-slate-800 rounded-lg drop-shadow mt-4 mb-4 text-white font-semibold">
+          <div class="text-center mb-4">
+          <span>It seems a playlist does not exist yet. Would you like to export one?</span>
+          </div>
+          <div class="flex flex-row justify-center gap-4">
+            <input type="text" class="p-4 rounded-lg drop-shadow border-gray-300" placeholder="Garden State" />
+            <button class="w-28 rounded-md border-2 border-blue-600 bg-blue-600 p-2 font-semibold lowercase text-white drop-shadow-lg lg:w-36">export</button>
           </div>
         </article>
         <article class="flex flex-col h-screen">
