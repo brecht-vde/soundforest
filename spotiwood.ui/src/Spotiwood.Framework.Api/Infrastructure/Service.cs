@@ -2,6 +2,8 @@
 using Spotiwood.Framework.Api.Application.Abstractions;
 using Spotiwood.Framework.Api.Application.Dtos;
 using Spotiwood.Framework.Api.Application.Serialization;
+using System.Net;
+using System.Net.Http.Json;
 using System.Text.Json;
 
 namespace Spotiwood.Framework.Api.Infrastructure;
@@ -14,16 +16,80 @@ internal sealed class Service : IService
         _client = client ?? throw new ArgumentNullException(nameof(client));
     }
 
-    public async Task PlaylistDetailsAsync(string? identifier, CancellationToken cancellationToken = default)
+    public async Task<OneOf<Error, Playlist>> ExportAsync(string? identifier, string? title, CancellationToken cancellationToken = default)
     {
         try
         {
+            var content = new
+            {
+                identifier,
+                title
+            };
 
+            var request = new HttpRequestMessage(HttpMethod.Post, "/api/export");
+            request.Content = JsonContent.Create(content);
+
+            var response = await _client.SendAsync(request, cancellationToken);
+            var stream = await response.Content.ReadAsStreamAsync();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var error = await JsonSerializer.DeserializeAsync<Error>(stream, Serialization.DefaultOptions)
+                    ?? throw new NullReferenceException();
+
+                return error;
+            }
+
+            var result = await JsonSerializer.DeserializeAsync<Playlist>(stream, Serialization.DefaultOptions)
+                ?? throw new NullReferenceException();
+
+            return result;
         }
         catch (Exception ex)
         {
+            return new Error()
+            {
+                Message = "Whoops, something went wrong :(."
+            };
+        }
+    }
 
-            throw;
+    public async Task<OneOf<Error, Playlist, NotFound>> PlaylistDetailsAsync(string? identifier, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            var query = !string.IsNullOrWhiteSpace(identifier)
+                ? $"/api/playlists/{identifier}"
+                : throw new ArgumentNullException($"{nameof(identifier)}");
+
+            var request = new HttpRequestMessage(HttpMethod.Get, query);
+            var response = await _client.SendAsync(request, cancellationToken);
+            var stream = await response.Content.ReadAsStreamAsync();
+
+            if (response.StatusCode is HttpStatusCode.NotFound)
+            {
+                return new NotFound();
+            }
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var error = await JsonSerializer.DeserializeAsync<Error>(stream, Serialization.DefaultOptions)
+                    ?? throw new NullReferenceException();
+
+                return error;
+            }
+
+            var result = await JsonSerializer.DeserializeAsync<Playlist>(stream, Serialization.DefaultOptions)
+                ?? throw new NullReferenceException();
+
+            return result;
+        }
+        catch (Exception ex)
+        {
+            return new Error()
+            {
+                Message = "Whoops, something went wrong :(."
+            };
         }
     }
 

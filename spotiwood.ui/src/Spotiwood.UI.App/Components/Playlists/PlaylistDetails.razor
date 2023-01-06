@@ -1,0 +1,21 @@
+﻿@using Spotiwood.Framework.Api.Application.Dtos;
+
+@if (Playlist?.Status?.Equals("completed", StringComparison.OrdinalIgnoreCase) is true)
+{
+
+}
+else
+{
+    <article class="mt-4 mb-4 rounded-lg bg-slate-800 p-8 font-semibold text-white drop-shadow">
+        <div class="text-center">
+            <span>It seems this playlist is not quite ready yet:</span>
+            <span class="rounded-full bg-pink-600 px-2 pb-1 text-xs drop-shadow-lg">pending</span>
+        </div>
+    </article>
+
+}
+
+
+@code {
+    [Parameter] public Playlist? Playlist { get; init; }
+}

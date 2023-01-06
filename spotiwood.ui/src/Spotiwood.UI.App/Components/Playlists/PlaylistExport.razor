@@ -1,0 +1,31 @@
+﻿@using Spotiwood.Framework.Api.Application.Abstractions;
+@using Spotiwood.Framework.Api.Application.Dtos;
+@inject IService _service
+
+<article class="p-8 bg-slate-800 rounded-lg drop-shadow mt-4 mb-4 text-white font-semibold">
+    <div class="text-center mb-4">
+        <span>It seems a playlist does not exist yet. Would you like to export one?</span>
+    </div>
+    <div class="flex flex-row justify-center gap-4">
+        <input type="text" class="p-4 rounded-lg drop-shadow border-gray-300 text-slate-900" placeholder=@_title @bind-value=@_title />
+        <button class="w-28 rounded-md border-2 border-blue-600 bg-blue-600 p-2 font-semibold lowercase text-white drop-shadow-lg lg:w-36" @onclick=OnClick>export</button>
+    </div>
+</article>
+
+@code {
+    [Parameter] public string? Identifier { get; init; }
+
+    [Parameter] public string? DefaultTitle { get; init; }
+
+    private string? _title;
+
+    protected override void OnInitialized()
+    {
+        _title = DefaultTitle;
+    }
+
+    private async Task OnClick(MouseEventArgs e)
+    {
+        await _service.ExportAsync(Identifier, _title);
+    }
+}
