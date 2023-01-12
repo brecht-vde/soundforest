@@ -1,0 +1,14 @@
+{
+  "profiles": {
+    "SoundForest.Api.Exports.Create": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7085"
+    },
+    "Docker": {
+      "commandName": "Docker",
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
+      "httpPort": 34521,
+      "useSSL": false
+    }
+  }
+}

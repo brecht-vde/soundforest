@@ -1,0 +1,30 @@
+version: '3.4'
+
+services:
+  soundforest.api.exports.create:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+
+  soundforest.api.exports.single:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+
+  soundforest.api.playlists.many:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+
+  soundforest.api.playlists.single:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+
+  soundforest.api.titles.many:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+
+  soundforest.api.titles.single:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+
+  soundforest.trigger.export:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development

@@ -5,9 +5,7 @@ public sealed record Playlist
 
     public string? Title { get; init; }
 
-    public string? PlaylistTitle { get; init; }
-
-    public Uri? PlaylistUri { get; init; }
+    public string? PlaylistId { get; init; }
 
     public string? Status { get; init; }
 }
