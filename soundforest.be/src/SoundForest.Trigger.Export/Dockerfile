@@ -1,0 +1,31 @@
+#See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
+
+FROM mcr.microsoft.com/azure-functions/dotnet-isolated:4-dotnet-isolated7.0 AS base
+WORKDIR /home/site/wwwroot
+EXPOSE 7087
+
+FROM mcr.microsoft.com/dotnet/runtime:7.0 as runtime7.0
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+# Copy .NET Core 7.0 runtime from the 7.0 image
+COPY --from=runtime7.0 /usr/share/dotnet/host /usr/share/dotnet/host
+COPY --from=runtime7.0 /usr/share/dotnet/shared /usr/share/dotnet/shared
+WORKDIR /src
+COPY ["src/SoundForest.Trigger.Export/SoundForest.Trigger.Export.csproj", "src/SoundForest.Trigger.Export/"]
+COPY ["src/SoundForest.Exports/SoundForest.Exports.csproj", "src/SoundForest.Exports/"]
+COPY ["src/SoundForest.Framework.CosmosDB/SoundForest.Framework.CosmosDB.csproj", "src/SoundForest.Framework.CosmosDB/"]
+COPY ["src/SoundForest.Schema/SoundForest.Schema.csproj", "src/SoundForest.Schema/"]
+COPY ["src/SoundForest.Framework/SoundForest.Framework.csproj", "src/SoundForest.Framework/"]
+COPY ["src/SoundForest.Playlists/SoundForest.Playlists.csproj", "src/SoundForest.Playlists/"]
+RUN dotnet restore "src/SoundForest.Trigger.Export/SoundForest.Trigger.Export.csproj"
+COPY . .
+WORKDIR "/src/src/SoundForest.Trigger.Export"
+RUN dotnet build "SoundForest.Trigger.Export.csproj" -c Release -o /app/build
+
+FROM build AS publish
+RUN dotnet publish "SoundForest.Trigger.Export.csproj" -c Release -o /app/publish /p:UseAppHost=false
+
+FROM base AS final
+WORKDIR /home/site/wwwroot
+COPY --from=publish /app/publish .
+ENV AzureWebJobsScriptRoot=/home/site/wwwroot \
+    AzureFunctionsJobHost__Logging__Console__IsEnabled=true

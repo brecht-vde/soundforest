@@ -1,0 +1,107 @@
+version: '3.4'
+
+services:
+  nginx:
+    image: nginx:latest
+    volumes: 
+      - ./nginx/reverse_proxy.conf:/etc/nginx/nginx.conf
+    ports:
+      - 7080:7080
+
+  soundforest.api.exports.create:
+    image: ${DOCKER_REGISTRY-}soundforestapiexportscreate
+    build:
+      context: .
+      dockerfile: src/SoundForest.Api.Exports.Create/Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://+:7081
+      - SOUNDFOREST_AUTH_AUDIENCE=${SOUNDFOREST_AUTH_AUDIENCE}
+      - SOUNDFOREST_AUTH_ISSUER=${SOUNDFOREST_AUTH_ISSUER}
+      - SOUNDFOREST_CONNECTIONSTRING=${SOUNDFOREST_CONNECTIONSTRING}
+      - SOUNDFOREST_DATABASE=${SOUNDFOREST_DATABASE}
+    ports:
+      - 7081:7081
+
+  soundforest.api.exports.single:
+    image: ${DOCKER_REGISTRY-}soundforestapiexportssingle
+    build:
+      context: .
+      dockerfile: src/SoundForest.Api.Exports.Single/Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://+:7082
+      - SOUNDFOREST_AUTH_AUDIENCE=${SOUNDFOREST_AUTH_AUDIENCE}
+      - SOUNDFOREST_AUTH_ISSUER=${SOUNDFOREST_AUTH_ISSUER}
+      - SOUNDFOREST_CONNECTIONSTRING=${SOUNDFOREST_CONNECTIONSTRING}
+      - SOUNDFOREST_DATABASE=${SOUNDFOREST_DATABASE}
+    ports:
+      - 7082:7082
+
+  soundforest.api.playlists.many:
+    image: ${DOCKER_REGISTRY-}soundforestapiplaylistsmany
+    build:
+      context: .
+      dockerfile: src/SoundForest.Api.Playlists.Many/Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://+:7083
+      - SOUNDFOREST_AUTH_AUDIENCE=${SOUNDFOREST_AUTH_AUDIENCE}
+      - SOUNDFOREST_AUTH_ISSUER=${SOUNDFOREST_AUTH_ISSUER}
+      - SOUNDFOREST_CONNECTIONSTRING=${SOUNDFOREST_CONNECTIONSTRING}
+      - SOUNDFOREST_DATABASE=${SOUNDFOREST_DATABASE}
+    ports:
+      - 7083:7083
+
+  soundforest.api.playlists.single:
+    image: ${DOCKER_REGISTRY-}soundforestapiplaylistssingle
+    build:
+      context: .
+      dockerfile: src/SoundForest.Api.Playlists.Single/Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://+:7084
+      - SOUNDFOREST_AUTH_AUDIENCE=${SOUNDFOREST_AUTH_AUDIENCE}
+      - SOUNDFOREST_AUTH_ISSUER=${SOUNDFOREST_AUTH_ISSUER}
+      - SOUNDFOREST_CONNECTIONSTRING=${SOUNDFOREST_CONNECTIONSTRING}
+      - SOUNDFOREST_DATABASE=${SOUNDFOREST_DATABASE}
+    ports:
+      - 7084:7084
+
+  soundforest.api.titles.many:
+    image: ${DOCKER_REGISTRY-}soundforestapititlesmany
+    build:
+      context: .
+      dockerfile: src/SoundForest.Api.Titles.Many/Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://+:7085
+      - SOUNDFOREST_AUTH_AUDIENCE=${SOUNDFOREST_AUTH_AUDIENCE}
+      - SOUNDFOREST_AUTH_ISSUER=${SOUNDFOREST_AUTH_ISSUER}
+      - SOUNDFOREST_OMDB_API=${SOUNDFOREST_OMDB_API}
+      - SOUNDFOREST_OMDB_KEY=${SOUNDFOREST_OMDB_KEY}
+    ports:
+      - 7085:7085
+
+  soundforest.api.titles.single:
+    image: ${DOCKER_REGISTRY-}soundforestapititlessingle
+    build:
+      context: .
+      dockerfile: src/SoundForest.Api.Titles.Single/Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://+:7086
+      - SOUNDFOREST_AUTH_AUDIENCE=${SOUNDFOREST_AUTH_AUDIENCE}
+      - SOUNDFOREST_AUTH_ISSUER=${SOUNDFOREST_AUTH_ISSUER}
+      - SOUNDFOREST_OMDB_API=${SOUNDFOREST_OMDB_API}
+      - SOUNDFOREST_OMDB_KEY=${SOUNDFOREST_OMDB_KEY}
+    ports:
+      - 7086:7086
+
+  soundforest.trigger.export:
+    image: ${DOCKER_REGISTRY-}soundforesttriggerexport
+    build:
+      context: .
+      dockerfile: src/SoundForest.Trigger.Export/Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://+:7087
+      - SOUNDFOREST_AUTH_AUDIENCE=${SOUNDFOREST_AUTH_AUDIENCE}
+      - SOUNDFOREST_AUTH_ISSUER=${SOUNDFOREST_AUTH_ISSUER}
+      - SOUNDFOREST_CONNECTIONSTRING=${SOUNDFOREST_CONNECTIONSTRING}
+      - SOUNDFOREST_DATABASE=${SOUNDFOREST_DATABASE}
+    ports:
+      - 7087:7087
