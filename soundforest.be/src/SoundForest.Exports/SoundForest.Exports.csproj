@@ -7,16 +7,28 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AngleSharp" Version="1.0.0" />
     <PackageReference Include="FluentValidation" Version="11.4.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
+    <PackageReference Include="SpotifyAPI.Web" Version="7.0.0" />
+    <PackageReference Include="System.Linq.Async" Version="6.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SoundForest.Clients.Auth0\SoundForest.Clients.Auth0.csproj" />
+    <ProjectReference Include="..\SoundForest.Clients.Spotify\SoundForest.Clients.Spotify.csproj" />
     <ProjectReference Include="..\SoundForest.Framework.CosmosDB\SoundForest.Framework.CosmosDB.csproj" />
     <ProjectReference Include="..\SoundForest.Schema\SoundForest.Schema.csproj" />
     <ProjectReference Include="..\SoundForest.Framework\SoundForest.Framework.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Processing\Application\Mappers\" />
   </ItemGroup>
 
 </Project>

@@ -1,13 +1,13 @@
 {
   "profiles": {
-    "SoundForest.Trigger.Export.Pending": {
+    "SoundForest.Trigger.Export": {
       "commandName": "Project",
       "commandLineArgs": "--port 7087"
     },
     "Docker": {
       "commandName": "Docker",
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
-      "httpPort": 31759,
+      "httpPort": 7087,
       "useSSL": false
     }
   }

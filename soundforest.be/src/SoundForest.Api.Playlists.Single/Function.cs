@@ -2,8 +2,8 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
-using SoundForest.Playlists.Application.Queries;
-using SoundForest.Playlists.Domain;
+using SoundForest.Playlists.Management.Application.Queries;
+using SoundForest.Playlists.Management.Domain;
 using System.Net;
 
 namespace SoundForest.Api.Playlists.Search.Details;

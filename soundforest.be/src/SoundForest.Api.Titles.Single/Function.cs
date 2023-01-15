@@ -2,8 +2,8 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
-using SoundForest.Titles.Application.Queries;
-using SoundForest.Titles.Domain;
+using SoundForest.Titles.Management.Application.Queries;
+using SoundForest.Titles.Management.Domain;
 using System.Net;
 
 namespace SoundForest.Api.Search.Details

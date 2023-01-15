@@ -51,6 +51,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoundForest.Schema", "src\S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoundForest.Trigger.Export", "src\SoundForest.Trigger.Export\SoundForest.Trigger.Export.csproj", "{8BB98E18-B7B5-4FA0-8E30-99CEEA688C76}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{FC2F5EAD-946A-46C4-B89C-F87910DA2449}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
