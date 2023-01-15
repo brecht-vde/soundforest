@@ -2,8 +2,8 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
-using SoundForest.Exports.Application.Queries;
-using SoundForest.Exports.Domain;
+using SoundForest.Exports.Management.Application.Queries;
+using SoundForest.Exports.Management.Domain;
 using System.Net;
 
 namespace SoundForest.Api.Exports.Single;

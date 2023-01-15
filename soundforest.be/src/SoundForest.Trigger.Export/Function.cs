@@ -2,10 +2,10 @@ using MediatR;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using SoundForest.Exports.Application.Commands;
-using SoundForest.Exports.Domain;
-using SoundForest.Playlists.Application.Commands;
-using SoundForest.Playlists.Domain;
-using SoundForest.Schema;
+using SoundForest.Exports.Management.Application.Commands;
+using SoundForest.Exports.Management.Domain;
+using SoundForest.Playlists.Management.Application.Commands;
+using SoundForest.Playlists.Management.Domain;
 using SoundForest.Schema.Exports;
 
 namespace SoundForest.Trigger.Export
@@ -39,32 +39,23 @@ namespace SoundForest.Trigger.Export
                         if (exportEntity is null)
                             continue;
 
-                        if (exportEntity?.status?.Equals(Constants.Statuses.Pending, StringComparison.OrdinalIgnoreCase) is true)
-                        {
-                            _ = await _mediator.Send(new StartExportCommand(
-                                    Id: exportEntity?.id,
-                                    Name: exportEntity?.name,
-                                    Username: exportEntity?.username));
-                        }
-                        else if (exportEntity?.status?.Equals(Constants.Statuses.Finalizing, StringComparison.OrdinalIgnoreCase) is true)
-                        {
-                            var playlist = new Playlist(
-                                    Id: exportEntity?.id,
-                                    Name: exportEntity?.name,
-                                    ExternalId: exportEntity?.externalId
-                                );
+                        if (Enum.TryParse<Status>(exportEntity?.status, out Status status) is false)
+                            continue;
 
-                            var result = await _mediator.Send(new CreatePlaylistCommand(playlist));
-
-                            result.Switch(
-                                success: async (s, v) =>
-                                {
-                                    _ = await _mediator.Send(new FinalizeExportCommand(exportEntity?.id, Status.Completed));
-                                },
-                                failure: async (s, m, e) =>
-                                {
-                                    _ = await _mediator.Send(new FinalizeExportCommand(exportEntity?.id, Status.Failed));
-                                });
+                        switch (status)
+                        {
+                            case Status.Pending:
+                                await ProcessPending(exportEntity);
+                                break;
+                            case Status.Finalizing:
+                                await ProcessFinalizing(exportEntity);
+                                break;
+                            case Status.NA:
+                            case Status.Running:
+                            case Status.Completed:
+                            case Status.Failed:
+                            default:
+                                break;
                         }
                     }
                 }
@@ -73,6 +64,74 @@ namespace SoundForest.Trigger.Export
             {
                 _logger.LogError(ex, "Could not export playlist.");
             }
+        }
+
+        private async Task ProcessFinalizing(ExportEntity exportEntity)
+        {
+            var playlist = new Playlist(
+                Id: exportEntity?.id,
+                Name: exportEntity?.name,
+                ExternalId: exportEntity?.externalId
+            );
+
+            // Save playlist
+            var result = await _mediator.Send(new CreatePlaylistCommand(playlist));
+
+            // Save export status based on result
+            result.Switch(
+                success: async (s, v) =>
+                {
+                    _ = await _mediator.Send(new UpsertExportCommand(exportEntity?.id,
+                        new Dictionary<string, object>() {
+                                            { nameof(Exports.Management.Domain.Export.Status), Status.Completed.ToString() }
+                        }));
+                },
+                failure: async (s, m, e) =>
+                {
+                    _ = await _mediator.Send(new UpsertExportCommand(exportEntity?.id,
+                        new Dictionary<string, object>() {
+                                            { nameof(Exports.Management.Domain.Export.Status), Status.Failed.ToString() }
+                        }));
+                });
+        }
+
+        private async Task ProcessPending(ExportEntity exportEntity)
+        {
+            // Set in progress
+            _ = await _mediator.Send(new UpsertExportCommand(
+                Id: exportEntity?.id,
+                Properties: new Dictionary<string, object>()
+                {
+                    { nameof(Exports.Management.Domain.Export.Status), Status.Running.ToString() }
+                }));
+
+            // Export
+            var result = await _mediator.Send(new ProcessExportCommand(
+                    Id: exportEntity?.id,
+                    Name: exportEntity?.name,
+                    Username: exportEntity?.username));
+
+            // Save result
+            result.Switch(
+                success: async (s, v) =>
+                {
+                    _ = await _mediator.Send(new UpsertExportCommand(
+                        Id: exportEntity?.id,
+                        Properties: new Dictionary<string, object>()
+                        {
+                            { nameof(Exports.Management.Domain.Export.Status), Status.Finalizing.ToString() },
+                            { nameof(Exports.Management.Domain.Export.ExternalId), v }
+                        }));
+                },
+                failure: async (s, m, e) =>
+                {
+                    _ = await _mediator.Send(new UpsertExportCommand(
+                        Id: exportEntity?.id,
+                        Properties: new Dictionary<string, object>()
+                        {
+                            { nameof(Exports.Management.Domain.Export.Status), Status.Finalizing.ToString() }
+                        }));
+                });
         }
     }
 }

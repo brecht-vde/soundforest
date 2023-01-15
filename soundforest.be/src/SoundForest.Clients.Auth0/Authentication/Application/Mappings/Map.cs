@@ -26,7 +26,7 @@ internal static class Map
         return new User(
             Provider: identity.provider, 
             AccessToken: identity.access_token, 
-            RefreshToken: identity.refreshToken, 
+            RefreshToken: identity.refresh_token, 
             Id: identity.user_id, 
             Connection: identity.connection, 
             IsSocial: identity.isSocial);

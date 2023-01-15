@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SoundForest.Framework.Authentication;
 using SoundForest.Playlists;
-using SoundForest.Playlists.Application.Options;
+using SoundForest.Playlists.Management.Application.Options;
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;

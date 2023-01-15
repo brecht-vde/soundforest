@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SoundForest.Exports;
-using SoundForest.Exports.Application.Options;
+using SoundForest.Exports.Management.Infrastructure.Options;
 using SoundForest.Framework.Authentication;
 using System.Reflection;
 using System.Text.Json;
@@ -33,7 +33,7 @@ var host = new HostBuilder()
 
         services.AddMediatR(typeof(Program));
 
-        services.AddFeatureExports(new ClientOptions(connectionString, database));
+        services.AddFeatureExportManagement(new ClientOptions(connectionString, database));
 
         services.Configure<JsonSerializerOptions>(options =>
         {

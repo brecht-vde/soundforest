@@ -6,11 +6,11 @@ using SoundForest.Clients.Omdb.Application.Options;
 using SoundForest.Framework;
 using SoundForest.Framework.Application.Pagination;
 using SoundForest.Framework.Application.Requests;
-using SoundForest.Titles.Application.Clients;
-using SoundForest.Titles.Application.Queries;
-using SoundForest.Titles.Application.Validators;
-using SoundForest.Titles.Domain;
-using SoundForest.Titles.Infrastructure.Clients;
+using SoundForest.Titles.Management.Application.Clients;
+using SoundForest.Titles.Management.Application.Queries;
+using SoundForest.Titles.Management.Application.Validators;
+using SoundForest.Titles.Management.Domain;
+using SoundForest.Titles.Management.Infrastructure.Clients;
 
 namespace SoundForest.Titles;
 public static class DependencyInjection

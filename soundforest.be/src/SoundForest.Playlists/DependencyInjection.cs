@@ -7,13 +7,13 @@ using SoundForest.Framework;
 using SoundForest.Framework.Application.Pagination;
 using SoundForest.Framework.Application.Requests;
 using SoundForest.Framework.CosmosDB;
-using SoundForest.Playlists.Application.Clients;
-using SoundForest.Playlists.Application.Commands;
-using SoundForest.Playlists.Application.Options;
-using SoundForest.Playlists.Application.Queries;
-using SoundForest.Playlists.Application.Validators;
-using SoundForest.Playlists.Domain;
-using SoundForest.Playlists.Infrastructure.Clients;
+using SoundForest.Playlists.Management.Application.Clients;
+using SoundForest.Playlists.Management.Application.Commands;
+using SoundForest.Playlists.Management.Application.Options;
+using SoundForest.Playlists.Management.Application.Queries;
+using SoundForest.Playlists.Management.Application.Validators;
+using SoundForest.Playlists.Management.Domain;
+using SoundForest.Playlists.Management.Infrastructure.Clients;
 
 namespace SoundForest.Playlists;
 public static class DependencyInjection

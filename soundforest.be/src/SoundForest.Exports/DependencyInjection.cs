@@ -1,15 +1,32 @@
-﻿using FluentValidation;
+﻿using AngleSharp;
+using AngleSharp.Io;
+using FluentValidation;
 using MediatR;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using SoundForest.Exports.Application.Clients;
+using SoundForest.Clients.Auth0.Authentication;
+using SoundForest.Clients.Auth0.Authentication.Application.Options;
+using SoundForest.Clients.Spotify.Authentication;
+using SoundForest.Clients.Spotify.Authentication.Application.Options;
 using SoundForest.Exports.Application.Commands;
-using SoundForest.Exports.Application.Options;
-using SoundForest.Exports.Application.Queries;
+using SoundForest.Exports.Application.Exporters;
+using SoundForest.Exports.Application.Parsers;
+using SoundForest.Exports.Application.Stores;
 using SoundForest.Exports.Application.Validators;
-using SoundForest.Exports.Domain;
-using SoundForest.Exports.Infrastructure.Clients;
+using SoundForest.Exports.Infrastructure.Exporters;
+using SoundForest.Exports.Infrastructure.Parsers;
+using SoundForest.Exports.Infrastructure.Stores;
+using SoundForest.Exports.Management.Application.Clients;
+using SoundForest.Exports.Management.Application.Commands;
+using SoundForest.Exports.Management.Application.Queries;
+using SoundForest.Exports.Management.Application.Validators;
+using SoundForest.Exports.Management.Domain;
+using SoundForest.Exports.Management.Infrastructure.Clients;
+using SoundForest.Exports.Management.Infrastructure.Options;
+using SoundForest.Exports.Processing.Domain;
 using SoundForest.Framework;
 using SoundForest.Framework.Application.Requests;
 using SoundForest.Framework.CosmosDB;
@@ -17,29 +34,72 @@ using SoundForest.Framework.CosmosDB;
 namespace SoundForest.Exports;
 public static class DependencyInjection
 {
-    public static IServiceCollection AddFeatureExports(this IServiceCollection services, ClientOptions options)
+    public static IServiceCollection AddFeatureExportManagement(this IServiceCollection services, ClientOptions options)
     {
         services.AddLogging();
         services.AddMediatR(typeof(DependencyInjection));
-        services.AddSingleton<CosmosClient>(ctx => new CosmosClient(options?.ConnectionString));
+        services.TryAddSingleton<CosmosClient>(ctx => new CosmosClient(options?.ConnectionString));
 
         services.AddCosmosDBExtensions();
         services.AddFramework();
 
-        services.AddTransient<IResultRequestHandler<CreateExportCommand, Result<Export>>, CreateExportCommandHandler>();
-        services.AddTransient<IResultRequestHandler<ExportByIdQuery, Result<Export>>, ExportByIdQueryHandler>();
-        services.AddTransient<IResultRequestHandler<StartExportCommand, Result<Export>>, StartExportCommandHandler>();
-        services.AddTransient<IResultRequestHandler<FinalizeExportCommand, Result<Export>>, FinalizeExportCommandHandler>();
+        services.TryAddTransient<IResultRequestHandler<CreateExportCommand, Result<Export>>, CreateExportCommandHandler>();
+        services.TryAddTransient<IResultRequestHandler<ExportByIdQuery, Result<Export>>, ExportByIdQueryHandler>();
+        services.TryAddTransient<IResultRequestHandler<UpsertExportCommand, Result<Export>>, UpsertExportCommandHandler>();
 
-        services.AddSingleton<IValidator<CreateExportCommand>, CreateExportCommandValidator>();
-        services.AddSingleton<IValidator<ExportByIdQuery>, ExportByIdQueryValidator>();
-        services.AddSingleton<IValidator<StartExportCommand>, StartExportCommandValidator>();
-        services.AddSingleton<IValidator<FinalizeExportCommand>, FinalizeExportCommandValidator>();
+        services.TryAddSingleton<IValidator<CreateExportCommand>, CreateExportCommandValidator>();
+        services.TryAddSingleton<IValidator<ExportByIdQuery>, ExportByIdQueryValidator>();
+        services.TryAddSingleton<IValidator<UpsertExportCommand>, UpsertExportCommandValidator>();
 
-
-        services.AddSingleton<IOptions<ClientOptions>>(ctx => Options.Create<ClientOptions>(options));
-        services.AddTransient<IClient, ExportClient>();
+        services.TryAddSingleton<IOptions<ClientOptions>>(ctx => Options.Create<ClientOptions>(options));
+        services.TryAddTransient<IClient, ExportClient>();
 
         return services;
+    }
+
+    public static IServiceCollection AddFeatureExportProcessing(this IServiceCollection services, SpotifyAuthOptions spotify, Auth0Options auth0, TsvOptions tsv)
+    {
+        services.AddLogging();
+        services.AddMediatR(typeof(DependencyInjection));
+        services.AddMemoryCache();
+
+        services.AddFramework();
+        services.AddSpotifyAuth(spotify);
+        services.AddAuth0(auth0);
+
+        services.TryAddTransient<IResultRequestHandler<ProcessExportCommand, Result<string>>, ProcessExportCommandHandler>();
+        services.TryAddSingleton<IValidator<ProcessExportCommand>, ProcessExportCommandValidator>();
+
+        services.TryAddSingleton<IOptions<TsvOptions>>(ctx => Options.Create<TsvOptions>(tsv));
+
+        services.AddSingleton<IKeyValueStore<IEnumerable<string>?>, TsvKeyValueStore>();
+        services.AddTransient<IParser<IEnumerable<Soundtrack>?>, SoundtrackParser>();
+        services.AddTransient<IExporter<IEnumerable<Soundtrack>?>, SpotifyExporter>();
+
+        services.AddTransient<IBrowsingContext>(ctx =>
+        {
+            var requester = new DefaultHttpRequester();
+            requester.Headers["user-agent"] = "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1";
+            var config = Configuration.Default.With(requester).WithDefaultLoader();
+            var context = BrowsingContext.New(config);
+            return context;
+        });
+
+        services.AddHttpClient();
+
+        return services;
+    }
+
+    public static IHost PreloadData(this IHost host)
+    {
+        return PreloadDataAsync(host).GetAwaiter().GetResult();
+    }
+
+    public static async Task<IHost> PreloadDataAsync(this IHost host)
+    {
+        using var scope = host.Services.CreateScope();
+        var service = scope.ServiceProvider.GetRequiredService<IKeyValueStore<IEnumerable<string>?>>();
+        await service.LoadAsync();
+        return host;
     }
 }
