@@ -1,4 +1,5 @@
 ﻿using AngleSharp;
+using AngleSharp.Dom;
 using Microsoft.Extensions.Logging;
 using SoundForest.Exports.Application.Parsers;
 using SoundForest.Exports.Processing.Domain;
@@ -24,20 +25,30 @@ internal sealed class SoundtrackParser : IParser<IEnumerable<Soundtrack>?>
             if (uris?.Any() is not true) return null;
 
             var documents = await uris.ToAsyncEnumerable<Uri>()
-                .SelectAwait(async u => await _context.OpenAsync(u.AbsoluteUri, cancellationToken))
+                .SelectAwait(async u =>
+                {
+                    _logger.LogInformation($"Fetching {u}.");
+                    var document = await _context.OpenAsync(u.AbsoluteUri, cancellationToken);
+                    await document.WaitForReadyAsync();
+                    return document;
+                })
                 .ToArrayAsync();
 
-            var containers = documents?.Select(d => d.QuerySelector(".ipl-content-list"));
+            _logger.LogInformation("documents: " + documents?.Count());
 
-            var content = containers?
-                .SelectMany(c => c.Children)
+            var items = documents?
+                .SelectMany(d => d.QuerySelectorAll(".ipl-content-list__item"))
                 .Select(c => c.TextContent)
-                .Where(tc => string.IsNullOrWhiteSpace(tc) is false);
+                .Where(c => !string.IsNullOrWhiteSpace(c));
 
-            var soundtracks = content?.Select(c => new Soundtrack(
+            _logger.LogInformation("items: " + items?.Count());
+
+            var soundtracks = items?.Select(c => new Soundtrack(
                     Artists: c?.ParseArtists(),
                     Title: c?.ParseTitle()
                 ));
+
+            _logger.LogInformation("soundtracks: " + soundtracks?.Count());
 
             return soundtracks;
         }

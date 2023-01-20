@@ -1,0 +1,36 @@
+﻿@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
+@using SoundForest.App.Components.Buttons
+@using SoundForest.App.Components.Icons
+@inject NavigationManager _navigationManager;
+
+<AuthorizeView>
+    <Authorized>
+        <section class="bg-neutral-50">
+            <ul class="flex justify-evenly py-4">
+                <li>
+                    <LinkButton Alt="search" Href="/titles">
+                        <Icon Name="search" Css="h-6 w-6 stroke-neutral-900" />
+                    </LinkButton>
+                </li>
+                <li>
+                    <LinkButton Alt="playlists" Href="/playlists">
+                        <Icon Name="list-music" Css="h-6 w-6 stroke-neutral-900" />
+                    </LinkButton>
+                </li>
+                <li>
+                    <Button OnClick=@OnLogout>
+                        <Icon Name="log-out" Css="h-6 w-6 stroke-neutral-900" />
+                    </Button>
+                </li>
+            </ul>
+        </section>
+    </Authorized>
+</AuthorizeView>
+
+@code {
+    protected void OnLogout(MouseEventArgs e)
+    {
+        _navigationManager.NavigateToLogout("authentication/logout");
+    }
+}

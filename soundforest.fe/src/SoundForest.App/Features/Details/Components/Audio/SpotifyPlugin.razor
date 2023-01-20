@@ -1,0 +1,19 @@
+﻿@using SoundForest.Framework.Api.Application.Abstractions;
+@using SoundForest.Framework.Api.Application.Dtos;
+@inject IService _service;
+
+@if (!string.IsNullOrWhiteSpace(Playlist?.ExternalId))
+{
+    var uri = $"https://open.spotify.com/embed/playlist/{Playlist.ExternalId}?utm_source=generator&theme=0";
+
+    <section class="flex flex-col h-screen">
+        <iframe class="h-full w-full" style="border-radius:12px"
+            src=@uri
+            frameborder="0" allowfullscreen=""
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+    </section>
+}
+
+@code {
+    [Parameter] public Playlist? Playlist { get; init; }
+}

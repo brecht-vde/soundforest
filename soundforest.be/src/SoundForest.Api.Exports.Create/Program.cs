@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using SoundForest.Exports;
 using SoundForest.Exports.Management.Infrastructure.Options;
 using SoundForest.Framework.Authentication;

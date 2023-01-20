@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
+using Microsoft.Extensions.Options;
 using SoundForest.Exports.Management.Application.Commands;
 using SoundForest.Exports.Management.Domain;
 using System.IdentityModel.Tokens.Jwt;
@@ -13,10 +14,12 @@ namespace SoundForest.Api.Exports.Create;
 public sealed class Function
 {
     private readonly IMediator _mediator;
+    private readonly IOptions<JsonSerializerOptions> _options;
 
-    public Function(IMediator mediator)
+    public Function(IMediator mediator, IOptions<JsonSerializerOptions> options)
     {
         _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+        _options = options ?? throw new ArgumentNullException(nameof(options));
     }
 
     [Function("Exports")]
@@ -30,7 +33,7 @@ public sealed class Function
         var jwt = values?.FirstOrDefault()?.Replace("Bearer", "", StringComparison.OrdinalIgnoreCase)?.Trim();
         var token = new JwtSecurityToken(jwt);
         var user = token?.Subject?.Split(":")?.LastOrDefault();
-        var requestBody = await JsonSerializer.DeserializeAsync<CreateExportCommandRequest>(request.Body);
+        var requestBody = await JsonSerializer.DeserializeAsync<CreateExportCommandRequest>(request.Body, _options?.Value);
 
         var command = new CreateExportCommand(requestBody?.Id, requestBody?.Name, user);
         var result = await _mediator.Send(command);

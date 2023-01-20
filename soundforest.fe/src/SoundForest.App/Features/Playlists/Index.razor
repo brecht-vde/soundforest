@@ -1,0 +1,31 @@
+﻿@page "/playlists"
+@using SoundForest.App.Features.Playlists.Components.Events;
+@using SoundForest.App.Features.Playlists.Components.PlaylistList
+@using SoundForest.Framework.Api.Application.Abstractions;
+@using SoundForest.Framework.Messaging;
+@inject IMessageBus _bus
+@inject IService _service
+
+<section class="flex flex-col gap-4">
+    <PlaylistListPager />
+    <PlaylistList />
+</section>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await _service.PlaylistsAsync();
+
+        result.Switch(
+            e =>
+            {
+                // TODO: do something with error
+            },
+            s =>
+            {
+                var message = new OnPlaylistSearchEvent(s);
+                _bus.Publish<OnPlaylistSearchEvent>(message);
+            }
+        );
+    }
+}

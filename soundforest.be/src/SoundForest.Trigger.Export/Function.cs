@@ -39,7 +39,7 @@ namespace SoundForest.Trigger.Export
                         if (exportEntity is null)
                             continue;
 
-                        if (Enum.TryParse<Status>(exportEntity?.status, out Status status) is false)
+                        if (Enum.TryParse<Status>(exportEntity?.status, true, out Status status) is false)
                             continue;
 
                         switch (status)
@@ -129,7 +129,7 @@ namespace SoundForest.Trigger.Export
                         Id: exportEntity?.id,
                         Properties: new Dictionary<string, object>()
                         {
-                            { nameof(Exports.Management.Domain.Export.Status), Status.Finalizing.ToString() }
+                            { nameof(Exports.Management.Domain.Export.Status), Status.Failed.ToString() }
                         }));
                 });
         }

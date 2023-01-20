@@ -35,7 +35,7 @@ internal static class ExportMapper
         };
 
     public static Status ToStatus(this string? status)
-        => status switch
+        => status?.ToLower() switch
         {
             Constants.Statuses.Failed => Status.Failed,
             Constants.Statuses.Pending => Status.Pending,

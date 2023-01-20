@@ -1,0 +1,78 @@
+﻿@using OneOf
+@using SoundForest.App.Components.Buttons
+@using SoundForest.App.Features.Titles.Events
+@using SoundForest.App.Features.Titles.States
+@using SoundForest.Framework.Api.Application.Abstractions;
+@using SoundForest.Framework.Api.Application.Dtos
+@using SoundForest.Framework.Messaging
+@using SoundForest.Framework.Messaging.State
+@inject IService _service;
+@inject IMessageBus _bus
+@inject IStateContainer<QueryState> _container
+
+@if (Result?.IsT1 is true)
+{
+    var result = Result.Value.AsT1;
+
+    <section class="text-neutral-50 text-xs font-sans text-center flex justify-between">
+        <div>
+            total: @result.Total
+        </div>
+        <div class="flex gap-2">
+            page:
+            @{
+                var pages = result.Total % result.Size is 0
+                ? result.Total / result.Size
+                : (result.Total / result.Size) + 1;
+
+                for (int i = 1; i <= pages; i++)
+                {
+                    var currentPage = i;
+
+                    if (currentPage == result.Page)
+                    {
+                        <Button Css="text-center font-sans text-xs font-bold text-neutral-5 underline decoration-emerald-500 underline-offset-4" OnClick=@(() => OnPageChanged(currentPage))>
+                            @currentPage
+                        </Button>
+                    }
+                    else
+                    {
+                        <Button Css="text-center font-sans text-xs font-bold text-neutral-50" OnClick=@(() => OnPageChanged(currentPage))>
+                            @currentPage
+                        </Button>
+                    }
+                }
+            }
+        </div>
+    </section>
+}
+
+@code {
+    private OneOf<Error, PagedCollection<TitleSummary>>? Result { get; set; }
+
+    protected override void OnInitialized()
+    {
+        _bus.Subscribe<OnSearchEvent>(OnSearchResultsChanged);
+    }
+
+    private void OnSearchResultsChanged(OnSearchEvent @event)
+    {
+        Result = @event.Data;
+        StateHasChanged();
+    }
+
+    private async Task OnPageChanged(int page)
+    {
+        _container.State.Page = page;
+        var result = await _service.TitlesAsync(_container.State.Query, _container.State.Page);
+
+        result.Switch(e =>
+        {
+
+        },
+        s =>
+        {
+            _bus.Publish<OnSearchEvent>(new OnSearchEvent(s));
+        });
+    }
+}
