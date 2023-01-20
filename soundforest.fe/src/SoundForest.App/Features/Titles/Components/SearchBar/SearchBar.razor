@@ -1,0 +1,61 @@
+﻿@using SoundForest.App.Components.Buttons
+@using SoundForest.App.Components.Icons
+@using SoundForest.App.Components.Inputs
+@using SoundForest.App.Features.Titles.Events
+@using SoundForest.App.Features.Titles.States
+@using SoundForest.Framework.Api.Application.Abstractions
+@using SoundForest.Framework.Api.Application.Dtos
+@using SoundForest.Framework.Messaging;
+@using SoundForest.Framework.Messaging.State
+@inject IService _service
+@inject IMessageBus _bus
+@inject IStateContainer<QueryState?> _state
+
+<section class="flex flex-row">
+    <TextInput PlaceHolder="search..." Css="form-control w-full rounded-l p-2 drop-shadow-lg focus:outline-1 focus:outline-none" @ref=@_input />
+    <Button Css="rounded-r bg-emerald-500 p-2 drop-shadow-lg" OnClick=@OnSearchAsync>
+        <Icon Css="w-6 h-6 stroke-neutral-900" Name="search" />
+    </Button>
+</section>
+
+@code {
+    private TextInput? _input;
+
+    protected override async void OnInitialized()
+    {
+        if (_state?.State is null)
+            return;
+
+        await ExecuteQuery(_state?.State?.Query, _state?.State?.Page);
+
+        if (_input is not null)
+        {
+            _input.Value = _state?.State?.Query;
+        }
+    }
+
+    protected async Task OnSearchAsync(MouseEventArgs e)
+    {
+        var query = _input?.Value;
+
+        await ExecuteQuery(query);
+    }
+
+    private async Task ExecuteQuery(string? query, int? page = null)
+    {
+        var result = await _service.TitlesAsync(query, page);
+
+        result.Switch(
+            e =>
+            {
+                // TODO: do something with the error
+            },
+            s =>
+            {
+                _state.State ??= new QueryState();
+                _state.State.Query = query;
+                _state.State.Page = page;
+                _bus.Publish(new OnSearchEvent(s));
+            });
+    }
+}

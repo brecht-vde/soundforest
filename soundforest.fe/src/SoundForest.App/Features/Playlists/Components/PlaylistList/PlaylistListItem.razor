@@ -1,0 +1,26 @@
+﻿@using SoundForest.App.Components.Buttons
+@using SoundForest.Framework.Api.Application.Dtos;
+
+@{
+    var external = $"https://open.spotify.com/playlist/{Playlist?.ExternalId}";
+    var details = $"/details/{Playlist?.Id}";
+}
+
+<div class="flex flex-col place-content-center text-neutral-50 font-serif rounded bg-neutral-900 p-2">
+    <span class="text-lg">
+        <LinkButton Alt=@Playlist?.Name Css="decoration underline decoration-emerald-500 underline-offset-2" Href=@external>
+            @Playlist?.Name
+        </LinkButton>
+    </span>
+    <span class="text-xs text-slate-300">
+        <LinkButton Alt=@Playlist?.Id Css="text-xs text-neutral-500" Href=@details>
+            see more
+        </LinkButton>
+    </span>
+</div>
+
+@code {
+
+    [Parameter]
+    public Playlist? Playlist { get; init; }
+}

@@ -1,0 +1,53 @@
+﻿@using SoundForest.Framework.Api.Application.Dtos;
+
+<section class="grid grid-cols-4 rounded bg-neutral-50">
+    <div class="p-2">
+        <img class="max-h-60 rounded drop-shadow" src=@Detail?.Poster />
+    </div>
+    <div class="col-span-3 col-start-2 flex flex-col gap-2 p-2 font-serif text-xs text-neutral-400">
+        <div>
+            <span class="text-xl text-neutral-900">@Detail?.Title</span>
+        </div>
+        <div class="flex gap-1">
+            <span>@Detail?.StartYear</span>
+            @if (Detail?.EndYear is not null)
+            {
+                <span> - </span>
+            }
+            <span>@Detail?.EndYear</span>
+            @if (Detail?.Seasons is not null)
+            {
+                <span>@Detail?.Seasons seasons</span>
+            }
+        </div>
+        <div class="flex flex-row">
+            @if (Detail?.Actors is not null)
+            {
+                <span class="space-x-1">
+                @foreach (var actor in Detail.Actors)
+                {
+                    <span>@actor</span>
+                }
+                </span>
+            }
+        </div>
+        <div>
+            <span>@Detail?.Plot</span>
+        </div>
+        <div class="flex gap-4">
+            @if (Detail?.Genres is not null)
+            {
+                @foreach (var genre in Detail.Genres)
+                {
+                    <span class="w-fit rounded bg-rose-400 px-1 font-sans font-bold text-neutral-50">
+                        @genre
+                    </span>
+                }
+            }
+        </div>
+    </div>
+</section>
+
+@code {
+    [Parameter] public TitleDetail? Detail { get; init; }
+}

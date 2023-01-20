@@ -1,0 +1,16 @@
+﻿@using Microsoft.AspNetCore.Components.Authorization
+@using SoundForest.App.Components.Buttons
+@using SoundForest.App.Components.Icons
+@using SoundForest.App.Layouts.Components.Branding
+@using SoundForest.App.Layouts.Components.Navigation
+@inherits LayoutComponentBase
+
+<header class="p-4">
+    <Logo />
+</header>
+<main class="flex flex-1 flex-col overflow-y-scroll p-4">
+    @Body
+</main>
+<footer>
+    <Menu />
+</footer>

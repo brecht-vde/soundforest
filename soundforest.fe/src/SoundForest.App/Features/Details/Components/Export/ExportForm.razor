@@ -1,0 +1,57 @@
+﻿@using SoundForest.App.Components.Buttons
+@using SoundForest.App.Components.Icons
+@using SoundForest.App.Components.Inputs
+@using SoundForest.Framework.Api.Application.Abstractions;
+@using SoundForest.Framework.Api.Application.Dtos;
+@inject IService _service;
+
+<section class="flex flex-col bg-emerald-200 rounded drop-shadow p-4 gap-1">
+    @if (Export is null)
+    {
+        <span class="text-xs text-emerald-900">Export the soundtracks for @Detail?.Title?</span>
+        <div class="flex flex-row">
+            <TextInput Css="form-control w-full rounded-l p-2 drop-shadow-lg focus:outline-none" PlaceHolder=@Detail?.Title @ref=@_input />
+            <Button Css="rounded-r bg-emerald-500 p-2 drop-shadow-lg text-center" OnClick=SubmitAsync>
+                <Icon Name="save" Css="w-6 h-6" />
+            </Button>
+        </div>
+    }
+    else
+    {
+        <span class="flex space-x-1 justify-center">
+            <span class="text-xs text-emerald-900">Export for @Detail?.Title:</span>
+            <span class="text-xs text-neutral-50 font-bold rounded px-2 text-center bg-rose-400">@Export?.Status</span>
+        </span>
+    }
+</section>
+
+@code {
+    [Parameter] public TitleDetail? Detail { get; init; }
+
+    [Parameter] public Export? Export { get; set; }
+
+    private TextInput? _input;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+    }
+
+    private async Task SubmitAsync()
+    {
+        var title = _input?.Value ?? $"Soundtracks for: {Detail?.Title}";
+        var result = await _service.CreateExportAsync(Detail?.Id, title);
+
+        result.Switch(
+            e =>
+            {
+                // TODO: do something with error
+            },
+            s =>
+            {
+                Export = s;
+                StateHasChanged();
+            }
+        );
+    }
+}

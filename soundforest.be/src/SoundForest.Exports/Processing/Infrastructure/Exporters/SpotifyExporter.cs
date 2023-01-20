@@ -31,7 +31,13 @@ internal sealed class SpotifyExporter : IExporter<IEnumerable<Soundtrack>?>
         try
         {
             var externalTracks = await BuildTracksAsync(items!, cancellationToken);
+
+            _logger.LogInformation("external tracks: " + externalTracks?.Count);
+
             var playlistId = await SaveTracksAsync(externalTracks, username, name, cancellationToken);
+
+            _logger.LogInformation("playlistid: " + playlistId);
+
             return playlistId;
         }
         catch (Exception ex)
@@ -49,19 +55,33 @@ internal sealed class SpotifyExporter : IExporter<IEnumerable<Soundtrack>?>
 
             var spotifyUserToken = await GetUserAccessToken(username, cancellationToken);
 
+            _logger.LogInformation("Fetched user token");
+
             if (string.IsNullOrWhiteSpace(spotifyUserToken)) return null;
 
             var client = new SpotifyClient(spotifyUserToken);
 
             var user = await client.UserProfile.Current();
 
+            _logger.LogInformation("Fetched user profile");
+
             if (string.IsNullOrWhiteSpace(user?.Id)) return null;
 
             var playlist = await client.Playlists.Create(user.Id, new PlaylistCreateRequest(name) { Description = "Playlist generated with Sound Forest :)." });
 
+            _logger.LogInformation("Created playlist");
+
             if (string.IsNullOrWhiteSpace(playlist?.Id)) return null;
 
-            await client.Playlists.AddItems(playlist.Id, new PlaylistAddItemsRequest(items.Select(i => i.Uri).ToArray()));
+            _logger.LogInformation("Items: " + items.Count());
+
+            foreach (var batch in items.Chunk(100))
+            {
+                var uris = batch.Select(item => item.Uri).ToArray();
+                await client.Playlists.AddItems(playlist.Id, new PlaylistAddItemsRequest(uris));
+            }
+
+            _logger.LogInformation("Added items");
 
             return playlist.Id;
         }

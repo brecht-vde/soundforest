@@ -1,0 +1,27 @@
+﻿@page "/"
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
+@using SoundForest.App.Components.Buttons
+@using SoundForest.App.Components.Icons
+@using SoundForest.App.Layouts;
+@inject NavigationManager _navigator
+@attribute [AllowAnonymous]
+
+<section id="Hero" class="flex flex-col flex-1 justify-center items-center gap-4">
+    <span class="text-center font-serif text-5xl text-neutral-50">Looking for awesome playlists?</span>
+    <AuthorizeView>
+        <NotAuthorized>
+            <LinkButton Alt="sign in" Href="/authentication/login" Css="w-28 rounded-lg bg-emerald-500 p-2 font-bold text-slate-900 drop-shadow text-center">
+                sign in
+            </LinkButton>
+        </NotAuthorized>
+        <Authorized>
+            <LinkButton Alt="let's go" Href="/titles" Css="w-28 rounded-lg bg-emerald-500 p-2 font-bold text-slate-900 drop-shadow text-center">
+                let's go
+            </LinkButton>
+        </Authorized>
+    </AuthorizeView>
+    <LinkButton Alt="learn more" Href="/about" Css="w-28 rounded-lg border-2 border-neutral-50 p-2 font-bold text-neutral-50 text-center">
+        learn more
+    </LinkButton>
+</section>

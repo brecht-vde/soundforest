@@ -1,0 +1,79 @@
+﻿@page "/details/{Id}"
+@using SoundForest.App.Features.Details.Components.Audio
+@using SoundForest.App.Features.Details.Components.Card
+@using SoundForest.App.Features.Details.Components.Export
+@using SoundForest.Framework.Api.Application.Abstractions;
+@using SoundForest.Framework.Api.Application.Dtos;
+@using SoundForest.Framework.Messaging;
+@inject IService _service;
+@inject IMessageBus _bus;
+
+<section class="flex flex-col gap-4">
+    <Card Detail=@_detail />
+    <ExportForm Detail=@_detail Export=@_export />
+    <SpotifyPlugin Playlist=@_playlist />
+</section>
+
+@code {
+
+    private TitleDetail? _detail;
+    private Playlist? _playlist;
+    private Export? _export;
+
+    [Parameter] public string Id { get; init; } = default!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadTitleAsync();
+        await LoadPlaylistAsync();
+        await LoadExportAsync();
+    }
+
+    private async Task LoadTitleAsync()
+    {
+        var result = await _service.TitleAsync(Id);
+
+        result.Switch(
+            e =>
+            {
+                // TODO: do something with error
+            },
+            s =>
+            {
+                _detail = s;
+            }
+        );
+    }
+
+    private async Task LoadPlaylistAsync()
+    {
+        var result = await _service.PlaylistAsync(Id);
+
+        result.Switch(
+            e =>
+            {
+                // TODO: do something with error
+            },
+            s =>
+            {
+                _playlist = s;
+            }
+        );
+    }
+
+    private async Task LoadExportAsync()
+    {
+        var result = await _service.ExportAsync(Id);
+
+        result.Switch(
+            e =>
+            {
+                // TODO: do something with error
+            },
+            s =>
+            {
+                _export = s;
+            }
+        );
+    }
+}

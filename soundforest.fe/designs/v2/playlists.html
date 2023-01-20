@@ -1,0 +1,129 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body
+  class="flex h-screen w-full flex-col overflow-hidden bg-neutral-900 bg-[url('background.avif')] bg-cover bg-center bg-no-repeat">
+  <header class="p-4 flex flex-col gap-4">
+    <!-- Nav Bar Top -->
+    <section id="nav-top">
+      <ul class="flex justify-between">
+        <li>
+          <div class="flex">
+            <span>
+              <svg class="h-6 w-6 stroke-emerald-500" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <path d="M10 10v.2A3 3 0 0 1 8.9 16v0H5v0h0a3 3 0 0 1-1-5.8V10a3 3 0 0 1 6 0Z"></path>
+                <path d="M7 16v6"></path>
+                <path d="M13 19v3"></path>
+                <path d="M12 19h8.3a1 1 0 0 0 .7-1.7L18 14h.3a1 1 0 0 0 .7-1.7L16 9h.2a1 1 0 0 0 .8-1.7L13 3l-1.4 1.5">
+                </path>
+              </svg>
+            </span>
+            <span class="font-serif font-thin text-neutral-50">Soundforest</span>
+            <span class="font-black text-rose-400">.</span>
+          </div>
+        </li>
+      </ul>
+    </section>
+  </header>
+  <!-- Seach tiles -->
+  <main class="flex-1 overflow-y-scroll p-4">
+    <section class="text-neutral-50 text-xl font-serif mb-4">
+      Playlists
+      <hr class="border-1 border-slate-300" />
+    </section>
+    <section class="grid grid-cols-1 gap-6">
+      <div class="text-neutral-50 font-serif flex gap-4">
+        <img class="max-h-16 drop-shadow-lg rounded border-1 border-slate-300"
+          src="https://mosaic.scdn.co/640/ab67616d0000b273ad73995480ca0ca7c7d1e882ab67616d0000b273dcef905cb144d4867119850bab67616d0000b273f2f91d08a5afcc4954a38867ab67616d0000b273f4956c3ceefc6fa1cffc6da6" />
+        <div class="flex flex-col place-content-center">
+          <span class="text-lg">
+            <a href="#" class="decoration underline decoration-emerald-500 decoration-double underline-offset-2">Cold
+              Case Playlist </a>
+          </span>
+          <span class="text-xs text-slate-300">see more</span>
+        </div>
+      </div>
+      <div class="text-neutral-50 font-serif flex gap-4">
+        <img class="max-h-16 drop-shadow-lg rounded border-1 border-slate-300"
+          src="https://mosaic.scdn.co/640/ab67616d0000b273ad73995480ca0ca7c7d1e882ab67616d0000b273dcef905cb144d4867119850bab67616d0000b273f2f91d08a5afcc4954a38867ab67616d0000b273f4956c3ceefc6fa1cffc6da6" />
+        <div class="flex flex-col place-content-center">
+          <span class="text-lg">
+            <a href="#" class="decoration underline decoration-emerald-500 decoration-double underline-offset-2">Cold
+              Case Playlist </a>
+          </span>
+          <span class="text-xs text-slate-300">see more</span>
+        </div>
+      </div>
+      <div class="text-neutral-50 font-serif flex gap-4">
+        <img class="max-h-16 drop-shadow-lg rounded border-1 border-slate-300"
+          src="https://mosaic.scdn.co/640/ab67616d0000b273ad73995480ca0ca7c7d1e882ab67616d0000b273dcef905cb144d4867119850bab67616d0000b273f2f91d08a5afcc4954a38867ab67616d0000b273f4956c3ceefc6fa1cffc6da6" />
+        <div class="flex flex-col place-content-center">
+          <span class="text-lg">
+            <a href="#" class="decoration underline decoration-emerald-500 decoration-double underline-offset-2">Cold
+              Case Playlist </a>
+          </span>
+          <span class="text-xs text-slate-300">see more</span>
+        </div>
+      </div>
+      <div class="text-neutral-50 font-serif flex gap-4">
+        <img class="max-h-16 drop-shadow-lg rounded border-1 border-slate-300"
+          src="https://mosaic.scdn.co/640/ab67616d0000b273ad73995480ca0ca7c7d1e882ab67616d0000b273dcef905cb144d4867119850bab67616d0000b273f2f91d08a5afcc4954a38867ab67616d0000b273f4956c3ceefc6fa1cffc6da6" />
+        <div class="flex flex-col place-content-center">
+          <span class="text-lg">
+            <a href="#" class="decoration underline decoration-emerald-500 decoration-double underline-offset-2">Cold
+              Case Playlist </a>
+          </span>
+          <span class="text-xs text-slate-300">see more</span>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer>
+    <!-- Nav Bar Bottom -->
+    <section id="nav-bottom" class="bg-neutral-50">
+      <ul class="flex justify-evenly py-4">
+        <li>
+          <a href="/search">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </a>
+        </li>
+        <li>
+          <a href="/playlists">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15V6"></path>
+              <path d="M18.5 18a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"></path>
+              <path d="M12 12H3"></path>
+              <path d="M16 6H3"></path>
+              <path d="M12 18H3"></path>
+            </svg>
+          </a>
+        </li>
+        <li>
+          <a href="/logout">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+              <polyline points="16 17 21 12 16 7"></polyline>
+              <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>
+          </a>
+        </li>
+      </ul>
+    </section>
+  </footer>
+</body>
+
+</html>

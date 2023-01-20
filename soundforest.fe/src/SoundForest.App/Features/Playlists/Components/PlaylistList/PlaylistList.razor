@@ -1,0 +1,34 @@
+﻿@using OneOf;
+@using SoundForest.App.Features.Playlists.Components.Events;
+@using SoundForest.Framework.Api.Application.Dtos;
+@using SoundForest.Framework.Messaging;
+@inject IMessageBus _bus;
+
+<div class="grid grid-cols-1 gap-4 flex-1 overflow-y-scroll">
+    @if (Result?.IsT0 is true)
+    {
+        <span>@Result.Value.AsT0.Message</span>
+    }
+    else if (Result?.IsT1 is true)
+    {
+        @foreach (var playlist in Result.Value.AsT1.Items)
+        {
+            <PlaylistListItem Playlist=playlist />
+        }
+    }
+</div>
+
+@code {
+    private OneOf<Error, PagedCollection<Playlist>>? Result { get; set; }
+
+    protected override void OnInitialized()
+    {
+        _bus.Subscribe<OnPlaylistSearchEvent>(OnPlaylistsChanged);
+    }
+
+    private void OnPlaylistsChanged(OnPlaylistSearchEvent @event)
+    {
+        Result = @event.Data;
+        StateHasChanged();
+    }
+}

@@ -1,0 +1,127 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body
+  class="flex h-screen w-full flex-col overflow-hidden bg-neutral-900 bg-[url('background.avif')] bg-cover bg-center bg-no-repeat">
+  <header class="flex flex-col gap-4 p-4">
+    <!-- Nav Bar Top -->
+    <section id="nav-top">
+      <ul class="flex justify-between">
+        <li>
+          <div class="flex">
+            <span>
+              <svg class="h-6 w-6 stroke-emerald-500" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <path d="M10 10v.2A3 3 0 0 1 8.9 16v0H5v0h0a3 3 0 0 1-1-5.8V10a3 3 0 0 1 6 0Z"></path>
+                <path d="M7 16v6"></path>
+                <path d="M13 19v3"></path>
+                <path d="M12 19h8.3a1 1 0 0 0 .7-1.7L18 14h.3a1 1 0 0 0 .7-1.7L16 9h.2a1 1 0 0 0 .8-1.7L13 3l-1.4 1.5">
+                </path>
+              </svg>
+            </span>
+            <span class="font-serif font-thin text-neutral-50">Soundforest</span>
+            <span class="font-black text-rose-400">.</span>
+          </div>
+        </li>
+      </ul>
+    </section>
+  </header>
+  <!-- detail tiles -->
+  <main class="flex-1 overflow-y-scroll p-4">
+    <div class="flex flex-col gap-4">
+      <section class="grid grid-cols-4 rounded-xl bg-neutral-50">
+        <div class="p-2">
+          <img class="max-h-40 rounded drop-shadow" src="https://m.media-amazon.com/images/M/MV5BOTA5NDZlZGUtMjAxOS00YTRkLTkwYmMtYWQ0NWEwZDZiNjEzXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_FMjpg_UY720_.jpg" />
+        </div>
+        <div class="col-span-3 col-start-2 flex max-h-60 flex-col gap-2 p-2 font-serif text-xs text-neutral-400">
+          <div>
+            <span class="text-xl text-neutral-900">The Assassination of Jesse James By the Coward Harris Ford</span>
+          </div>
+          <div>
+            <span>2004 (-2005)</span>
+            <span>1 season</span>
+          </div>
+          <div>
+            <span>Zach Braff, Nathalie Portman, Peter Sarsgaard</span>
+          </div>
+          <div>
+            <span>A quietly troubled young man returns home for his mother's funeral after being estranged from his family for a decade.</span>
+          </div>
+          <div>
+            <span class="w-fit rounded bg-rose-400 px-1 font-sans font-bold text-neutral-50 drop-shadow">romance</span>
+            <span class="w-fit rounded bg-rose-400 px-1 font-sans font-bold text-neutral-50 drop-shadow">drama</span>
+            <span class="w-fit rounded bg-rose-400 px-1 font-sans font-bold text-neutral-50 drop-shadow">comedy</span>
+          </div>
+        </div>
+      </section>
+      <section class="bg-emerald-200 rounded drop-shadow p-4">
+        <div class="flex flex-row">
+          <input type="export"
+            class="form-control w-full rounded-l p-2 drop-shadow-lg focus:outline-1 focus:outline-slate-300"
+            placeholder="Name" />
+          <button class="rounded-r bg-emerald-500 p-2 drop-shadow-lg">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+              <polyline points="17 21 17 13 7 13 7 21"></polyline>
+              <polyline points="7 3 7 8 15 8"></polyline>
+            </svg>
+          </button>
+        </div>
+      </section>
+      <section class="flex flex-col h-screen">
+        <iframe class="h-full w-full" style="border-radius:12px"
+          src="https://open.spotify.com/embed/playlist/4uFPrD98TakulHkwpXSzE2?utm_source=generator&theme=0"
+          frameborder="0" allowfullscreen=""
+          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+      </section>
+    </div>
+  </main>
+  <footer>
+    <!-- Nav Bar Bottom -->
+    <section id="nav-bottom" class="bg-neutral-50">
+      <ul class="flex justify-evenly py-4">
+        <li>
+          <a href="/search">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </a>
+        </li>
+        <li>
+          <a href="/playlists">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15V6"></path>
+              <path d="M18.5 18a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"></path>
+              <path d="M12 12H3"></path>
+              <path d="M16 6H3"></path>
+              <path d="M12 18H3"></path>
+            </svg>
+          </a>
+        </li>
+        <li>
+          <a href="/logout">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+              <polyline points="16 17 21 12 16 7"></polyline>
+              <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>
+          </a>
+        </li>
+      </ul>
+    </section>
+  </footer>
+</body>
+
+</html>

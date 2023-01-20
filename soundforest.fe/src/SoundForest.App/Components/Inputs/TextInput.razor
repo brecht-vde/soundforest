@@ -1,0 +1,11 @@
+﻿<input type="text" class=@Css @bind-value=@Value placeholder=@PlaceHolder />
+
+@code {
+    public string? Value { get; set; }
+
+    [Parameter]
+    public string? Css { get; set; }
+
+    [Parameter]
+    public string? PlaceHolder { get; set; }
+}

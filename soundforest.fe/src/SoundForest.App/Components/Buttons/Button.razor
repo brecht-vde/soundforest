@@ -1,0 +1,15 @@
+﻿<button class=@Css onclick=@OnClick>
+    @ChildContent
+</button>
+
+
+@code {
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnClick { get; init; }
+
+    [Parameter]
+    public string? Css { get; init; }
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+}

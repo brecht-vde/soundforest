@@ -1,0 +1,40 @@
+﻿@using SoundForest.App.Components.Buttons
+@using SoundForest.Framework.Api.Application.Dtos;
+
+@if (Summary is not null)
+{
+    <div class="rounded-lg bg-neutral-50 drop-shadow-lg">
+        <div class="absolute right-2 top-2 z-10 w-fit rounded-lg bg-rose-400 p-1 font-sans text-xs font-bold text-neutral-50 drop-shadow">
+            @Summary?.Type
+        </div>
+        <img class="rounded drop-shadow object-cover object-center w-full max-h-40" src=@Summary?.Poster />
+        <div class="flex flex-col px-4 py-2 font-serif font-bold text-neutral-900 drop-shadow-lg">
+            @{
+                var uri = $"/details/{Summary?.Id}";
+                <LinkButton Alt=@Summary?.Title Href=@uri Css="decoration-wa underline decoration-emerald-500 decoration-2 underline-offset-2 overflow-hidden whitespace-nowrap text-ellipsis">
+                    @Summary?.Title
+                </LinkButton>
+            }
+            <span class="flex gap-1">
+                <span class="text-xs font-extralight">
+                    @Summary?.StartYear
+                </span>
+                @if (Summary?.StartYear is not null && Summary?.EndYear is not null)
+                {
+                    <span class="text-xs font-extralight">
+                        -
+                    </span>
+                }
+                <span class="text-xs font-extralight">
+                    @Summary?.EndYear
+                </span>
+            </span>
+        </div>
+    </div>
+}
+
+@code {
+
+    [Parameter]
+    public TitleSummary? Summary { get; init; }
+}
