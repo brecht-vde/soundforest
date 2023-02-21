@@ -1,4 +1,4 @@
-﻿namespace SoundForest.Exports.Application.Stores;
+﻿namespace SoundForest.Exports.Processing.Application.Stores;
 internal interface IKeyValueStore<T>
 {
     public T Find(string? key);

@@ -2,11 +2,11 @@
 using Microsoft.Extensions.Logging;
 using SoundForest.Clients.Auth0.Authentication.Application;
 using SoundForest.Clients.Spotify.Authentication.Application;
-using SoundForest.Exports.Application.Exporters;
+using SoundForest.Exports.Processing.Application.Exporters;
 using SoundForest.Exports.Processing.Domain;
 using SpotifyAPI.Web;
 
-namespace SoundForest.Exports.Infrastructure.Exporters;
+namespace SoundForest.Exports.Processing.Infrastructure.Exporters;
 internal sealed class SpotifyExporter : IExporter<IEnumerable<Soundtrack>?>
 {
     private readonly ILogger<SpotifyExporter> _logger;

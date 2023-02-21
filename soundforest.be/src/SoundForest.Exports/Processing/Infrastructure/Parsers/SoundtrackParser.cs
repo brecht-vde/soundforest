@@ -1,10 +1,10 @@
 ﻿using AngleSharp;
 using AngleSharp.Dom;
 using Microsoft.Extensions.Logging;
-using SoundForest.Exports.Application.Parsers;
+using SoundForest.Exports.Processing.Application.Parsers;
 using SoundForest.Exports.Processing.Domain;
 
-namespace SoundForest.Exports.Infrastructure.Parsers;
+namespace SoundForest.Exports.Processing.Infrastructure.Parsers;
 internal sealed class SoundtrackParser : IParser<IEnumerable<Soundtrack>?>
 {
     private readonly ILogger<SoundtrackParser> _logger;
@@ -24,7 +24,7 @@ internal sealed class SoundtrackParser : IParser<IEnumerable<Soundtrack>?>
 
             if (uris?.Any() is not true) return null;
 
-            var documents = await uris.ToAsyncEnumerable<Uri>()
+            var documents = await uris.ToAsyncEnumerable()
                 .SelectAwait(async u =>
                 {
                     _logger.LogInformation($"Fetching {u}.");

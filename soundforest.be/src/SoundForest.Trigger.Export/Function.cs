@@ -1,9 +1,9 @@
 using MediatR;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
-using SoundForest.Exports.Application.Commands;
 using SoundForest.Exports.Management.Application.Commands;
 using SoundForest.Exports.Management.Domain;
+using SoundForest.Exports.Processing.Application.Commands;
 using SoundForest.Playlists.Management.Application.Commands;
 using SoundForest.Playlists.Management.Domain;
 using SoundForest.Schema.Exports;

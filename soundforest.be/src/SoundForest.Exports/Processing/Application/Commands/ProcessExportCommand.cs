@@ -1,11 +1,11 @@
-﻿using SoundForest.Exports.Application.Exporters;
-using SoundForest.Exports.Application.Parsers;
-using SoundForest.Exports.Application.Stores;
+﻿using SoundForest.Exports.Processing.Application.Exporters;
+using SoundForest.Exports.Processing.Application.Parsers;
+using SoundForest.Exports.Processing.Application.Stores;
 using SoundForest.Exports.Processing.Domain;
 using SoundForest.Framework.Application.Errors;
 using SoundForest.Framework.Application.Requests;
 
-namespace SoundForest.Exports.Application.Commands;
+namespace SoundForest.Exports.Processing.Application.Commands;
 public sealed record ProcessExportCommand(string? Id, string? Name, string? Username) : IResultRequest<Result<string>>;
 
 internal sealed class ProcessExportCommandHandler : IResultRequestHandler<ProcessExportCommand, Result<string>>

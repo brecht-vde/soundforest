@@ -1,11 +1,11 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using SoundForest.Clients.Omdb.Application;
-using SoundForest.Clients.Omdb.Application.Mappings;
-using SoundForest.Clients.Omdb.Application.Options;
-using SoundForest.Clients.Omdb.Application.Responses;
-using SoundForest.Clients.Omdb.Application.Responses.Extensions;
 using SoundForest.Clients.Omdb.Domain;
+using SoundForest.Clients.Omdb.Infrastructure.Mappings;
+using SoundForest.Clients.Omdb.Infrastructure.Options;
+using SoundForest.Clients.Omdb.Infrastructure.Responses;
+using SoundForest.Clients.Omdb.Infrastructure.Responses.Extensions;
 using SoundForest.Framework.Application.Pagination;
 using System.Text.Json;
 
@@ -15,13 +15,13 @@ internal class OmdbClient : IOmdbClient
     private readonly ILogger<OmdbClient> _logger;
     private readonly IOptions<OmdbOptions> _options;
     private readonly HttpClient _client;
-    private readonly JsonSerializerOptions _serializer;
+    private readonly IOptions<JsonSerializerOptions> _serializer;
 
     public OmdbClient(
         ILogger<OmdbClient> logger,
         IOptions<OmdbOptions> options,
         HttpClient client,
-        JsonSerializerOptions serializer)
+        IOptions<JsonSerializerOptions> serializer)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _client = client ?? throw new ArgumentNullException(nameof(client));
@@ -46,9 +46,9 @@ internal class OmdbClient : IOmdbClient
 
             var content = await response.Content.ReadAsStringAsync(cancellationToken);
 
-            if (content is null || content.IsErrorResponse(_serializer) is true) return new();
+            if (content is null || content.IsErrorResponse(_serializer.Value) is true) return new();
 
-            var searchResultArrayResponse = content.ToResponse<SearchResultArrayResponse>(_serializer);
+            var searchResultArrayResponse = content.ToResponse<SearchResultArrayResponse>(_serializer.Value);
 
             if (searchResultArrayResponse is null) return new();
 
@@ -76,9 +76,9 @@ internal class OmdbClient : IOmdbClient
 
             var content = await response.Content.ReadAsStringAsync(cancellationToken);
 
-            if (content is null || content.IsErrorResponse(_serializer) is true) return null;
+            if (content is null || content.IsErrorResponse(_serializer.Value) is true) return null;
 
-            var searchDetailResponse = content.ToResponse<SearchDetailResponse>(_serializer);
+            var searchDetailResponse = content.ToResponse<SearchDetailResponse>(_serializer.Value);
 
             if (searchDetailResponse is null) return null;
 

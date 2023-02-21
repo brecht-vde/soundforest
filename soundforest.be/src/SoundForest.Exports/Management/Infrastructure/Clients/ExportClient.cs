@@ -41,46 +41,6 @@ internal sealed class ExportClient : IClient
         _container = _client.GetContainer(_options.Value.Database, Constants.Containers.Exports);
     }
 
-    public async Task<PagedCollection<Export>?> ManyAsync(int? page, int? size, CancellationToken cancellationToken = default)
-    {
-        try
-        {
-            var pagination = PaginationDefaults(page, size);
-            var queryable = _container.GetItemLinqQueryable<ExportEntity>();
-
-            var count = await queryable.CountAsync();
-
-            if (count is null || count.Resource is 0)
-                return null;
-
-            var query = queryable
-                .Skip((pagination.Item1 - 1) * pagination.Item2)
-                .Take(pagination.Item2);
-
-            var entities = await _qb.ToListAsync(query);
-
-            if (entities is null || entities.Any() is not true)
-                return null;
-
-            var exports = entities.Select(e => e.ToExport()).ToArray();
-
-            var result = new PagedCollection<Export>()
-            {
-                Items = exports,
-                Page = pagination.Item1,
-                Size = pagination.Item2,
-                Total = count.Resource
-            };
-
-            return result;
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Could not execute database query.");
-            return null;
-        }
-    }
-
     public async Task<Export?> SingleAsync(string? id, CancellationToken cancellationToken = default)
     {
         try

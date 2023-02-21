@@ -124,7 +124,7 @@ internal sealed class PlaylistClient : IClient
         catch (Exception ex)
         {
             _logger.LogError(ex, "Could not upsert record.");
-            throw;
+            return null;
         }
     }
 }

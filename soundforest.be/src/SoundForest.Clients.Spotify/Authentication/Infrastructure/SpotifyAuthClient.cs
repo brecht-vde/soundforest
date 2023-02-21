@@ -1,11 +1,11 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using SoundForest.Clients.Spotify.Authentication.Application;
-using SoundForest.Clients.Spotify.Authentication.Application.Mappings;
-using SoundForest.Clients.Spotify.Authentication.Application.Options;
-using SoundForest.Clients.Spotify.Authentication.Application.Responses;
-using SoundForest.Clients.Spotify.Authentication.Application.Responses.Extensions;
 using SoundForest.Clients.Spotify.Authentication.Domain;
+using SoundForest.Clients.Spotify.Authentication.Infrastructure.Mappings;
+using SoundForest.Clients.Spotify.Authentication.Infrastructure.Options;
+using SoundForest.Clients.Spotify.Authentication.Infrastructure.Responses;
+using SoundForest.Clients.Spotify.Authentication.Infrastructure.Responses.Extensions;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
@@ -16,7 +16,7 @@ internal sealed class SpotifyAuthClient : ISpotifyAuthClient
     private readonly ILogger<SpotifyAuthClient> _logger;
     private readonly IOptions<SpotifyAuthOptions> _options;
     private readonly HttpClient _client;
-    private readonly JsonSerializerOptions _serializer;
+    private readonly IOptions<JsonSerializerOptions> _serializer;
 
     private static Func<string?, string?, string?> EncodeCredentials = (clientId, clientSecret)
         => Convert.ToBase64String(Encoding.UTF8.GetBytes($"{clientId}:{clientSecret}"));
@@ -35,7 +35,7 @@ internal sealed class SpotifyAuthClient : ISpotifyAuthClient
                 new KeyValuePair<string, string>("refresh_token", token)
             });
 
-    public SpotifyAuthClient(ILogger<SpotifyAuthClient> logger, IOptions<SpotifyAuthOptions> options, HttpClient client, JsonSerializerOptions serializer)
+    public SpotifyAuthClient(ILogger<SpotifyAuthClient> logger, IOptions<SpotifyAuthOptions> options, HttpClient client, IOptions<JsonSerializerOptions> serializer)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _options = options ?? throw new ArgumentNullException(nameof(options));
@@ -60,7 +60,7 @@ internal sealed class SpotifyAuthClient : ISpotifyAuthClient
         }
         catch (Exception ex)
         {
-            _logger?.LogError(ex, "Could not request accesstoken.");
+            _logger.LogError(ex, "Could not request accesstoken.");
             return null;
         }
     }
@@ -73,7 +73,7 @@ internal sealed class SpotifyAuthClient : ISpotifyAuthClient
         }
         catch (Exception ex)
         {
-            _logger?.LogError(ex, "Could not request refresh token.");
+            _logger.LogError(ex, "Could not request refresh token.");
             return null;
         }
     }
@@ -86,7 +86,7 @@ internal sealed class SpotifyAuthClient : ISpotifyAuthClient
 
         var response = await _client.SendAsync(request);
         using var stream = await response.Content.ReadAsStreamAsync();
-        var tokenResponse = await stream.ToResponse<TokenResponse>(_serializer);
+        var tokenResponse = await stream.ToResponse<TokenResponse>(_serializer.Value);
 
         return tokenResponse?.ToToken();
     }

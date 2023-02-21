@@ -2,10 +2,10 @@ using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using SoundForest.Clients.Auth0.Authentication.Application.Options;
-using SoundForest.Clients.Spotify.Authentication.Application.Options;
+using SoundForest.Clients.Auth0.Authentication.Infrastructure.Options;
+using SoundForest.Clients.Spotify.Authentication.Infrastructure.Options;
 using SoundForest.Exports;
-using SoundForest.Exports.Infrastructure.Stores;
+using SoundForest.Exports.Processing.Infrastructure.Stores;
 using SoundForest.Playlists;
 using System.Reflection;
 using System.Text.Json;
@@ -40,7 +40,7 @@ var host = new HostBuilder()
         services.AddFeatureExportManagement(new CO_Exports(connectionString, database));
 
         services.AddFeatureExportProcessing(
-            new SpotifyAuthOptions(spotifyClientId, spotifyClientSecret, new Uri(spotifyBaseUri)), 
+            new SpotifyAuthOptions(spotifyClientId, spotifyClientSecret, new Uri(spotifyBaseUri)),
             new Auth0Options(auth0MgmtClientId, auth0MgmtClientSecret, auth0Audience, new Uri(auth0MgmtBaseUri)),
             new TsvOptions(new Uri(tsvFileUri)));
 

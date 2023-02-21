@@ -1,8 +1,8 @@
 ﻿using FluentValidation;
-using SoundForest.Exports.Application.Commands;
+using SoundForest.Exports.Processing.Application.Commands;
 using System.Text.RegularExpressions;
 
-namespace SoundForest.Exports.Application.Validators;
+namespace SoundForest.Exports.Processing.Application.Validators;
 internal sealed class ProcessExportCommandValidator : AbstractValidator<ProcessExportCommand>
 {
     public ProcessExportCommandValidator()

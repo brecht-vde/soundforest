@@ -2,7 +2,7 @@ using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using SoundForest.Clients.Omdb.Application.Options;
+using SoundForest.Clients.Omdb.Infrastructure.Options;
 using SoundForest.Framework.Authentication;
 using SoundForest.Titles;
 using System.Reflection;

@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace SoundForest.Exports.Infrastructure.Parsers;
+namespace SoundForest.Exports.Processing.Infrastructure.Parsers;
 internal static class SountrackExtensions
 {
     private static string[] _regexes = new[]

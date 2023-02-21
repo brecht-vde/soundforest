@@ -1,11 +1,11 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using SoundForest.Clients.Auth0.Authentication.Application;
-using SoundForest.Clients.Auth0.Authentication.Application.Mappings;
-using SoundForest.Clients.Auth0.Authentication.Application.Options;
-using SoundForest.Clients.Auth0.Authentication.Application.Responses;
-using SoundForest.Clients.Auth0.Authentication.Application.Responses.Extensions;
 using SoundForest.Clients.Auth0.Authentication.Domain;
+using SoundForest.Clients.Auth0.Authentication.Infrastructure.Mappings;
+using SoundForest.Clients.Auth0.Authentication.Infrastructure.Options;
+using SoundForest.Clients.Auth0.Authentication.Infrastructure.Responses;
+using SoundForest.Clients.Auth0.Authentication.Infrastructure.Responses.Extensions;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
@@ -16,13 +16,13 @@ internal sealed class Auth0Client : IAuth0Client
     private ILogger<Auth0Client> _logger;
     private readonly IOptions<Auth0Options> _options;
     private readonly HttpClient _client;
-    private readonly JsonSerializerOptions _serializer;
+    private readonly IOptions<JsonSerializerOptions> _serializer;
 
     public Auth0Client(
         ILogger<Auth0Client> logger,
         IOptions<Auth0Options> options,
         HttpClient client,
-        JsonSerializerOptions serializer)
+        IOptions<JsonSerializerOptions> serializer)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _options = options ?? throw new ArgumentNullException(nameof(options));
@@ -59,13 +59,13 @@ internal sealed class Auth0Client : IAuth0Client
 
             var response = await _client.SendAsync(request);
             using var stream = await response.Content.ReadAsStreamAsync();
-            var tokenResponse = await stream.ToResponse<TokenResponse>(_serializer);
+            var tokenResponse = await stream.ToResponse<TokenResponse>(_serializer.Value);
 
             return tokenResponse?.ToToken();
         }
         catch (Exception ex)
         {
-            _logger?.LogError(ex, "Could not request auth0 access token");
+            _logger.LogError(ex, "Could not request auth0 access token");
             return null;
         }
     }
@@ -79,13 +79,13 @@ internal sealed class Auth0Client : IAuth0Client
 
             var response = await _client.SendAsync(request);
             using var stream = await response.Content.ReadAsStreamAsync();
-            var userResponse = await stream.ToResponse<UserResponse>(_serializer);
+            var userResponse = await stream.ToResponse<UserResponse>(_serializer.Value);
 
             return userResponse?.ToUser();
         }
         catch (Exception ex)
         {
-            _logger?.LogError(ex, "Could not request auth0 user access token.");
+            _logger.LogError(ex, "Could not request auth0 user access token.");
             return null;
         }
     }

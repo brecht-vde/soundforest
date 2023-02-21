@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using SoundForest.Exports.Application.Stores;
+using SoundForest.Exports.Processing.Application.Stores;
 using System.IO.Compression;
 
-namespace SoundForest.Exports.Infrastructure.Stores;
+namespace SoundForest.Exports.Processing.Infrastructure.Stores;
 internal sealed class TsvKeyValueStore : IKeyValueStore<IEnumerable<string>?>
 {
     private readonly ILogger<TsvKeyValueStore> _logger;

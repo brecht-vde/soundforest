@@ -2,7 +2,7 @@
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using SoundForest.Clients.Omdb;
-using SoundForest.Clients.Omdb.Application.Options;
+using SoundForest.Clients.Omdb.Infrastructure.Options;
 using SoundForest.Framework;
 using SoundForest.Framework.Application.Pagination;
 using SoundForest.Framework.Application.Requests;

@@ -24,7 +24,7 @@ internal sealed class CreateExportCommandHandler : IResultRequestHandler<CreateE
             if (result is null)
             {
                 return Result<Export>
-                    .NotFoundResult("Sorry, we did not find this playlist :(.");
+                    .NotFoundResult("Sorry, we could not save this export :(.");
             }
 
             return Result<Export>

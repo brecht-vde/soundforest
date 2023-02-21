@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using SoundForest.Clients.Omdb.Application;
-using SoundForest.Clients.Omdb.Application.Options;
 using SoundForest.Clients.Omdb.Infrastructure;
+using SoundForest.Clients.Omdb.Infrastructure.Options;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -14,14 +14,12 @@ public static class DependencyInjection
         services.AddLogging();
         services.AddSingleton<IOptions<OmdbOptions>>(ctx => Options.Create<OmdbOptions>(options));
         services.AddHttpClient<IOmdbClient, OmdbClient>(ctx => ctx.BaseAddress = options.BaseAddress);
-        services.AddSingleton<JsonSerializerOptions>(ctx =>
+        services.Configure<JsonSerializerOptions>(options =>
         {
-            var options = new JsonSerializerOptions();
             options.Converters.Add(new JsonStringEnumConverter());
             options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
             options.PropertyNameCaseInsensitive = true;
             options.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault;
-            return options;
         });
 
         return services;
