@@ -1,5 +1,6 @@
 ﻿using AngleSharp;
 using AngleSharp.Dom;
+using AngleSharp.Html.Parser;
 using Microsoft.Extensions.Logging;
 using SoundForest.Exports.Processing.Application.Parsers;
 using SoundForest.Exports.Processing.Domain;
@@ -8,12 +9,14 @@ namespace SoundForest.Exports.Processing.Infrastructure.Parsers;
 internal sealed class SoundtrackParser : IParser<IEnumerable<Soundtrack>?>
 {
     private readonly ILogger<SoundtrackParser> _logger;
-    private readonly IBrowsingContext _context;
+    private readonly HttpClient _client;
+    private readonly HtmlParser _parser;
 
-    public SoundtrackParser(ILogger<SoundtrackParser> logger, IBrowsingContext context)
+    public SoundtrackParser(ILogger<SoundtrackParser> logger, HttpClient client)
     {
-        _context = context ?? throw new ArgumentNullException(nameof(context));
+        _client = client ?? throw new ArgumentNullException(nameof(client));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        _parser = new HtmlParser();
     }
 
     public async Task<IEnumerable<Soundtrack>?> ParseAsync(IEnumerable<string> ids, CancellationToken cancellationToken = default)
@@ -28,25 +31,27 @@ internal sealed class SoundtrackParser : IParser<IEnumerable<Soundtrack>?>
                 .SelectAwait(async u =>
                 {
                     _logger.LogInformation($"Fetching {u}.");
-                    var document = await _context.OpenAsync(u.AbsoluteUri, cancellationToken);
-                    await document.WaitForReadyAsync();
+                    var req = new HttpRequestMessage(HttpMethod.Get, u);
+                    var resp = await _client.SendAsync(req);
+                    var html = await resp.Content.ReadAsStringAsync();
+                    var document = await _parser.ParseDocumentAsync(html);
                     return document;
                 })
                 .ToArrayAsync();
 
             _logger.LogInformation("documents: " + documents?.Count());
 
-            var items = documents?
-                .SelectMany(d => d.QuerySelectorAll(".ipl-content-list__item"))
-                .Select(c => c.TextContent)
-                .Where(c => !string.IsNullOrWhiteSpace(c));
+            var soundtracks = documents?
+                .SelectMany(d => d.QuerySelectorAll(".ipc-metadata-list__item"))?
+                .Select(c =>
+                {
+                    var title = c?.QuerySelector(".ipc-metadata-list-item__label")?.TextContent;
+                    var artists = c?.QuerySelectorAll(".ipc-html-content-inner-div")?.Select(e => e.TextContent).Where(e => !string.IsNullOrWhiteSpace(e));
 
-            _logger.LogInformation("items: " + items?.Count());
-
-            var soundtracks = items?.Select(c => new Soundtrack(
-                    Artists: c?.ParseArtists(),
-                    Title: c?.ParseTitle()
-                ));
+                    return new Soundtrack(
+                        Title: title,
+                        Artists: artists?.ParseArtists());
+                }).Where(s => s?.Artists?.Count() > 0);
 
             _logger.LogInformation("soundtracks: " + soundtracks?.Count());
 

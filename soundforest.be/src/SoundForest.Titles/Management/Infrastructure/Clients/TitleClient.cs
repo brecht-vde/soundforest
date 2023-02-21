@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
-using SoundForest.Clients.Omdb.Application;
+using SoundForest.Clients.Omdb.Search.Application;
 using SoundForest.Framework.Application.Pagination;
 using SoundForest.Titles.Management.Application.Clients;
 using SoundForest.Titles.Management.Domain;

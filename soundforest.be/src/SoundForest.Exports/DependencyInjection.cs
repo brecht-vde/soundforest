@@ -80,7 +80,7 @@ public static class DependencyInjection
         {
             var requester = new DefaultHttpRequester();
             requester.Headers["user-agent"] = "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1";
-            var config = Configuration.Default.With(requester).WithDefaultLoader();
+            var config = Configuration.Default.With(requester).WithDefaultLoader(new LoaderOptions() { IsResourceLoadingEnabled = true });
             var context = BrowsingContext.New(config);
             return context;
         });

@@ -30,11 +30,11 @@ internal sealed class SpotifyExporter : IExporter<IEnumerable<Soundtrack>?>
     {
         try
         {
-            var externalTracks = await BuildTracksAsync(items!, cancellationToken);
+            var tracks = await BuildTracksAsync(items!, cancellationToken);
 
-            _logger.LogInformation("external tracks: " + externalTracks?.Count);
+            _logger.LogInformation("external tracks: " + tracks?.Count);
 
-            var playlistId = await SaveTracksAsync(externalTracks, username, name, cancellationToken);
+            var playlistId = await SaveTracksAsync(tracks, username, name, cancellationToken);
 
             _logger.LogInformation("playlistid: " + playlistId);
 
@@ -67,11 +67,13 @@ internal sealed class SpotifyExporter : IExporter<IEnumerable<Soundtrack>?>
 
             if (string.IsNullOrWhiteSpace(user?.Id)) return null;
 
-            var playlist = await client.Playlists.Create(user.Id, new PlaylistCreateRequest(name) { Description = "Playlist generated with Sound Forest :)." });
+            var playlist = await client.Playlists.Create(user.Id, new PlaylistCreateRequest(name));
 
             _logger.LogInformation("Created playlist");
 
             if (string.IsNullOrWhiteSpace(playlist?.Id)) return null;
+
+            await client.Playlists.ChangeDetails(playlist.Id, new PlaylistChangeDetailsRequest() { Description = $"Playlist generated with Sound Forest :)." });
 
             _logger.LogInformation("Items: " + items.Count());
 
@@ -98,7 +100,7 @@ internal sealed class SpotifyExporter : IExporter<IEnumerable<Soundtrack>?>
         {
             var spotifyM2mToken = await GetM2mAccesToken(cancellationToken);
 
-            if (string.IsNullOrWhiteSpace(spotifyM2mToken)) return null;
+            if (string.IsNullOrWhiteSpace(spotifyM2mToken)) return default;
 
             var client = new SpotifyClient(spotifyM2mToken);
 
@@ -108,26 +110,35 @@ internal sealed class SpotifyExporter : IExporter<IEnumerable<Soundtrack>?>
             {
                 if (item?.Artists?.Any() is not true || string.IsNullOrWhiteSpace(item?.Title)) continue;
 
-                var result = await client.Search.Item(new SearchRequest(SearchRequest.Types.Track, item.Title));
+                var found = false;
 
                 foreach (var artist in item.Artists)
                 {
-                    var check = result?.Tracks?.Items?.FirstOrDefault(x => x?.Artists?.FirstOrDefault()?.Name.Contains(artist, StringComparison.OrdinalIgnoreCase) is true);
+                    var term = $"{item.Title} {artist}";
+                    _logger.LogInformation($"Searching: {term}");
+                    var result = await client.Search.Item(new SearchRequest(SearchRequest.Types.All, term));
+                    var track = result?.Tracks?.Items?.FirstOrDefault();
 
-                    if (check is not null && !tracks.Contains(check))
+                    if (track is not null)
                     {
-                        tracks.Add(check);
+                        tracks.Add(track);
+                        found = true;
                         break;
                     }
                 }
+
+                if (found is false)
+                {
+                    _logger.LogInformation($"Did not find: {item.Title} {string.Join(", ", item.Artists)}");
+                }
             }
 
-            return tracks?.Any() is not true ? null : tracks;
+            return tracks?.Any() is not true ? default : tracks;
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Could not find items on Spotify.");
-            return null;
+            return default;
         }
     }
 

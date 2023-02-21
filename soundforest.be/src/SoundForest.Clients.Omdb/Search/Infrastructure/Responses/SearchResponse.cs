@@ -1,4 +1,4 @@
-﻿namespace SoundForest.Clients.Omdb.Infrastructure.Responses;
+﻿namespace SoundForest.Clients.Omdb.Search.Infrastructure.Responses;
 internal sealed record SearchResultArrayResponse
 {
     public IEnumerable<SearchResultResponse>? Search { get; init; }

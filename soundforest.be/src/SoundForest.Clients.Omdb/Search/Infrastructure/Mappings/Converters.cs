@@ -1,4 +1,4 @@
-﻿namespace SoundForest.Clients.Omdb.Infrastructure.Mappings;
+﻿namespace SoundForest.Clients.Omdb.Search.Infrastructure.Mappings;
 internal static class Converters
 {
     public static int? ToStartYear(this string? value)

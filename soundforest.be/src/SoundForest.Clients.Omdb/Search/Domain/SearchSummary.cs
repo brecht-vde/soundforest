@@ -1,4 +1,4 @@
-﻿namespace SoundForest.Clients.Omdb.Domain;
+﻿namespace SoundForest.Clients.Omdb.Search.Domain;
 public sealed record SearchSummary(
     string? Id,
     string? Title,
