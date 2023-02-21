@@ -1,8 +1,8 @@
-﻿using SoundForest.Clients.Omdb.Domain;
-using SoundForest.Clients.Omdb.Infrastructure.Responses;
+﻿using SoundForest.Clients.Omdb.Search.Domain;
+using SoundForest.Clients.Omdb.Search.Infrastructure.Responses;
 using SoundForest.Framework.Application.Pagination;
 
-namespace SoundForest.Clients.Omdb.Infrastructure.Mappings;
+namespace SoundForest.Clients.Omdb.Search.Infrastructure.Mappings;
 internal static class Map
 {
     public static SearchDetail? ToDetail(this SearchDetailResponse? response)

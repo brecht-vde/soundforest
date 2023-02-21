@@ -37,7 +37,6 @@
   
   <ItemGroup>
     <Folder Include="Processing\Exporters\" />
-    <Folder Include="Processing\Stores\" />
     <Folder Include="Processing\Parsers\" />
   </ItemGroup>
 </Project>

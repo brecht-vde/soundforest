@@ -2,7 +2,7 @@
 using AutoFixture.Xunit2;
 using FluentAssertions;
 using Moq;
-using SoundForest.Clients.Omdb.Domain;
+using SoundForest.Clients.Omdb.Search.Domain;
 using SoundForest.Framework.Application.Requests;
 using SoundForest.Titles.Management.Application.Clients;
 using SoundForest.Titles.Management.Application.Queries;

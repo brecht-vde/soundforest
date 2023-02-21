@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using SoundForest.Clients.Omdb.Infrastructure.Mappings;
+using SoundForest.Clients.Omdb.Search.Infrastructure.Mappings;
 using System.Linq;
 using Xunit;
 

@@ -1,4 +1,4 @@
-﻿using SoundForest.Clients.Omdb.Domain;
+﻿using SoundForest.Clients.Omdb.Search.Domain;
 using SoundForest.Titles.Management.Domain;
 
 namespace SoundForest.Titles.Management.Infrastructure.Mappers;

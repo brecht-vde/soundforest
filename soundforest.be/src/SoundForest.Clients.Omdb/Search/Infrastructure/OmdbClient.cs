@@ -1,15 +1,15 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using SoundForest.Clients.Omdb.Application;
-using SoundForest.Clients.Omdb.Domain;
-using SoundForest.Clients.Omdb.Infrastructure.Mappings;
-using SoundForest.Clients.Omdb.Infrastructure.Options;
-using SoundForest.Clients.Omdb.Infrastructure.Responses;
-using SoundForest.Clients.Omdb.Infrastructure.Responses.Extensions;
+using SoundForest.Clients.Omdb.Search.Application;
+using SoundForest.Clients.Omdb.Search.Domain;
+using SoundForest.Clients.Omdb.Search.Infrastructure.Mappings;
+using SoundForest.Clients.Omdb.Search.Infrastructure.Options;
+using SoundForest.Clients.Omdb.Search.Infrastructure.Responses;
+using SoundForest.Clients.Omdb.Search.Infrastructure.Responses.Extensions;
 using SoundForest.Framework.Application.Pagination;
 using System.Text.Json;
 
-namespace SoundForest.Clients.Omdb.Infrastructure;
+namespace SoundForest.Clients.Omdb.Search.Infrastructure;
 internal class OmdbClient : IOmdbClient
 {
     private readonly ILogger<OmdbClient> _logger;

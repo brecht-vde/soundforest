@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace SoundForest.Clients.Omdb.Infrastructure.Responses.Extensions;
+namespace SoundForest.Clients.Omdb.Search.Infrastructure.Responses.Extensions;
 internal static class ReponseExtensions
 {
     public static bool IsErrorResponse(this string content, JsonSerializerOptions? serializer)
