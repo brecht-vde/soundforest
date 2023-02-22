@@ -120,7 +120,8 @@ namespace SoundForest.Trigger.Export
                         Properties: new Dictionary<string, object>()
                         {
                             { nameof(Exports.Management.Domain.Export.Status), Status.Finalizing.ToString() },
-                            { nameof(Exports.Management.Domain.Export.ExternalId), v }
+                            { nameof(Exports.Management.Domain.Export.ExternalId), v?.ExternalId },
+                            { nameof(Exports.Management.Domain.Export.Log), v?.Log }
                         }));
                 },
                 failure: async (s, m, e) =>

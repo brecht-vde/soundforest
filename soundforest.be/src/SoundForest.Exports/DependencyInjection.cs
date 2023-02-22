@@ -67,7 +67,7 @@ public static class DependencyInjection
         services.AddSpotifyAuth(spotify);
         services.AddAuth0(auth0);
 
-        services.TryAddTransient<IResultRequestHandler<ProcessExportCommand, Result<string>>, ProcessExportCommandHandler>();
+        services.TryAddTransient<IResultRequestHandler<ProcessExportCommand, Result<ProcessExportCommandResponse>>, ProcessExportCommandHandler>();
         services.TryAddSingleton<IValidator<ProcessExportCommand>, ProcessExportCommandValidator>();
 
         services.TryAddSingleton<IOptions<TsvOptions>>(ctx => Options.Create<TsvOptions>(tsv));
@@ -75,15 +75,6 @@ public static class DependencyInjection
         services.AddSingleton<IKeyValueStore<IEnumerable<string>?>, TsvKeyValueStore>();
         services.AddTransient<IParser<IEnumerable<Soundtrack>?>, SoundtrackParser>();
         services.AddTransient<IExporter<IEnumerable<Soundtrack>?>, SpotifyExporter>();
-
-        services.AddTransient<IBrowsingContext>(ctx =>
-        {
-            var requester = new DefaultHttpRequester();
-            requester.Headers["user-agent"] = "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1";
-            var config = Configuration.Default.With(requester).WithDefaultLoader(new LoaderOptions() { IsResourceLoadingEnabled = true });
-            var context = BrowsingContext.New(config);
-            return context;
-        });
 
         services.AddHttpClient();
 

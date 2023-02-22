@@ -10,6 +10,7 @@ internal static class Mapper
             Name: command?.Name,
             Username: command?.Username,
             Status: Status.Pending,
-            ExternalId: null
+            ExternalId: null,
+            Log: null
             );
 }

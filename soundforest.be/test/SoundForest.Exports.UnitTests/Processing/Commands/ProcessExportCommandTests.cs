@@ -18,12 +18,13 @@ public sealed class ProcessExportCommandTests
         [Frozen] Mock<IExporter<IEnumerable<Soundtrack>?>> exporter,
         ProcessExportCommand cmd,
         ProcessExportCommandHandler sut,
-        string externalId)
+        string externalId,
+        string[] log)
     {
         // Arrange
         exporter
             .Setup(e => e.ExportAsync(It.IsNotNull<IEnumerable<Soundtrack>?>(), It.IsNotNull<string>(), It.IsNotNull<string>(), It.IsNotNull<CancellationToken>()))
-            .ReturnsAsync(externalId);
+            .ReturnsAsync((externalId, log));
 
         // Act
         var result = await sut.Handle(cmd, It.IsAny<CancellationToken>());
@@ -45,7 +46,7 @@ public sealed class ProcessExportCommandTests
         // Arrange
         exporter
             .Setup(e => e.ExportAsync(It.IsNotNull<IEnumerable<Soundtrack>?>(), It.IsNotNull<string>(), It.IsNotNull<string>(), It.IsNotNull<CancellationToken>()))
-            .ReturnsAsync(It.IsAny<string>());
+            .ReturnsAsync((It.IsAny<string>(), It.IsAny<string[]>()));
 
         // Act
         var result = await sut.Handle(cmd, It.IsAny<CancellationToken>());

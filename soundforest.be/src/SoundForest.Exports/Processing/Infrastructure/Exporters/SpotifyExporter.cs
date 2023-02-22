@@ -26,24 +26,24 @@ internal sealed class SpotifyExporter : IExporter<IEnumerable<Soundtrack>?>
         _cache = cache ?? throw new ArgumentNullException(nameof(cache));
     }
 
-    public async Task<string?> ExportAsync(IEnumerable<Soundtrack>? items, string username, string name, CancellationToken cancellationToken = default)
+    public async Task<(string?, string[]?)> ExportAsync(IEnumerable<Soundtrack>? items, string username, string name, CancellationToken cancellationToken = default)
     {
         try
         {
-            var tracks = await BuildTracksAsync(items!, cancellationToken);
+            var tracksAndLog = await BuildTracksAsync(items!, cancellationToken);
 
-            _logger.LogInformation("external tracks: " + tracks?.Count);
+            _logger.LogInformation("external tracks: " + tracksAndLog.Item1?.Count);
 
-            var playlistId = await SaveTracksAsync(tracks, username, name, cancellationToken);
+            var playlistId = await SaveTracksAsync(tracksAndLog.Item1, username, name, cancellationToken);
 
             _logger.LogInformation("playlistid: " + playlistId);
 
-            return playlistId;
+            return (playlistId, tracksAndLog.Item2);
         }
         catch (Exception ex)
         {
             _logger?.LogError(ex, "Could not export to Spotify.");
-            return null;
+            return default;
         }
     }
 
@@ -94,7 +94,7 @@ internal sealed class SpotifyExporter : IExporter<IEnumerable<Soundtrack>?>
         }
     }
 
-    private async Task<IList<FullTrack>?> BuildTracksAsync(IEnumerable<Soundtrack> items, CancellationToken cancellationToken = default)
+    private async Task<(IList<FullTrack>?, string[]?)> BuildTracksAsync(IEnumerable<Soundtrack> items, CancellationToken cancellationToken = default)
     {
         try
         {
@@ -103,8 +103,8 @@ internal sealed class SpotifyExporter : IExporter<IEnumerable<Soundtrack>?>
             if (string.IsNullOrWhiteSpace(spotifyM2mToken)) return default;
 
             var client = new SpotifyClient(spotifyM2mToken);
-
             var tracks = new List<FullTrack>();
+            var logs = new List<string>();
 
             foreach (var item in items)
             {
@@ -119,7 +119,7 @@ internal sealed class SpotifyExporter : IExporter<IEnumerable<Soundtrack>?>
                     var result = await client.Search.Item(new SearchRequest(SearchRequest.Types.All, term));
                     var track = result?.Tracks?.Items?.FirstOrDefault();
 
-                    if (track is not null)
+                    if (track is not null && tracks.Any(x => x.Id == track.Id) is not true)
                     {
                         tracks.Add(track);
                         found = true;
@@ -129,11 +129,12 @@ internal sealed class SpotifyExporter : IExporter<IEnumerable<Soundtrack>?>
 
                 if (found is false)
                 {
+                    logs.Add($"{item.Title} {string.Join(", ", item.Artists)}");
                     _logger.LogInformation($"Did not find: {item.Title} {string.Join(", ", item.Artists)}");
                 }
             }
 
-            return tracks?.Any() is not true ? default : tracks;
+            return tracks?.Any() is not true ? (null, logs?.ToArray()) : (tracks, logs?.ToArray());
         }
         catch (Exception ex)
         {
