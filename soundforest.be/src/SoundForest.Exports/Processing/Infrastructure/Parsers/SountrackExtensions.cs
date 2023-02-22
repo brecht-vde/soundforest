@@ -33,6 +33,6 @@ internal static class SountrackExtensions
 
     public static IEnumerable<string>? ParseArtists(this IEnumerable<string>? texts)
     {
-        return texts?.Select(t => _regex.Replace(t, "")).Distinct();
+        return texts?.Select(t => _regex.Replace(t, "").Replace('&', ' ')).Distinct();
     }
 }

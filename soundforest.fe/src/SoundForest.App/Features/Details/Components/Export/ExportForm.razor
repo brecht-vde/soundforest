@@ -18,10 +18,27 @@
     }
     else
     {
-        <span class="flex space-x-1 justify-center">
-            <span class="text-xs text-emerald-900">Export for @Detail?.Title:</span>
-            <span class="text-xs text-neutral-50 font-bold rounded px-2 text-center bg-rose-400">@Export?.Status</span>
-        </span>
+        <div class="flex flex-col place-items-center space-x-1 space-y-4 text-xs text-emerald-900">
+            <div>
+                <span class="text-xs text-emerald-900">Export for @Detail?.Title:</span>
+                <span class="text-xs text-neutral-50 font-bold rounded px-2 text-center bg-rose-400">@Export?.Status</span>
+            </div>
+
+            @if (Export?.Log?.Any() is true)
+            {
+                <div>
+                    <span>Unfortunately, we didn't find all songs :(.</span>
+                </div>
+                <div>
+                    <ul class="">
+                        @foreach (var log in Export.Log)
+                        {
+                            <li class="list-disc">@log</li>
+                        }
+                    </ul>
+                </div>
+            }
+        </div>
     }
 </section>
 

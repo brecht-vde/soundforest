@@ -6,9 +6,11 @@ using SoundForest.Framework.Application.Errors;
 using SoundForest.Framework.Application.Requests;
 
 namespace SoundForest.Exports.Processing.Application.Commands;
-public sealed record ProcessExportCommand(string? Id, string? Name, string? Username) : IResultRequest<Result<string>>;
+public sealed record ProcessExportCommand(string? Id, string? Name, string? Username) : IResultRequest<Result<ProcessExportCommandResponse>>;
 
-internal sealed class ProcessExportCommandHandler : IResultRequestHandler<ProcessExportCommand, Result<string>>
+public sealed record ProcessExportCommandResponse(string? ExternalId, string[]? Log);
+
+internal sealed class ProcessExportCommandHandler : IResultRequestHandler<ProcessExportCommand, Result<ProcessExportCommandResponse>>
 {
     private readonly IParser<IEnumerable<Soundtrack>?> _parser;
     private readonly IKeyValueStore<IEnumerable<string>?> _store;
@@ -24,7 +26,7 @@ internal sealed class ProcessExportCommandHandler : IResultRequestHandler<Proces
         _exporter = exporter ?? throw new ArgumentNullException(nameof(exporter));
     }
 
-    public async Task<Result<string>> Handle(ProcessExportCommand request, CancellationToken cancellationToken)
+    public async Task<Result<ProcessExportCommandResponse>> Handle(ProcessExportCommand request, CancellationToken cancellationToken)
     {
         try
         {
@@ -33,24 +35,24 @@ internal sealed class ProcessExportCommandHandler : IResultRequestHandler<Proces
 
             var tracks = await _parser.ParseAsync(ids, cancellationToken);
 
-            var externalId = await _exporter.ExportAsync(
+            var externalIdAndLog = await _exporter.ExportAsync(
                 items: tracks,
                 username: request.Username!,
                 name: request.Name!,
                 cancellationToken: cancellationToken);
 
-            if (string.IsNullOrWhiteSpace(externalId))
+            if (string.IsNullOrWhiteSpace(externalIdAndLog.Item1))
             {
-                return Result<string>
+                return Result<ProcessExportCommandResponse>
                     .NotFoundResult("Sorry, could not export the playlist. :(.");
             }
 
-            return Result<string>
-                .SuccessResult(externalId);
+            return Result<ProcessExportCommandResponse>
+                .SuccessResult(new ProcessExportCommandResponse(externalIdAndLog.Item1, externalIdAndLog.Item2));
         }
         catch (Exception ex)
         {
-            return Result<string>
+            return Result<ProcessExportCommandResponse>
                 .ServerErrorResult(
                     message: "Whoops! Something went wrong in our system.",
                     errors: new List<Error>() { new Error() { Exception = ex } }

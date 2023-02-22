@@ -11,7 +11,8 @@ internal static class ExportMapper
                 Name: entity?.name,
                 Username: entity?.username,
                 Status: entity?.status is not null ? entity.status.ToStatus() : Status.NA,
-                ExternalId: entity?.externalId
+                ExternalId: entity?.externalId,
+                Log: entity?.log
             );
 
     public static ExportEntity ToExportEntity(this Export export)
@@ -20,7 +21,8 @@ internal static class ExportMapper
                 name: export?.Name,
                 username: export?.Username,
                 status: export?.Status.FromStatus(),
-                externalId: export?.ExternalId
+                externalId: export?.ExternalId,
+                log: export?.Log
             );
 
     public static string FromStatus(this Status status)
