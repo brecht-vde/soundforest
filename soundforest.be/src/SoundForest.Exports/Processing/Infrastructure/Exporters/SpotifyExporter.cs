@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
+using Polly;
 using SoundForest.Clients.Auth0.Authentication.Application;
 using SoundForest.Clients.Spotify.Authentication.Application;
 using SoundForest.Exports.Processing.Application.Exporters;
@@ -115,8 +116,21 @@ internal sealed class SpotifyExporter : IExporter<IEnumerable<Soundtrack>?>
                 foreach (var artist in item.Artists)
                 {
                     var term = $"{item.Title} {artist}";
-                    var result = await client.Search.Item(new SearchRequest(SearchRequest.Types.All, term));
-                    var track = result?.Tracks?.Items?.FirstOrDefault();
+                    _logger.LogInformation($"Searching: {term}");
+                    
+                    var response = await Policy.Handle<APIException>()
+                        .WaitAndRetryAsync(
+                        retryCount: 4, 
+                        sleepDurationProvider: attempt => TimeSpan.FromSeconds(Math.Pow(3, attempt)), 
+                        onRetry: (ex, timespan, count, context) => {
+                            _logger.Log(LogLevel.Information, $"Retrying: {term}");
+                        })
+                        .ExecuteAndCaptureAsync(async () => { 
+                            var result = await client.Search.Item(new SearchRequest(SearchRequest.Types.All, term));
+                            return result;
+                        });
+
+                    var track = response?.Result?.Tracks?.Items?.FirstOrDefault();
 
                     if (track is null) continue;
 

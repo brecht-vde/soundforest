@@ -6,7 +6,7 @@
 @inject IService _service;
 
 <section class="flex flex-col bg-emerald-200 rounded drop-shadow p-4 gap-1">
-    @if (Export is null)
+    @if (Export is null || Export?.Status?.Equals("failed", StringComparison.OrdinalIgnoreCase) is true)
     {
         <span class="text-xs text-emerald-900">Export the soundtracks for @Detail?.Title?</span>
         <div class="flex flex-row">
