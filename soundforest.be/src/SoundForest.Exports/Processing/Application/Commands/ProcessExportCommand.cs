@@ -35,20 +35,20 @@ internal sealed class ProcessExportCommandHandler : IResultRequestHandler<Proces
 
             var tracks = await _parser.ParseAsync(ids, cancellationToken);
 
-            var externalIdAndLog = await _exporter.ExportAsync(
+            var result = await _exporter.ExportAsync(
                 items: tracks,
                 username: request.Username!,
                 name: request.Name!,
                 cancellationToken: cancellationToken);
 
-            if (string.IsNullOrWhiteSpace(externalIdAndLog.Item1))
+            if (result is null || string.IsNullOrWhiteSpace(result?.ExternalId))
             {
                 return Result<ProcessExportCommandResponse>
                     .NotFoundResult("Sorry, could not export the playlist. :(.");
             }
 
             return Result<ProcessExportCommandResponse>
-                .SuccessResult(new ProcessExportCommandResponse(externalIdAndLog.Item1, externalIdAndLog.Item2));
+                .SuccessResult(new ProcessExportCommandResponse(result.ExternalId, result.Logs));
         }
         catch (Exception ex)
         {

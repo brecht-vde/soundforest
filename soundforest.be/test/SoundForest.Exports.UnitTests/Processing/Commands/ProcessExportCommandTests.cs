@@ -18,13 +18,12 @@ public sealed class ProcessExportCommandTests
         [Frozen] Mock<IExporter<IEnumerable<Soundtrack>?>> exporter,
         ProcessExportCommand cmd,
         ProcessExportCommandHandler sut,
-        string externalId,
-        string[] log)
+        ExportResult export)
     {
         // Arrange
         exporter
             .Setup(e => e.ExportAsync(It.IsNotNull<IEnumerable<Soundtrack>?>(), It.IsNotNull<string>(), It.IsNotNull<string>(), It.IsNotNull<CancellationToken>()))
-            .ReturnsAsync((externalId, log));
+            .ReturnsAsync(export);
 
         // Act
         var result = await sut.Handle(cmd, It.IsAny<CancellationToken>());
@@ -33,12 +32,12 @@ public sealed class ProcessExportCommandTests
         result.Should()
             .NotBeNull()
             .And
-            .BeEquivalentTo<Result<string>>(Result<string>.SuccessResult(externalId));
+            .BeEquivalentTo<Result<ProcessExportCommandResponse>>(Result<ProcessExportCommandResponse>.SuccessResult(new ProcessExportCommandResponse(export.ExternalId, export.Logs)));
     }
 
     [Theory]
     [AutoMoqData]
-    internal async Task ProcessExportCommandHandler_Handle_NotExporterReturnsNull(
+    internal async Task ProcessExportCommandHandler_Handle_NotExportedReturnsEmptyResult(
         [Frozen] Mock<IExporter<IEnumerable<Soundtrack>?>> exporter,
         ProcessExportCommand cmd,
         ProcessExportCommandHandler sut)
@@ -46,7 +45,7 @@ public sealed class ProcessExportCommandTests
         // Arrange
         exporter
             .Setup(e => e.ExportAsync(It.IsNotNull<IEnumerable<Soundtrack>?>(), It.IsNotNull<string>(), It.IsNotNull<string>(), It.IsNotNull<CancellationToken>()))
-            .ReturnsAsync((It.IsAny<string>(), It.IsAny<string[]>()));
+            .ReturnsAsync(new ExportResult(null, Array.Empty<string>()));
 
         // Act
         var result = await sut.Handle(cmd, It.IsAny<CancellationToken>());

@@ -13,6 +13,7 @@ internal sealed class SpotifyExporter : IExporter<IEnumerable<Soundtrack>?>
     private readonly ISpotifyAuthClient _spotifyAuthClient;
     private readonly IAuth0Client _auth0Client;
     private readonly IMemoryCache _cache;
+    private readonly IList<string> _log = new List<string>();
 
     public SpotifyExporter(
         ILogger<SpotifyExporter> logger,
@@ -26,24 +27,24 @@ internal sealed class SpotifyExporter : IExporter<IEnumerable<Soundtrack>?>
         _cache = cache ?? throw new ArgumentNullException(nameof(cache));
     }
 
-    public async Task<(string?, string[]?)> ExportAsync(IEnumerable<Soundtrack>? items, string username, string name, CancellationToken cancellationToken = default)
+    public async Task<ExportResult?> ExportAsync(IEnumerable<Soundtrack>? items, string username, string name, CancellationToken cancellationToken = default)
     {
         try
         {
-            var tracksAndLog = await BuildTracksAsync(items!, cancellationToken);
+            var tracks = await BuildTracksAsync(items!, cancellationToken);
 
-            _logger.LogInformation("external tracks: " + tracksAndLog.Item1?.Count);
+            _logger.LogInformation("external tracks: " + tracks?.Count());
 
-            var playlistId = await SaveTracksAsync(tracksAndLog.Item1, username, name, cancellationToken);
+            var playlistId = await SaveTracksAsync(tracks, username, name, cancellationToken);
 
             _logger.LogInformation("playlistid: " + playlistId);
 
-            return (playlistId, tracksAndLog.Item2);
+            return new ExportResult(playlistId, _log?.ToArray());
         }
         catch (Exception ex)
         {
             _logger?.LogError(ex, "Could not export to Spotify.");
-            return default;
+            return null;
         }
     }
 
@@ -94,7 +95,7 @@ internal sealed class SpotifyExporter : IExporter<IEnumerable<Soundtrack>?>
         }
     }
 
-    private async Task<(IList<FullTrack>?, string[]?)> BuildTracksAsync(IEnumerable<Soundtrack> items, CancellationToken cancellationToken = default)
+    private async Task<IEnumerable<FullTrack>?> BuildTracksAsync(IEnumerable<Soundtrack> items, CancellationToken cancellationToken = default)
     {
         try
         {
@@ -104,37 +105,36 @@ internal sealed class SpotifyExporter : IExporter<IEnumerable<Soundtrack>?>
 
             var client = new SpotifyClient(spotifyM2mToken);
             var tracks = new List<FullTrack>();
-            var logs = new List<string>();
 
             foreach (var item in items)
             {
                 if (item?.Artists?.Any() is not true || string.IsNullOrWhiteSpace(item?.Title)) continue;
 
-                var found = false;
+                FullTrack? foundTrack = null;
 
                 foreach (var artist in item.Artists)
                 {
                     var term = $"{item.Title} {artist}";
-                    _logger.LogInformation($"Searching: {term}");
                     var result = await client.Search.Item(new SearchRequest(SearchRequest.Types.All, term));
                     var track = result?.Tracks?.Items?.FirstOrDefault();
 
-                    if (track is not null && tracks.Any(x => x.Id == track.Id) is not true)
-                    {
-                        tracks.Add(track);
-                        found = true;
-                        break;
-                    }
+                    if (track is null) continue;
+
+                    if (track is not null && tracks.Any(x => x.Id == track.Id) is true) continue;
+
+                    foundTrack = track;
                 }
 
-                if (found is false)
+                if (foundTrack is null)
                 {
-                    logs.Add($"{item.Title} {string.Join(", ", item.Artists)}");
-                    _logger.LogInformation($"Did not find: {item.Title} {string.Join(", ", item.Artists)}");
+                    _log.Add($"{item.Title} {string.Join(", ", item.Artists)}");
+                    continue;
                 }
+
+                tracks.Add(foundTrack);
             }
 
-            return tracks?.Any() is not true ? (null, logs?.ToArray()) : (tracks, logs?.ToArray());
+            return tracks?.Any() is not true ? null : tracks;
         }
         catch (Exception ex)
         {
