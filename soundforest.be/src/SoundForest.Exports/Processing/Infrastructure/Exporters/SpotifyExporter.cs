@@ -14,18 +14,21 @@ internal sealed class SpotifyExporter : IExporter<IEnumerable<Soundtrack>?>
     private readonly ISpotifyAuthClient _spotifyAuthClient;
     private readonly IAuth0Client _auth0Client;
     private readonly IMemoryCache _cache;
+    private readonly ISpotifyClientFactory _factory;
     private readonly IList<string> _log = new List<string>();
 
     public SpotifyExporter(
         ILogger<SpotifyExporter> logger,
         ISpotifyAuthClient spotifyAuthClient,
         IAuth0Client auth0Client,
-        IMemoryCache cache)
+        IMemoryCache cache,
+        ISpotifyClientFactory factory)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _spotifyAuthClient = spotifyAuthClient ?? throw new ArgumentNullException(nameof(spotifyAuthClient));
         _auth0Client = auth0Client ?? throw new ArgumentNullException(nameof(auth0Client));
         _cache = cache ?? throw new ArgumentNullException(nameof(cache));
+        _factory = factory ?? throw new ArgumentNullException(nameof(factory));
     }
 
     public async Task<ExportResult?> ExportAsync(IEnumerable<Soundtrack>? items, string username, string name, CancellationToken cancellationToken = default)
@@ -61,28 +64,28 @@ internal sealed class SpotifyExporter : IExporter<IEnumerable<Soundtrack>?>
 
             if (string.IsNullOrWhiteSpace(spotifyUserToken)) return null;
 
-            var client = new SpotifyClient(spotifyUserToken);
-
-            var user = await client.UserProfile.Current();
+            var userClient = _factory.Create<IUserProfileClient>(spotifyUserToken);
+            var user = await userClient.Current();
 
             _logger.LogInformation("Fetched user profile");
 
             if (string.IsNullOrWhiteSpace(user?.Id)) return null;
 
-            var playlist = await client.Playlists.Create(user.Id, new PlaylistCreateRequest(name));
+            var playlistClient = _factory.Create<IPlaylistsClient>(spotifyUserToken);
+            var playlist = await playlistClient.Create(user.Id, new PlaylistCreateRequest(name));
 
             _logger.LogInformation("Created playlist");
 
             if (string.IsNullOrWhiteSpace(playlist?.Id)) return null;
 
-            await client.Playlists.ChangeDetails(playlist.Id, new PlaylistChangeDetailsRequest() { Description = $"Playlist generated with Sound Forest :)." });
+            await playlistClient.ChangeDetails(playlist.Id, new PlaylistChangeDetailsRequest() { Description = $"Playlist generated with Sound Forest :)." });
 
             _logger.LogInformation("Items: " + items.Count());
 
             foreach (var batch in items.Chunk(100))
             {
                 var uris = batch.Select(item => item.Uri).ToArray();
-                await client.Playlists.AddItems(playlist.Id, new PlaylistAddItemsRequest(uris));
+                await playlistClient.AddItems(playlist.Id, new PlaylistAddItemsRequest(uris));
             }
 
             _logger.LogInformation("Added items");
@@ -104,7 +107,7 @@ internal sealed class SpotifyExporter : IExporter<IEnumerable<Soundtrack>?>
 
             if (string.IsNullOrWhiteSpace(spotifyM2mToken)) return default;
 
-            var client = new SpotifyClient(spotifyM2mToken);
+            var searchClient = _factory.Create<ISearchClient>(spotifyM2mToken);
             var tracks = new List<FullTrack>();
 
             foreach (var item in items)
@@ -126,7 +129,7 @@ internal sealed class SpotifyExporter : IExporter<IEnumerable<Soundtrack>?>
                             _logger.Log(LogLevel.Information, $"Retrying: {term}");
                         })
                         .ExecuteAndCaptureAsync(async () => { 
-                            var result = await client.Search.Item(new SearchRequest(SearchRequest.Types.All, term));
+                            var result = await searchClient.Item(new SearchRequest(SearchRequest.Types.All, term));
                             return result;
                         });
 
