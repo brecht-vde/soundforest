@@ -1,6 +1,4 @@
-﻿using AngleSharp;
-using AngleSharp.Io;
-using FluentValidation;
+﻿using FluentValidation;
 using MediatR;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.DependencyInjection;
@@ -75,6 +73,7 @@ public static class DependencyInjection
         services.AddSingleton<IKeyValueStore<IEnumerable<string>?>, TsvKeyValueStore>();
         services.AddTransient<IParser<IEnumerable<Soundtrack>?>, SoundtrackParser>();
         services.AddTransient<IExporter<IEnumerable<Soundtrack>?>, SpotifyExporter>();
+        services.AddTransient<ISpotifyClientFactory, SpotifyClientFactory>();
 
         services.AddHttpClient();
 
