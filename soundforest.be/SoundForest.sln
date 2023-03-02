@@ -77,7 +77,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoundForest.Clients.Auth0.U
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoundForest.Clients.Spotify.UnitTests", "test\SoundForest.Clients.Spotify.UnitTests\SoundForest.Clients.Spotify.UnitTests.csproj", "{998AAE7E-088E-4812-8FFE-5733B6D0760E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoundForest.Exports.UnitTests", "test\SoundForest.Exports.UnitTests\SoundForest.Exports.UnitTests.csproj", "{353EF377-4BDC-4FAC-AAAA-AD1DFCA2714E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoundForest.Exports.UnitTests", "test\SoundForest.Exports.UnitTests\SoundForest.Exports.UnitTests.csproj", "{353EF377-4BDC-4FAC-AAAA-AD1DFCA2714E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoundForest.Api", "src\SoundForest.Api\SoundForest.Api.csproj", "{49C6302E-C2C4-4967-BBA7-0BD79875A9C6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -193,6 +195,10 @@ Global
 		{353EF377-4BDC-4FAC-AAAA-AD1DFCA2714E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{353EF377-4BDC-4FAC-AAAA-AD1DFCA2714E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{353EF377-4BDC-4FAC-AAAA-AD1DFCA2714E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49C6302E-C2C4-4967-BBA7-0BD79875A9C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49C6302E-C2C4-4967-BBA7-0BD79875A9C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49C6302E-C2C4-4967-BBA7-0BD79875A9C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49C6302E-C2C4-4967-BBA7-0BD79875A9C6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -233,6 +239,7 @@ Global
 		{77150591-D6BA-42D9-9FFA-D5F0087C8CAD} = {82ED47FF-DD6D-432E-B1BE-C31B3007C307}
 		{998AAE7E-088E-4812-8FFE-5733B6D0760E} = {82ED47FF-DD6D-432E-B1BE-C31B3007C307}
 		{353EF377-4BDC-4FAC-AAAA-AD1DFCA2714E} = {E5B5D5DF-257F-4FBD-8129-8AACE01E2C51}
+		{49C6302E-C2C4-4967-BBA7-0BD79875A9C6} = {B81E0FB7-DB62-4BE6-94DC-3F4E0CEB3A44}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BC0CDDC5-107B-49E7-9B3F-EEE2C967E2F4}
