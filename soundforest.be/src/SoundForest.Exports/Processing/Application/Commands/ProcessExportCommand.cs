@@ -30,6 +30,7 @@ internal sealed class ProcessExportCommandHandler : IResultRequestHandler<Proces
     {
         try
         {
+            await _store.LoadAsync(cancellationToken);
             var ids = _store.Find(request.Id)?.ToList() ?? new List<string>();
             ids.Insert(0, request.Id!);
 

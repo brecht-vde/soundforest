@@ -56,7 +56,5 @@ var host = new HostBuilder()
         });
     })
     .Build();
-host.Services.GetRequiredService<ILogger<Program>>().LogError("Loading data.");
-await host.PreloadDataAsync();
-host.Services.GetRequiredService<ILogger<Program>>().LogError("starting app.");
+
 await host.RunAsync();
