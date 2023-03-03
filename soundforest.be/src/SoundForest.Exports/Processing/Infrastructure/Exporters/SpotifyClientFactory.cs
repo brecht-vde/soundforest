@@ -12,16 +12,13 @@ internal class SpotifyClientFactory : ISpotifyClientFactory
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public T Create<T>(string token)
+    // When running on Azure Functions App, type name can't be determined from T, so have to pass type name as parameter
+    public T Create<T>(string type, string token)
     {
         if (_client is null)
             _client = new SpotifyClient(token);
 
-        _logger.LogInformation($"Type: {typeof(T).Name}");
-        _logger.LogInformation($"SC: {nameof(ISearchClient)}");
-        _logger.LogInformation($"Type == SC?: {typeof(T).Name == nameof(ISearchClient)}");
-
-        return typeof(T).Name switch
+        return type switch
         {
             nameof(IUserProfileClient) => (T)_client.UserProfile,
             nameof(IPlaylistsClient) => (T)_client.Playlists,
