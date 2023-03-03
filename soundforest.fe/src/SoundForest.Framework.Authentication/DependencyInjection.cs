@@ -18,6 +18,8 @@ public static class DependencyInjection
             var audience = configuration.GetRequiredSection("Authentication")["Audience"];
             opt.ProviderOptions.ResponseType = "code";
             opt.ProviderOptions.AdditionalProviderParameters.Add("audience", audience);
+            opt.ProviderOptions.AdditionalProviderParameters.Add("connection", "spotify");
+            opt.ProviderOptions.AdditionalProviderParameters.Add("connection_scope", "playlist-modify-public");
         });
 
         return services;
