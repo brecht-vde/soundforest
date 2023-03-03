@@ -10,18 +10,12 @@ internal class SpotifyClientFactory : ISpotifyClientFactory
         if (_client is null)
             _client = new SpotifyClient(token);
 
-        var type = typeof(T);
-
-        switch (type)
+        return nameof(T) switch
         {
-            case Type _ when type is IUserProfileClient:
-                return (T)_client.UserProfile;
-            case Type _ when type is IPlaylistsClient:
-                return (T)_client.Playlists;
-            case Type _ when type is ISearchClient:
-                return (T)_client.Search;
-            default:
-                throw new ArgumentOutOfRangeException("Invalid type passed: " + type?.Name);
-        }
+            nameof(IUserProfileClient) => (T)_client.UserProfile,
+            nameof(IPlaylistsClient) => (T)_client.Playlists,
+            nameof(ISearchClient) => (T)_client.Search,
+            _ => throw new ArgumentOutOfRangeException("Invalid type passed: " + nameof(T))
+        };
     }
 }
