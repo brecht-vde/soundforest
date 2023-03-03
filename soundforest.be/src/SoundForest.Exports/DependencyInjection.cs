@@ -79,9 +79,4 @@ public static class DependencyInjection
 
         return services;
     }
-
-    public static IHost PreloadData(this IHost host)
-    {
-        return PreloadDataAsync(host).GetAwaiter().GetResult();
-    }
 }
