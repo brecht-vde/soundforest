@@ -10,7 +10,7 @@ internal sealed class TsvKeyValueStore : IKeyValueStore<IEnumerable<string>?>
     private readonly HttpClient _client;
     private readonly IOptions<TsvOptions> _options;
     private readonly IList<KeyValuePair<string, string>> _items = new List<KeyValuePair<string, string>>();
-    private static string _filePath = Path.Combine("/tmp", "file.tsv");
+    private static string _filePath = Path.Combine(Path.GetTempPath(), "file.tsv");
 
 
     public TsvKeyValueStore(ILogger<TsvKeyValueStore> logger, HttpClient client, IOptions<TsvOptions> options)
