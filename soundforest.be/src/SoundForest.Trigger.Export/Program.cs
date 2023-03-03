@@ -56,5 +56,5 @@ var host = new HostBuilder()
     })
     .Build();
 
-await host.PreloadDataAsync();
+//await host.PreloadDataAsync();
 await host.RunAsync();
