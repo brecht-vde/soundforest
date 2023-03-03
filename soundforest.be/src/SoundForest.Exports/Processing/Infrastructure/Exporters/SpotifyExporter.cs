@@ -126,6 +126,7 @@ internal sealed class SpotifyExporter : IExporter<IEnumerable<Soundtrack>?>
                         retryCount: 4, 
                         sleepDurationProvider: attempt => TimeSpan.FromSeconds(Math.Pow(3, attempt)), 
                         onRetry: (ex, timespan, count, context) => {
+                            _logger.LogError(ex, "Spotify API Exception.");
                             _logger.Log(LogLevel.Information, $"Retrying: {term}");
                         })
                         .ExecuteAndCaptureAsync(async () => { 
