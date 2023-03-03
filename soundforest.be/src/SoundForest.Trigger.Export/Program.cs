@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using SoundForest.Clients.Auth0.Authentication.Infrastructure.Options;
 using SoundForest.Clients.Spotify.Authentication.Infrastructure.Options;
 using SoundForest.Exports;
@@ -55,6 +56,7 @@ var host = new HostBuilder()
         });
     })
     .Build();
-
-//await host.PreloadDataAsync();
+host.Services.GetRequiredService<ILogger<Program>>().LogError("Loading data.");
+await host.PreloadDataAsync();
+host.Services.GetRequiredService<ILogger<Program>>().LogError("starting app.");
 await host.RunAsync();
