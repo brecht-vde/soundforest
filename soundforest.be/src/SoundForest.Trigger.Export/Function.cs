@@ -47,10 +47,10 @@ namespace SoundForest.Trigger.Export
                         switch (status)
                         {
                             case Status.Pending:
-                                // await ProcessPending(exportEntity);
+                                //await ProcessPending(exportEntity);
                                 break;
                             case Status.Finalizing:
-                                // await ProcessFinalizing(exportEntity);
+                                //await ProcessFinalizing(exportEntity);
                                 break;
                             case Status.NA:
                             case Status.Running:
