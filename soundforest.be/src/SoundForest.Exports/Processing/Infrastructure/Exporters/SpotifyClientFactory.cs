@@ -21,7 +21,7 @@ internal class SpotifyClientFactory : ISpotifyClientFactory
             case Type _ when type is ISearchClient:
                 return (T)_client.Search;
             default:
-                throw new ArgumentOutOfRangeException(nameof(T));
+                throw new ArgumentOutOfRangeException("Invalid type passed: " + type?.Name);
         }
     }
 }
