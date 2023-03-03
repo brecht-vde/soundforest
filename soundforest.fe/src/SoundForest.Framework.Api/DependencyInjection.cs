@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SoundForest.Framework.Api.Application.Abstractions;
 using SoundForest.Framework.Api.Infrastructure;
@@ -15,8 +16,7 @@ public static class DependencyInjection
         services.AddAuthentication(configuration);
 
         services.AddHttpClient<IService, Service>(client
-            // TODO: Get from config
-            => client.BaseAddress = new Uri("http://localhost:7080"))
+            => client.BaseAddress = new Uri(configuration.GetRequiredSection("Authentication:ApiRoot").Value))
             .AddHttpMessageHandler<ApiAuthorizationMessageHandler>();
 
         // TODO: replace with IOptions
