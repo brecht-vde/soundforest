@@ -64,14 +64,14 @@ internal sealed class SpotifyExporter : IExporter<IEnumerable<Soundtrack>?>
 
             if (string.IsNullOrWhiteSpace(spotifyUserToken)) return null;
 
-            var userClient = _factory.Create<IUserProfileClient>(spotifyUserToken);
+            var userClient = _factory.Create<IUserProfileClient>(nameof(IUserProfileClient), spotifyUserToken);
             var user = await userClient.Current();
 
             _logger.LogInformation("Fetched user profile");
 
             if (string.IsNullOrWhiteSpace(user?.Id)) return null;
 
-            var playlistClient = _factory.Create<IPlaylistsClient>(spotifyUserToken);
+            var playlistClient = _factory.Create<IPlaylistsClient>(nameof(IPlaylistsClient), spotifyUserToken);
             var playlist = await playlistClient.Create(user.Id, new PlaylistCreateRequest(name));
 
             _logger.LogInformation("Created playlist");
@@ -107,7 +107,7 @@ internal sealed class SpotifyExporter : IExporter<IEnumerable<Soundtrack>?>
 
             if (string.IsNullOrWhiteSpace(spotifyM2mToken)) return default;
 
-            var searchClient = _factory.Create<ISearchClient>(spotifyM2mToken);
+            var searchClient = _factory.Create<ISearchClient>(nameof(ISearchClient), spotifyM2mToken);
             var tracks = new List<FullTrack>();
 
             foreach (var item in items)

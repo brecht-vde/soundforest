@@ -92,15 +92,15 @@ public sealed class SpotifyExporterTests
             .ReturnsAsync(ValidPlaylist);
 
         factory
-            .Setup(c => c.Create<ISearchClient>(It.IsAny<string>()))
+            .Setup(c => c.Create<ISearchClient>(It.IsAny<string>(), It.IsAny<string>()))
             .Returns(searchClient.Object);
 
         factory
-            .Setup(c => c.Create<IUserProfileClient>(It.IsAny<string>()))
+            .Setup(c => c.Create<IUserProfileClient>(It.IsAny<string>(), It.IsAny<string>()))
             .Returns(userClient.Object);
 
         factory
-            .Setup(c => c.Create<IPlaylistsClient>(It.IsAny<string>()))
+            .Setup(c => c.Create<IPlaylistsClient>(It.IsAny<string>(), It.IsAny<string>()))
             .Returns(playlistClient.Object);
 
         var sut = new SpotifyExporter(logger, spotifyAuthClient.Object, auth0Client.Object, cache.Object, factory.Object);
