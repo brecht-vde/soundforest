@@ -84,12 +84,4 @@ public static class DependencyInjection
     {
         return PreloadDataAsync(host).GetAwaiter().GetResult();
     }
-
-    public static async Task<IHost> PreloadDataAsync(this IHost host)
-    {
-        using var scope = host.Services.CreateScope();
-        var service = scope.ServiceProvider.GetRequiredService<IKeyValueStore<IEnumerable<string>?>>();
-        await service.LoadAsync();
-        return host;
-    }
 }
