@@ -1,14 +1,14 @@
-name: Build and deploy .NET Core application to Function App soundforest
+name: Build and deploy soundforest.be Service
 on:
   push:
     branches:
     - main
 env:
-  AZURE_FUNCTIONAPP_NAME: soundforest
-  AZURE_FUNCTIONAPP_PACKAGE_PATH: soundforest.be/src/SoundForest.Api/published
+  AZURE_FUNCTIONAPP_NAME: soundforest-service
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: soundforest.be/src/SoundForest.Trigger.Export/published
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 7.0.x
-  WORKING_DIRECTORY: soundforest.be/src/SoundForest.Api
+  WORKING_DIRECTORY: soundforest.be/src/SoundForest.Trigger.Export
   DOTNET_CORE_VERSION_INPROC: 6.0.x
 jobs:
   build:
@@ -16,11 +16,11 @@ jobs:
     steps:
     - uses: actions/checkout@master
     - name: Setup .NET Core
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v1
       with:
         dotnet-version: ${{ env.DOTNET_CORE_VERSION }}
     - name: Setup .NET Core (for inproc extensions)
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v1
       with:
         dotnet-version: ${{ env.DOTNET_CORE_VERSION_INPROC }}
     - name: Restore
@@ -47,5 +47,5 @@ jobs:
       uses: Azure/functions-action@v1
       with:
         app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
-        publish-profile: ${{ secrets.soundforest_EC18 }}
+        publish-profile: ${{ secrets.soundforest_service_ACC0 }}
         package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
