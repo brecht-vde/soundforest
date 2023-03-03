@@ -3,6 +3,8 @@ on:
   push:
     branches:
     - main
+    paths:
+    - soundforest.be/**
 env:
   AZURE_FUNCTIONAPP_NAME: soundforest-service
   AZURE_FUNCTIONAPP_PACKAGE_PATH: soundforest.be/src/SoundForest.Trigger.Export/published
