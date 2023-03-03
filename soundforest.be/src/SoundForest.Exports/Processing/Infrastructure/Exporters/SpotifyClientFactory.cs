@@ -17,11 +17,11 @@ internal class SpotifyClientFactory : ISpotifyClientFactory
         if (_client is null)
             _client = new SpotifyClient(token);
 
-        _logger.LogInformation($"Type: {nameof(T)}");
+        _logger.LogInformation($"Type: {typeof(T).Name}");
         _logger.LogInformation($"SC: {nameof(ISearchClient)}");
-        _logger.LogInformation($"Type == SC?: {nameof(T) == nameof(ISearchClient)}");
+        _logger.LogInformation($"Type == SC?: {typeof(T).Name == nameof(ISearchClient)}");
 
-        return nameof(T) switch
+        return typeof(T).Name switch
         {
             nameof(IUserProfileClient) => (T)_client.UserProfile,
             nameof(IPlaylistsClient) => (T)_client.Playlists,
