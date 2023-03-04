@@ -61,9 +61,6 @@ In my spare time, I like to play around with typescript and one of the things I 
 
 There's lots of refactoring that could be done here, but I consider this project closed. I have a few 100s of hours of songs to listen to now :). Working on this project, I did uncover some interesting topics I want to look into next, so I'll focus on that instead. 
 
-## License
-You can find details in the [LICENSE](/LICENSE) file.
-
 ## Disclaimer
 
-This project is for my personal development / learning purposes and is in no way intended for commercial use. There are no affiliations or endorsements between this repository and the resources or tools it makes use of.
+This project is for my personal development / learning purposes and is in no way intended for commercial use. There are no affiliations or endorsements between this repository and the resources or tools it makes use of. 
