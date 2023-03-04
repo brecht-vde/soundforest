@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using SoundForest.Exports.Processing.Application.Commands;
-using System.Text.RegularExpressions;
+using SoundForest.Framework.Application.Validation;
 
 namespace SoundForest.Exports.Processing.Application.Validators;
 internal sealed class ProcessExportCommandValidator : AbstractValidator<ProcessExportCommand>
@@ -10,7 +10,7 @@ internal sealed class ProcessExportCommandValidator : AbstractValidator<ProcessE
         RuleFor(c => c.Id)
             .NotEmpty()
                 .WithMessage("An identifier must be provided.")
-            .Matches(new Regex(@"^tt\d{7,8}$"))
+            .IdentifierFormat()
                 .WithMessage("An identifier must consist of 'tt' followed by 7 or 8 digits.");
 
         RuleFor(c => c.Username)

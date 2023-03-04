@@ -1,5 +1,5 @@
 ﻿namespace SoundForest.Exports.Processing.Application.Parsers;
-internal interface IParser<T>
+internal interface IParsingService<T>
 {
     public Task<T> ParseAsync(IEnumerable<string> ids, CancellationToken cancellationToken = default);
 }

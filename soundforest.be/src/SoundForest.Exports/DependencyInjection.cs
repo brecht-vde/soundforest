@@ -3,7 +3,6 @@ using MediatR;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using SoundForest.Clients.Auth0.Authentication;
 using SoundForest.Clients.Auth0.Authentication.Infrastructure.Options;
@@ -23,6 +22,8 @@ using SoundForest.Exports.Processing.Application.Stores;
 using SoundForest.Exports.Processing.Application.Validators;
 using SoundForest.Exports.Processing.Domain;
 using SoundForest.Exports.Processing.Infrastructure.Exporters;
+using SoundForest.Exports.Processing.Infrastructure.Exporters.Factories;
+using SoundForest.Exports.Processing.Infrastructure.Exporters.Services;
 using SoundForest.Exports.Processing.Infrastructure.Parsers;
 using SoundForest.Exports.Processing.Infrastructure.Stores;
 using SoundForest.Framework;
@@ -71,9 +72,13 @@ public static class DependencyInjection
         services.TryAddSingleton<IOptions<TsvOptions>>(ctx => Options.Create<TsvOptions>(tsv));
 
         services.AddSingleton<IKeyValueStore<IEnumerable<string>?>, TsvKeyValueStore>();
-        services.AddTransient<IParser<IEnumerable<Soundtrack>?>, SoundtrackParser>();
+        services.AddTransient<IParsingService<IEnumerable<Soundtrack>?>, SoundtrackParser>();
         services.AddTransient<IExporter<IEnumerable<Soundtrack>?>, SpotifyExporter>();
         services.AddTransient<ISpotifyClientFactory, SpotifyClientFactory>();
+        services.AddTransient<IDocumentLoader, ImdbDocumentLoader>();
+        services.AddTransient<ITokenService, TokenService>();
+        services.AddTransient<ISearchService, SearchService>();
+        services.AddTransient<IPlaylistService, PlaylistService>();
 
         services.AddHttpClient();
 

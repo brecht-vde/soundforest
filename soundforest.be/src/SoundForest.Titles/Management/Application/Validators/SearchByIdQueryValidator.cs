@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using SoundForest.Framework.Application.Validation;
 using SoundForest.Titles.Management.Application.Queries;
 using System.Text.RegularExpressions;
 
@@ -10,7 +11,7 @@ internal sealed class SearchByIdQueryValidator : AbstractValidator<SearchByIdQue
         RuleFor(q => q.Id)
             .NotEmpty()
                 .WithMessage("An identifier must be provided.")
-            .Matches(new Regex(@"^tt\d{7,8}$"))
+            .IdentifierFormat()
                 .WithMessage("An identifier must consist of 'tt' followed by 7 or 8 digits.");
     }
 }
