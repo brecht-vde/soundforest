@@ -1,6 +1,6 @@
 ﻿using SpotifyAPI.Web;
 
-namespace SoundForest.Exports.Processing.Infrastructure.Exporters;
+namespace SoundForest.Exports.Processing.Infrastructure.Exporters.Factories;
 internal class SpotifyClientFactory : ISpotifyClientFactory
 {
     // When running on Azure Functions App, type name can't be determined from T, so have to pass type name as parameter

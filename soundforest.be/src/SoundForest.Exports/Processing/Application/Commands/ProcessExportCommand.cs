@@ -12,12 +12,12 @@ public sealed record ProcessExportCommandResponse(string? ExternalId, string[]? 
 
 internal sealed class ProcessExportCommandHandler : IResultRequestHandler<ProcessExportCommand, Result<ProcessExportCommandResponse>>
 {
-    private readonly IParser<IEnumerable<Soundtrack>?> _parser;
+    private readonly IParsingService<IEnumerable<Soundtrack>?> _parser;
     private readonly IKeyValueStore<IEnumerable<string>?> _store;
     private readonly IExporter<IEnumerable<Soundtrack>?> _exporter;
 
     public ProcessExportCommandHandler(
-        IParser<IEnumerable<Soundtrack>?> parser,
+        IParsingService<IEnumerable<Soundtrack>?> parser,
         IKeyValueStore<IEnumerable<string>?> store,
         IExporter<IEnumerable<Soundtrack>?> exporter)
     {

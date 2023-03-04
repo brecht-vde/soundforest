@@ -3,9 +3,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Options;
+using SoundForest.Api.Dtos;
 using SoundForest.Exports.Management.Application.Commands;
 using SoundForest.Exports.Management.Domain;
-using System.IdentityModel.Tokens.Jwt;
+using SoundForest.Framework.Application.Tools;
 using System.Net;
 using System.Text.Json;
 
@@ -28,13 +29,8 @@ public sealed class ExportsCreate
         [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "exports")] HttpRequestData request,
         FunctionContext ctx)
     {
-        // TODO: Move to extension methods
-        request.Headers.TryGetValues("Authorization", out IEnumerable<string>? values);
-        var jwt = values?.FirstOrDefault()?.Replace("Bearer", "", StringComparison.OrdinalIgnoreCase)?.Trim();
-        var token = new JwtSecurityToken(jwt);
-        var user = token?.Subject?.Split(":")?.LastOrDefault();
+        var user = request.ExtractUserName();
         var requestBody = await JsonSerializer.DeserializeAsync<CreateExportCommandRequest>(request.Body, _options?.Value);
-
         var command = new CreateExportCommand(requestBody?.Id, requestBody?.Name, user);
         var result = await _mediator.Send(command);
         var response = request.CreateResponse();
@@ -58,12 +54,5 @@ public sealed class ExportsCreate
             });
 
         return response;
-    }
-
-    private record CreateExportCommandRequest
-    {
-        public string? Id { get; init; }
-
-        public string? Name { get; init; }
     }
 }
